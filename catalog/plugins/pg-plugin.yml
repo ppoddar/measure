@@ -1,0 +1,10 @@
+# ---------------------------------------------
+# plugin to invoke a Snapshot 
+# @see https://www.postgresql.org/docs/9.6/monitoring-stats.html
+# ---------------------------------------------
+name: snapshot-plugin
+class: com.nutanix.bpg.measure.jdbc.SnapshotPluginMetaData
+description: takes snapshot of a Postgres database statistics
+
+metrics: pg_stat_activity
+    

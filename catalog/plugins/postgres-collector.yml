@@ -1,0 +1,27 @@
+# ---------------------------------------------
+# plugin to invoke a PSQL script that collects 
+# a set of values from Postgres database
+# @see https://www.postgresql.org/docs/9.6/monitoring-stats.html
+# ---------------------------------------------
+name: postgres-collector
+class: com.nutanix.bpg.measure.script.ScriptPluginMetadata
+description: collects Postgres database statistics
+
+# command can use variables. 
+# Command uses Java MessageFormt syntax and refers
+# variables by 0-based positional index
+# The variables would be
+# substituted when command is executed.
+# the variables are ordered by order of declaration
+script: /usr/local/bin/psql 
+arguments: "--tuples-only -f ${psql-script}  -v db='${database-name}'"
+
+# what does plugin measure?
+# a metrics must be defined of this name
+# mesaurement would be stored in a table whose
+# name is derieved from metrics' name
+metrics: pg_stat_activity
+  
+# parser to parse the output
+parser: com.nutanix.bpg.measure.script.TokenParser
+    

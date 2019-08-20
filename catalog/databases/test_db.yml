@@ -1,0 +1,4 @@
+name: test_db
+url: jdbc:postgresql://localhost:5432/test_db
+
+ 
