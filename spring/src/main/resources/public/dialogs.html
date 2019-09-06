@@ -1,0 +1,30 @@
+
+<!-- ========= Error Dialog ============ -->
+<div id='error' class="w3-modal-content w3-border">
+	<div class='w3-container'>
+		<h1 class='w3-red'>ERROR</h1>
+		<textrea id="error-message" class='w3-margin' cols="24"
+			readonly="true" wrap="true"> </textrea>
+		<div class='w3-bar'>
+			<button id='cancel-error-dialog'
+			class='w3-button w3-bar-item w3-center w3-blue cancel-button'
+			onclick = "$('#error').parent().remove();">
+			OK</button>
+		</div>
+	</div>
+</div>
+<!-- ========= Message Dialog ============ -->
+<div id='message' class="w3-modal-content w3-card-4 w3-border">
+	<header class='w3-container w3-teal'>
+		<h1>Message</h1>
+	</header>
+	<div class='w3-container w3-margin w3-border'>
+		<p id='message-text'></p>
+	</div>
+		
+	<footer class='w3-container w3-teal w3-content'>
+		<button class='w3-button w3-center w3-black cancel-button'>ok</button>
+		</div>
+	</footer>
+</div>
+

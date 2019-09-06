@@ -1,0 +1,20 @@
+<html>
+<head>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery.loadtemplate/1.5.10/jquery.loadTemplate.js'></script>
+</head>
+<body>
+<div id="myContent"></div>
+
+<script id="myTemplate" type="text/x-jquery-tmpl">
+<span><b>${title}<b></span>
+</script>
+
+<script type="text/javascript">
+data={'title':'jQuery template'}
+$('#myTemplate').tmpl(data).appendTo('#myContent')
+
+</script>
+</body>
+
+</html>

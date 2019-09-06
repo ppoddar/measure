@@ -1,0 +1,128 @@
+<div id='view'>
+	<h1>Snapshot</h1>
+	<b>Snapshot</b> is a set of measurements taken at regular interval on a
+	target database.
+	<p>A database collects statistics on its performance. A snapshot
+		essentially reads these database statistics tables.
+	<p>Several measurements are taken over a period of time to gather
+		trends.
+</div>
+<!-- =========== take a snapshot ========== -->
+<div id='dialog' class="w3-modal-conent w3-padding w3-card-4 w3-border">
+	<header class="w3-container w3-teal">
+		<h1>Take a snapshot</h1>
+	</header>
+	<p class='w3-margin'>snapshot is a set of measurements taken at
+		regular interval. The measurements collect particular metrics on a
+		target database.</p>
+	<p id='validation-error' class='w3-text-red'></p>
+	<hr class='w3-black'>
+	<form class="w3-container w3-margin w3-padding">
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Snapshot name</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<input id='snapshot-name' class="w3-border w3-text-teal" type='text'
+					required>
+			</div>
+		</div>
+		<div class='w3-row  w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Target database</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<select id='snapshot-database' class="w3-input w3-border">
+				</select>
+			</div>
+		</div>
+
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Metrics to collect</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<select id='snapshot-metrics' class="w3-input w3-border">
+				</select>
+			</div>
+		</div>
+
+		<div class='w3-row  w3-padding'>
+			<div class='w3-col m7'>
+				<label class="w3-text-teal"><b>number of measurements</b></label>
+			</div>
+			<div class='w3-col m4'>
+				<input id='snapshot-schedule-count' class="w3-input w3-border"
+					type="number" size="4" value="10" min="3" step="1">
+			</div>
+		</div>
+
+		<div class='w3-row  w3-padding'>
+			<div class='w3-col m7'>
+				<label class="w3-text-teal"><b>measurement interval</b> <span
+					class='w3-small'>(in minutes)</span></label>
+			</div>
+			<div class='w3-col m4'>
+				<input id='snapshot-schedule-interval' class="w3-input w3-border"
+					type="number" size="4" value="2" min="2" step="1">
+			</div>
+		</div>
+		<hr class='w3-black'>
+		<div class='w3-bar'>
+			<button class='w3-button w3-grey w3-right cancel-button'>Cancel</button>
+			<input class="w3-button w3-blue" value='Take Snapshot' type='submit'>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+$('#take-snapshot-menu-item').on('click', function(e) {
+	var $dialog = $('#take-snapshot-dialog')
+	
+	$dialog.find('#validation-error').empty()
+	var $databaseOptions = $dialog
+    	.find('#snapshot-database').first()
+
+    Database.populateComboBox(
+            $databaseOptions, 
+            Database.getAll())
+	  
+	var $metricsOptions = $dialog
+    	.find('#snapshot-metrics').first()
+
+    Database.populateComboBox(
+            $metricsOptions, 
+            Database.getAllMetrics())
+	$('#take-snapshot-dialog').show()
+})
+<!-- each dialog form has a submit button -->
+<!-- following is the action handler when -->
+<!-- the form is submited.                -->
+<!-- the input variables are collected    -->
+<!-- from the form input and an Ajax call -->
+<!-- is made to the server.               -->
+$('#take-snapshot-dialog').on('submit', function(e) {
+	e.preventDefault()
+	var $form = $(this)
+	var name     = $form.find('#snapshot-name')
+	var database = $form.find('#snapshot-database')
+	var metrics  = $form.find('#snapshot-metrics')
+	console.log('---------- snapshot name:[' + name.val() + ']')
+	
+	var url = 'snapshot' 
+	+ '/' + name.val() 
+	+ '/' + database.val() 
+	+ '/' + metrics.val() 
+	+ '/'
+	var count    = $form.find('#snapshot-schedule-count').val()
+	var interval = $form.find('#snapshot-schedule-interval').val()
+	var payload = {
+		'count'   : count,  
+		'interval': interval
+	}
+	var totalExpectedTime = count
+
+	$(this).hide()
+	new Database().takeSnapshot(url, payload)
+})
+
+</script>

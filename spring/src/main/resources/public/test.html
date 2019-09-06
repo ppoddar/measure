@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>test</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src='./scripts/measure.js'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="./css/bpg.css">
+</head>
+<body>
+
+<div id="message-dialog" class="w3-modal dialog"></div>
+
+<script type="text/javascript">
+$('#message-dialog').load('dialogs.html #message')
+
+showMessageDialog('a simple <b>message</b> with HTML')
+</script>
+</body>

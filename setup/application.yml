@@ -1,0 +1,16 @@
+# -----------------------------------------
+# Configuration for Spring Boot Application
+# -----------------------------------------
+server: 
+  servlet: 
+      contextPath: /measure
+spring: 
+  application: 
+     name: measure
+
+logging: 
+  level:
+     com.nutanix: debug
+     org.springframework: error
+
+ 

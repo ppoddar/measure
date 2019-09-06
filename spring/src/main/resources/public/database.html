@@ -1,0 +1,97 @@
+<!-- the view shown as general description -->
+<div id='view'>
+	<h1>Database</h1>
+	
+	Database are configured by the server. But you can
+	also  <img src='images/png/database_new.png'>
+	<span>register a database</span> 
+	
+	<div class='w3-border-red'>
+	The server must be
+	able to establish connection to a database.
+	</div>
+	
+	<p>
+	Following is a list of registered databases:
+	
+	<ul id='database-tree' 
+	 class='w3-ul w3-card-4'></ul>
+	
+</div>
+	
+</div>
+
+<!--  modal content of a form to register a database -->
+<div id='dialog' 
+  class="w3-modal-conent  w3-card-4 w3-margin">
+	<header class='w3-container w3-teal'>
+		<h1>Register a database</h1>
+	</header>
+	<p class='w3-padding'>
+		specify coordinates of a database.
+	</p>
+	<hr>
+	<form>
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Database kind</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<select id='database-kind'></select>
+			</div>
+		</div>
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Database name</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<input id="database-name" class="w3-input w3-border" type="text"
+					required>
+			</div>
+		</div>
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Host IP address</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<input id="database-host" class="w3-input w3-border" type="text">
+			</div>
+		</div>
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Listen Port</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<input id="database-port" class="w3-input w3-border" type="number">
+			</div>
+		</div>
+
+
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>User name</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<input id="database-user" class="w3-input w3-border" type="text">
+			</div>
+		</div>
+		<div class='w3-row w3-padding'>
+			<div class='w3-col m4'>
+				<label class="w3-text-teal"><b>Password</b></label>
+			</div>
+			<div class='w3-col m7'>
+				<input id="database-password" class="w3-input w3-border"
+					type="password">
+			</div>
+		</div>
+		<div class='w3-bar w3-padding'>
+			<button 
+			  class='w3-button w3-light-grey w3-right cancel-button'
+			  onclick="$('#new-database-dialog').hide()">
+			  Cancel</button>
+			<input class="w3-button w3-blue" value='Register' type='submit'>
+		</div>
+	</form>
+</div>
+
+

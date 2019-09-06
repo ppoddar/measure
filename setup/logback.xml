@@ -16,12 +16,15 @@
     <root level="error">
         <appender-ref ref="Console" />
     </root>
-     <logger name="ch.qos" level="error" additivity="false">
+    <logger name="ch.qos" level="error" additivity="false">
+        <appender-ref ref="Console" />
+    </logger>
+    <logger name="org.springframework" level="error" additivity="false">
         <appender-ref ref="Console" />
     </logger>
 
     <!-- LOG "com.nutanix.*" at INFO level -->
-    <logger name="com.nutanix" level="debug" additivity="false">
+    <logger name="com.nutanix" level="info" additivity="false">
         <appender-ref ref="Console" />
     </logger>
     
