@@ -1,16 +1,25 @@
 # -----------------------------------------
 # Configuration for Spring Boot Application
 # -----------------------------------------
+
 server: 
   servlet: 
-      contextPath: /measure
+      contextPath: /
 spring: 
   application: 
-     name: measure
-
+     name: BPG
+# directory location of catalogs w.r.t running directory
+catalog: 
+    database: 
+      url: catalog/databases
+    
+database: 
+    url: jdbc:postgresql://localhost:5432/bpg
+    
 logging: 
   level:
      com.nutanix: debug
      org.springframework: error
+     org.springframework.web: debug
 
  

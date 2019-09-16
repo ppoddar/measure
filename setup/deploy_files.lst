@@ -1,2 +1,4 @@
-spring/target/spring-0.0.1-SNAPSHOT.jar
 setup/
+public/
+catalog/
+spring/target/spring-0.0.1-SNAPSHOT.jar

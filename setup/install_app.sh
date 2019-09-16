@@ -19,9 +19,11 @@ sh setup/setup-database.sh $DATABASE_NAME
 echo starting main service at $PORT
 
 ./setup/stop-process.sh $PORT
-
+echo starting web service at $PORT ...
+nohup \
 java -jar $MAIN_JAR \
   -Dserver.port=$PORT \
   -Dspring.config.location=$DIR/setup/application.yml \
-  -Dlogging.config=$DIR/setup/logback.xml
+  -Dlogging.config=$DIR/setup/logback.xml \
+  &
 

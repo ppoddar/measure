@@ -1,51 +1,24 @@
 #!/bin/sh
-PORT=8080
-APPLICATION_CONFIG=application.yml
-
-while (( "$#" )); do
-  case "$1" in
-    -c|--config)
-      APPLICATION_CONFIG=$2
-      shift 2
-      ;;
-    -p|--port)
-      PORT=$2
-      shift 2
-      ;;
-    --) # end argument parsing
-      shift
-      break
-      ;;
-    -*|--*=) # unsupported flags, ignore
-      echo "Error: Unsupported flag $1" >&2
-      shift
-      ;;
-    *) # preserve positional arguments
-      PARAMS="$PARAMS $1"
-      shift
-      ;;
-  esac
- done
-
-
+PORT=${1:-8080}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-# Project Root Directory is same as script location
-PROJECT_ROOT_DIR=$SCRIPT_DIR
-#"$(dirname "$SCRIPT_DIR")"
-
+PROJECT_HOME=$SCRIPT_DIR/..
+MAIN_JAR=$PROJECT_HOME/spring/target/spring-0.0.1-SNAPSHOT.jar
 # be happy, be patient
 echo ----------------------------------------
 fortune
 echo ----------------------------------------
+. $SCRIPT_DIR/stop-process.sh $PORT
 
-# Change to Project Root Dorectory
-pushd  $PROJECT_ROOT_DIR > /dev/null 2>&1  
+PROFILE=dev
+echo Spring application configuration at $PROJECT_HOME/config/application.yml 
+cat $PROJECT_HOME/config/application-$PROFILE.yml
 
-echo Starting Spring Boot based micro-service at port $PORT ...
-mvn clean install 
-mvn -q -pl spring package spring-boot:run \
-  -DskipTests=true \
+java \
+  -Dspring.profiles.active=$PROFILE \
   -Dserver.port=$PORT \
-  -Dspring.config.location=$SCRIPT_DIR/$APPLICATION_CONFIG \
-  -Dlogging.level.org=ERROR  \
-  -Dlogging.level.com.nutanix=INFO 
+  -jar $MAIN_JAR 
+
+#  -Dspring.config.location=$PROJECT_HOME/config/application.yml
+#  -Dlogging.level.org=ERROR  \
+#  -Dlogging.level.com.nutanix=INFO 
+

@@ -19,8 +19,9 @@ echo copying files from $SRC_LIST to $DST ...
 rsync -v -r -p --files-from=$SRC_LIST $PROJECT_HOME_DIR $DST 
 
 echo running script $INSTALL_SCRIPT on $REMOTE_USER@$REMOTE_HOST ...
-ssh $REMOTE_USER@$REMOTE_HOST 'bash -s' < $INSTALL_SCRIPT
+ssh $REMOTE_USER@$REMOTE_HOST  $REMOTE_DIR/setup/$INSTALL_SCRIPT
 
+echo service has been installed at $REMOTE_HOST Opening page...
 open http://$REMOTE_HOST:$REMOTE_PORT/
 
 
