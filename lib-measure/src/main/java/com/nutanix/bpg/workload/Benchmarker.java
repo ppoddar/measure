@@ -45,8 +45,8 @@ public class Benchmarker implements Supplier<Snapshot> {
 		benchmarks.setMetrics(PGBench.METRICS);
 		benchmarks.setExpectedMeasurementCount(options.length);
 		for (PGBenchOptions option : options) {
-			int scale = option.getScaleFactor();
-			logger.debug("run PGBENCH with scale factor " + scale);
+			
+			logger.debug("run PGBENCH with " + option);
 			PGBench pgbench = new PGBench(database, option);
 			try {
 				Measurement m = pgbench.takeMeasurement();
@@ -54,7 +54,7 @@ public class Benchmarker implements Supplier<Snapshot> {
 					throw new RuntimeException("pgbench retured null measurment");
 				}
 				m.setContext(Snapshot.CONTEXT_BENCHMARK, benchmarks.getId());
-				benchmarks.addMeasurement(m);
+				//benchmarks.addMeasurement(m);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

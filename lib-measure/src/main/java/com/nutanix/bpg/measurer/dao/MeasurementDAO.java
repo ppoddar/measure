@@ -20,7 +20,6 @@ import com.nutanix.bpg.measure.model.DataMapping;
 import com.nutanix.bpg.measure.model.Measurement;
 import com.nutanix.bpg.measure.model.Metrics;
 import com.nutanix.bpg.measure.model.MetricsDimension;
-import com.nutanix.bpg.measure.model.PluginMetadata;
 import com.nutanix.bpg.measure.utils.StringUtils;
 
 /**
@@ -31,24 +30,23 @@ import com.nutanix.bpg.measure.utils.StringUtils;
  *
  */
 public class MeasurementDAO {
-	public static String MEASUREMENT_ID         = "id"; 
-	public static String MEASUREMENT_START_TIME = "start_time"; 
-	public static String MEASUREMENT_END_TIME   = "end_time"; 
-	public static String MEASUREMENT_CONTEXT_TYPE  = "ctx_type"; 
-	public static String MEASUREMENT_CONTEXT    = "ctx"; 
-	public static String MEASUREMENT_METRICS    = "metrics"; 
+	public static String ID         = "id"; 
+	public static String START_TIME = "start_time"; 
+	public static String END_TIME   = "end_time"; 
+	public static String CONTEXT_TYPE  = "ctx_type"; 
+	public static String CONTEXT    = "ctx"; 
+	public static String METRICS    = "metrics"; 
 	
 	private static String[] CONTEXT_COLUMNS = {
-			MEASUREMENT_ID,
-			MEASUREMENT_START_TIME,
-			MEASUREMENT_END_TIME,
-			MEASUREMENT_CONTEXT_TYPE,
-			MEASUREMENT_CONTEXT,
-			MEASUREMENT_METRICS
+			ID,
+			START_TIME,
+			END_TIME,
+			CONTEXT_TYPE,
+			CONTEXT,
+			METRICS
 	};
 	
-	private static Logger logger = LoggerFactory.getLogger(PluginMetadata.class);
-	//private final Connection con;
+	private static Logger logger = LoggerFactory.getLogger(MeasurementDAO.class);
 	
 
 	/**
@@ -81,12 +79,12 @@ public class MeasurementDAO {
 			validateContext(m);
 			InsertSQL sql = new InsertSQL();
 			sql.into(DataMapping.getTableForMetrics(m.getMetrics()));
-			sql.insert(MEASUREMENT_ID,         m.getId());
-			sql.insert(MEASUREMENT_METRICS,    m.getMetrics().getName());
-			sql.insert(MEASUREMENT_START_TIME, m.getStartTime());
-			sql.insert(MEASUREMENT_END_TIME,   m.getEndTime());
-			sql.insert(MEASUREMENT_CONTEXT_TYPE, m.getContextType());
-			sql.insert(MEASUREMENT_CONTEXT,    m.getContext());
+			sql.insert(ID,         m.getId());
+			sql.insert(METRICS,    m.getMetrics().getName());
+			sql.insert(START_TIME, m.getStartTime());
+			sql.insert(END_TIME,   m.getEndTime());
+			sql.insert(CONTEXT_TYPE, m.getContextType());
+			sql.insert(CONTEXT,    m.getContext());
 			for (MetricsDimension dim : m.getMetrics()) {
 				sql.insert(dim, m.getValue(dim.getName()));
 			}
@@ -161,18 +159,16 @@ public class MeasurementDAO {
 			int K = hasContextColumns ? CONTEXT_COLUMNS.length : 0;
 			for (int i = 0; i < N; i++) {
 				int jdbcIndex = i+1+K;
-				Object value = SQLQueryExcutor
-						.getValue(jdbcIndex, rs);
+				Object value = SQLQueryExcutor.getValue(jdbcIndex, rs);
 				m.putValue(metrics.getDimension(i), value);
 			}
 			if (hasContextColumns) {
-				m.setId(rs.getString(MEASUREMENT_ID));
-				//m.setId(rs.getString(MEASUREMENT_METRICS));
-				m.setStartTime(rs.getLong(MEASUREMENT_START_TIME));
-				m.setEndTime(rs.getLong(MEASUREMENT_END_TIME));
+				m.setId(rs.getString(ID));
+				m.setStartTime(rs.getLong(START_TIME));
+				m.setEndTime(rs.getLong(END_TIME));
 				m.setContext(
-					rs.getString(MEASUREMENT_CONTEXT_TYPE),
-					rs.getString(MEASUREMENT_CONTEXT));
+					rs.getString(CONTEXT_TYPE),
+					rs.getString(CONTEXT));
 			}
 			return m;
 		} catch (Exception e) {
@@ -180,7 +176,6 @@ public class MeasurementDAO {
 						+ " from result set columns " 
 						+ SQLQueryExcutor.getColumnNames(rs.getMetaData())
 						+ " due to ", e);
-
 		}
 	}
 	
@@ -195,27 +190,27 @@ public class MeasurementDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static Map<String, List<Double>> getTrend(
-			Connection con,
-			String ctx, 
-			Metrics metrics, String[] dims) throws SQLException {
-		Map<String, List<Double>> result = new HashMap<String, List<Double>>();
-		SelectSQL sql = new SelectSQL();
-		String tableName = DataMapping.getTableForMetrics(metrics);
-		sql.from(tableName);
-		for (String d : dims) {
-			result.put(d, new ArrayList<Double>());
-			sql.select(d);
-		}
-		sql.where(MEASUREMENT_CONTEXT, SQL.OP.EQUALS, ctx);
-		sql.where(MEASUREMENT_METRICS, SQL.OP.EQUALS, metrics.getName());
-		ResultSet rs = SQLQueryExcutor.executeQuery(con, sql);
-		while (rs.next()) {
-			for (String d: dims) {
-				Double v = SQLQueryExcutor.getValue(d, rs, Double.class);
-				result.get(d).add(v);
-			}
-		}
-		return result;
-	}
+//	public static Map<String, List<Double>> getTrend(
+//			Connection con,
+//			String ctx, 
+//			Metrics metrics, String[] dims) throws SQLException {
+//		Map<String, List<Double>> result = new HashMap<String, List<Double>>();
+//		SelectSQL sql = new SelectSQL();
+//		String tableName = DataMapping.getTableForMetrics(metrics);
+//		sql.from(tableName);
+//		for (String d : dims) {
+//			result.put(d, new ArrayList<Double>());
+//			sql.select(d);
+//		}
+//		sql.where(CONTEXT, SQL.OP.EQUALS, ctx);
+//		sql.where(METRICS, SQL.OP.EQUALS, metrics.getName());
+//		ResultSet rs = SQLQueryExcutor.executeQuery(con, sql);
+//		while (rs.next()) {
+//			for (String d: dims) {
+//				Double v = SQLQueryExcutor.getValue(d, rs, Double.class);
+//				result.get(d).add(v);
+//			}
+//		}
+//		return result;
+//	}
 }

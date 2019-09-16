@@ -1,0 +1,44 @@
+# array of database columns that are referred in application
+# the columns 
+- 
+  name: id
+  
+- 
+  name: ctx
+- 
+  name: ctx_type
+  
+- 
+  name: metrics
+  
+- 
+  name: name
+- 
+  name: measurement_id
+- 
+  name: start_time
+  sql-type: bigint
+
+-
+  name: end_time
+  sql-type: bigint
+
+-
+  name: expected_count
+  sql-type: bigint
+-
+  name: actual_count
+  sql-type: bigint
+  
+- 
+  name: count
+  sql-type: bigint
+  
+  
+  
+  
+   
+  
+  
+ 
+ 

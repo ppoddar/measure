@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.MeasuremementTaker;
-import com.nutanix.bpg.measure.Schedule;
 
 /**
  * a schedule {@link #takeMeasurement() takes}
@@ -17,7 +16,7 @@ import com.nutanix.bpg.measure.Schedule;
  * @author pinaki.poddar
  *
  */
-public class SnapshotSchedule implements Schedule {
+public class SnapshotSchedule  implements Runnable {
 	private  int count;
 	private  int interval;
 	private  TimeUnit unit;
@@ -35,6 +34,7 @@ public class SnapshotSchedule implements Schedule {
 	 * at interval of 1 minute.
 	 */
 	public SnapshotSchedule() {
+		logger.debug("creating SnapshotSchedule with default values" );
 		setCount(DEFAULT_COUNT);
 		setInterval(DEFAULT_INTERVAL);
 		setIntervalTimeUnit(DEFAULT_TIMEUNIT);
@@ -45,18 +45,31 @@ public class SnapshotSchedule implements Schedule {
 	 * @param count
 	 */
 	public void setCount(int count) {
+		logger.debug("SnapshotSchedule set count  " + count );
 		this.count = count;
 	}
 	
+	public void setIntervalTimeUnit(String unit) {
+		logger.debug("SnapshotSchedule set interval unit  " + unit );
+		try {
+			this.unit = TimeUnit.valueOf(unit.toUpperCase());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			this.unit = TimeUnit.MINUTES;
+		}
+	}
+
 	/**
 	 * set interval between measurements.
 	 * @param count
 	 */
 	public void setIntervalTimeUnit(TimeUnit unit) {
+		logger.debug("SnapshotSchedule set interval unit  " + unit );
 		this.unit = unit;
 	}
 	
 	public void setInterval(int i) {
+		logger.debug("SnapshotSchedule set interval  " + i );
 		this.interval = i;
 	}
 
@@ -124,7 +137,6 @@ public class SnapshotSchedule implements Schedule {
 	 * adds it to snapshot
 	 * counts down the latch
 	 */
-	@Override
 	public void run() {
 		try {
 			if (latch == null) {
@@ -136,12 +148,12 @@ public class SnapshotSchedule implements Schedule {
 			if (taker == null) {
 				throw new IllegalStateException("no measurement taker is set");
 			}
-			logger.debug("taking measurment. " + latch.getCount() 
+			logger.debug(this + " taking measurment. " + latch.getCount() 
 			+ " more to go... next measurment would be taken after "
 			+ getInterval() + " " + getIntervalTimeUnit());
 			Measurement m = taker.takeMeasurement();
 			m.setContext(Snapshot.CONTEXT_SNAPSHOT, sn.getId());
-			sn.addMeasurement(m);
+			//sn.addMeasurement(m);
 			latch.countDown();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,6 +181,8 @@ public class SnapshotSchedule implements Schedule {
 //	}
 	
 	public String toString() {
-		return "schedule:" + getTakenCount() + "/" + getCount();
+		return "schedule:" + getCount() + " in " 
+				+ getInterval() + " " 
+				+ getIntervalTimeUnit() + " interval";
 	}
 }

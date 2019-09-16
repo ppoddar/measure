@@ -70,12 +70,12 @@ public class DynamicTable {
 		String ddl = "CREATE TABLE IF NOT EXISTS " 
 	         + tableName
 	         + SPACE + OPEN_BRACKET
-		     + MeasurementDAO.MEASUREMENT_ID         + " VARCHAR PRIMARY KEY,"
-		     + MeasurementDAO.MEASUREMENT_METRICS    + " VARCHAR,"
-		     + MeasurementDAO.MEASUREMENT_START_TIME + " BIGINT,"
-		     + MeasurementDAO.MEASUREMENT_END_TIME   + " BIGINT,"
-		     + MeasurementDAO.MEASUREMENT_CONTEXT_TYPE    + " VARCHAR,"
-		     + MeasurementDAO.MEASUREMENT_CONTEXT    + " VARCHAR,"
+		     + MeasurementDAO.ID         + " VARCHAR PRIMARY KEY,"
+		     + MeasurementDAO.METRICS    + " VARCHAR,"
+		     + MeasurementDAO.START_TIME + " BIGINT,"
+		     + MeasurementDAO.END_TIME   + " BIGINT,"
+		     + MeasurementDAO.CONTEXT_TYPE    + " VARCHAR,"
+		     + MeasurementDAO.CONTEXT    + " VARCHAR,"
 		     + joinColumnNames(m, true)
 		     + CLOSE_BRACKET;
 		

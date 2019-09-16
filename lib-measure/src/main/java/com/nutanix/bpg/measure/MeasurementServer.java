@@ -1,6 +1,5 @@
 package com.nutanix.bpg.measure;
 
-import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 import com.nutanix.bpg.measure.model.Database;
@@ -34,30 +33,6 @@ import com.nutanix.bpg.workload.PGBenchOptions;
  *
  */
 public interface MeasurementServer  {
-	/**
-	 * records a database.
-	 * @param db a database
-	 * @param overwrite whether t overwrite  
-	 * database of same name, if exists
-	 * 
-	 */
-	public void addDatabase(Database db, boolean overwrite);
-
-	/**
-	 * gets the database of given name.
-	 * @param name name of a database
-	 * @return a database 
-	 * @throws RuntimeException if no database of given name
-	 * exists.
-	 */
-	Database getDatabase(String name);
-	
-	/**
-	 * gets all database known to this system.
-	 * @return a collection. must not be empty 
-	 * or null.
-	 */
-	Collection<Database> getDatabases();
 	
 	/**
 	 * Takes snapshot.

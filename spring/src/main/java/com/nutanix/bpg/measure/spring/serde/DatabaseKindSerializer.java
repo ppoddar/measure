@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.nutanix.bpg.measure.model.DatabaseKind;
 
+@SuppressWarnings("serial")
 public class DatabaseKindSerializer extends StdSerializer<DatabaseKind>{
 
 	protected DatabaseKindSerializer() {
 		super(DatabaseKind.class);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

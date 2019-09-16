@@ -43,6 +43,7 @@ public class SnapshotPlugin implements Supplier<Snapshot> {
 		this.metrics = metrics;
 		this.taker = taker;
 		this.con = con;
+		
 	}
 
 	public Snapshot get() {

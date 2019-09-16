@@ -11,7 +11,7 @@
  
     
     <!-- LOG everything at debug level -->
-    <root level="debug">
+    <root level="error">
         <appender-ref ref="Console" />
     </root>
  

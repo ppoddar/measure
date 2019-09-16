@@ -34,7 +34,7 @@ public class Snapshot {
 	private Database db;
 	private Metrics metrics;
 	int expectedMeasurementCount;
-	private Measurements measurements;
+//	private Measurements measurements;
 	
 	private static final Logger logger = LoggerFactory.getLogger(Snapshot.class);
 	
@@ -44,17 +44,17 @@ public class Snapshot {
 	 * create an empty snapshot
 	 */
 	public Snapshot() {
-		measurements = new Measurements();
+		//measurements = new Measurements();
 	}
 
-	public Measurements getMeasurements() {
-		return measurements;
-	}
-	
-	public void addMeasurement(Measurement m) {
-		measurements.addMeasurement(m);
-		logger.debug("added " + measurements.getSize() + " measurenent " + m);
-	}
+//	public Measurements getMeasurements() {
+//		return measurements;
+//	}
+//	
+//	public void addMeasurement(Measurement m) {
+//		measurements.addMeasurement(m);
+//		logger.debug("added " + measurements.getSize() + " measurenent " + m);
+//	}
 	
 	public String getId() {
 		return id;
@@ -119,22 +119,22 @@ public class Snapshot {
 		return expectedMeasurementCount;
 	}
 	
-	public int getActualMeasurementCount() {
-		return getMeasurements().getSize();
-	}
+//	public int getActualMeasurementCount() {
+//		return getMeasurements().getSize();
+//	}
 	
-	public boolean isComplete() {
-		return getActualMeasurementCount() >= getExpectedMeasurementCount();
-	}
+//	public boolean isComplete() {
+//		return getActualMeasurementCount() >= getExpectedMeasurementCount();
+//	}
 	
-	public long getStartTime() {
-		return getMeasurements().getStartTime();
-	}
-	
-	public long getEndTime() {
-		if (!isComplete()) return -1;
-		return getMeasurements().getEndTime();
-	}
+//	public long getStartTime() {
+//		return getMeasurements().getStartTime();
+//	}
+//	
+//	public long getEndTime() {
+//		if (!isComplete()) return -1;
+//		return getMeasurements().getEndTime();
+//	}
 
 	
 	public String toString() {

@@ -201,10 +201,12 @@ public class Conversion {
 		recordConversion("string", String.class, new StringConverter());
 		recordConversion("char", Character.class, new CharacterConverter());
 		recordConversion("Integer", Integer.class, new IntegerConverter());
-		recordConversion("int", Integer.class, new IntegerConverter());
+		recordConversion("int", int.class, new IntegerConverter());
 		recordConversion("long", Long.class, new LongConverter());
+		recordConversion("long", long.class, new LongConverter());
 		recordConversion("short", Short.class, new ShortConverter());
 		recordConversion("double", Double.class, new DoubleConverter());
+		recordConversion("double", double.class, new DoubleConverter());
 		recordConversion("float", Float.class, new FloatConverter());
 		recordConversion("bool", Boolean.class, new BooleanConverter());
 		recordConversion("uuid", UUID.class, new UUIDConverter());
