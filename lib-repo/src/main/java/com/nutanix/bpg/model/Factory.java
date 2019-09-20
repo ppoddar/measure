@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.io.InputStream;
 
@@ -8,7 +8,7 @@ import java.io.InputStream;
  * 
  * @author pinaki.poddar
  *
- * @param <T>
+ * @param <T> type of things built
  */
 public interface Factory<T> {
 	T build(InputStream in) throws Exception;

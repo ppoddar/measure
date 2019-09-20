@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -113,7 +113,7 @@ public abstract class AbstractDatabase implements Database {
 	 * Each columns in a table forms a  {@link MetricsDimension 
 	 * dimension} in the {@link Metrics metrics}.
 	 *  
-	 * 
+	 * @return catalog of metrices
 	 */
 	public Catalog<Metrics> getMetrics() {
 		if (metricsCatalog != null) {

@@ -1,0 +1,178 @@
+<html>
+<head>
+<title>Measurement (draft)</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src='./scripts/measure.js'></script>
+<script src='./scripts/drawing.js'></script>
+<script src='./scripts/snapshot.js'></script>
+<script src='./scripts/database.js'></script>
+<script src='./scripts/metrics.js'></script>
+<script src='./scripts/tasks.js'></script>
+<script src='./scripts/tab.js'></script>
+<script src='./scripts/benchmark.js'></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="./css/bpg.css">
+</head>
+
+<body>
+	<div id='page-caption'></div>
+	<div id='page-menu' class='w3-bar w3-black'>
+		<div id='home' class="tab-button">
+			<i class="w3-bar-item material-icons">home</i>
+		</div>
+		<div id='snapshot-menu'
+			class='w3-dropdown-hover w3-bar-item tab-button'>
+			<button class="w3-button">Snapshot</button>
+			<div id='take-snapshot-menu-item'
+				class="w3-dropdown-content w3-bar-block w3-black w3-card-4">
+				<a id='take-snapshot' class="w3-button">Take snapshot ...</a>
+			</div>
+		</div>
+		<div id='benchmark-menu'
+			class='w3-dropdown-hover w3-bar-item  tab-button'>
+			<button class="w3-button">Benchmark</button>
+			<div id='run-benchmark-menu-item'
+				class="w3-dropdown-content w3-bar-block  w3-black w3-card-4">
+				<a id='run-benchmark' class="w3-button">Run benchmark ...</a>
+			</div>
+		</div>
+
+		<div id='task-menu' class='w3-dropdown-hover w3-bar-item tab-button'>
+			<button class='w3-button'>
+				Tasks <span id='task-count' class='w3-badge w3-green'></span>
+			</button>
+			<div id='show-tasks-menu-item'
+				class="w3-dropdown-content w3-bar-block  w3-black w3-card-4">
+				<a id='show-tasks' class="w3-button">Show Tasks</a>
+			</div>
+		</div>
+	</div>
+
+	<div id='new-database-dialog' class='w3-modal'></div>
+	<div id='take-snapshot-dialog' class='dialog w3-modal'></div>
+	<div id='run-benchmark-dialog' class='dialog w3-modal'></div>
+
+	<div id="error-dialog" class="w3-modal dialog"></div>
+	<div id="message-dialog" class="w3-modal dialog"></div>
+
+	<!-- two-column display. Left column holds   -->
+	<!-- a tree of database. Right column is tab -->
+	<div class='w3-row w3-container'>
+		<div class='w3-col m4'>
+			<div class='w3-bar w3-black'>
+				<div  class='w3-bar-item'>Databases</div>
+				<i    class='w3-bar-item  material-icons' id='database-new'>add</i>
+				<i    class='w3-bar-item material-icons'>search</i>
+			</div>
+			<ul id='database-tree' class='w3-ul w3-card-4'></ul>
+		</div>
+		<div class='w3-rest'>
+			<div id='workbench-view' class='w3-container tab-content'></div>
+			<div id='database-view'  class='w3-container tab-content'></div>
+			<div id='snapshot-view'  class='w3-container tab-content'></div>
+			<div id='benchmark-view' class='w3-container tab-content'></div>
+			<div id='task-view'      class='w3-container tab-content'></div>
+		</div>
+	</div>
+
+	<script>
+	$('#page-caption')   .load('html/page.html #caption')
+	$('#database-view')  .load('html/db.html #view')
+	$('#workbench-view') .load('html/page.html #view')
+	
+	$('#snapshot-view')  .load('html/snapshot.html #view')
+	$('#benchmark-view') .load('html/benchmark.html #view')
+	$('#task-view')      .load('html/task.html #view')
+	
+	$('#home')          .data('content', $('#workbench-view'))
+	$('#database-menu') .data('content', $('#database-view'))
+	$('#snapshot-menu') .data('content', $('#snapshot-view'))
+	$('#benchmark-menu').data('content', $('#benchmark-view'))
+	$('#task-menu')     .data('content', $('#task-view'))
+	
+	$('#new-database-dialog')   .load('html/db.html  #dialog')
+	$('#take-snapshot-dialog')  .load('html/snapshot.html #dialog')
+	$('#run-benchmark-dialog')  .load('html/benchmark.html #dialog')
+    
+ 	$('#error-dialog')   .load('html/dialogs.html #error')
+	$('#message-dialog') .load('html/dialogs.html #message')
+ 
+	google.charts.load('current', {'packages':['corechart']});
+	
+	new Database().getCatalog($('#database-tree'))
+
+	$('.dialog').hide()
+    $('.tab-content').hide()
+    $('.cancel-button').on('click', function(e){
+        var $dialog = $(this).parents('.dialog').first()
+        console.log('found dialog ' + $dialog.attr('id')
+        		+ ' as parent of ' + $(this).attr('id'))
+        dialog.remove()
+    })
+	$('.tab-button').on('click', function() {
+		$tab = $(this).data('content')
+		console.log('clicked tab-button ' 
+				+ $(this).attr('id')
+				+ ' content ' + $tab.attr('id'))
+				
+		$('.tab-content').hide()
+		$tab.show()
+	})
+	
+	
+	$('#workbench-view').show()
+	$('#task-count').data('count', 0)
+	
+	
+	
+<!-- =============== Record database ================ -->	
+    $('#database-new').on('click', function(e) {
+        new Database().createNew(e)
+    })
+    
+    
+    $('#show-tasks').on('click', function() {
+    	Task.showAll($('#task-table'))
+    	new Tab('task-view').show()
+    })
+    
+    $('#run-benchmark').on('click', function(e){
+        new Benchmark().runBenchmark(e)
+    })
+    
+<!-- =============== take snapshot ================ -->	
+    $('#take-snapshot').on('click', function(e) {
+    	console.log('clicked ' + $(this).attr('id'))
+    	e.preventDefault()
+    	e.stopPropagation()
+    	var $dialog = $('#take-snapshot-dialog')
+    	var $form = $dialog.find('form').first()
+	    var $databaseOptions = $form
+		          .find('#snapshot-database').first()
+        populateComboBox($databaseOptions, 
+        	new Database().getAllDatabases());
+	    var $metricsOptions = $form
+        	.find('#snapshot-metrics').first()
+		populateComboBox($metricsOptions, 
+			new Database().getAllMetrics());
+	    
+    	showDialog($dialog)
+    	$form.submit(function(e) {
+    		new Snapshot().takeSnapshot(e, $(this))
+   			return
+    	})
+    })
+    
+</script>
+</body>
+
+
+</html>

@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>Resource Allocation (draft)</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src='./scripts/measure.js'></script>
+<script src='./scripts/drawing.js'></script>
+<script src='./scripts/snapshot.js'></script>
+<script src='./scripts/database.js'></script>
+<script src='./scripts/metrics.js'></script>
+<script src='./scripts/tasks.js'></script>
+<script src='./scripts/tab.js'></script>
+<script src='./scripts/benchmark.js'></script>
+<script src='./scripts/pool.js'></script>
+<script src='./scripts/cluster.js'></script>
+<script src='./scripts/vm.js'></script>
+<script src='./scripts/capacity.js'></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="./css/bpg.css">
+<script type="text/javascript">
+$(function(){
+	ResourcePool.fetchAllPools($('#pool-list'))
+})
+</script>
+
+</head>
+
+<body>
+	<div id='page-caption'></div>
+	<div id='navigator' class='w3-sidebar w3-card' style="width:25%">
+		<div class='w3-bar w3-black'>
+			<div  class='w3-bar-item'>Resource Pool</div>
+			<i    class='w3-bar-item material-icons'>search</i>
+		</div>
+		<ul id='pool-list' class='w3-margin'></ul>
+    </div>
+		
+	<div id='tabs' style="margin-left:25%">
+		<div id='tab-bar' class='w3-bar w3-black'>
+		</div>
+	</div>
+
+	<div id='new-job-dialog' class='w3-modal'></div>
+	<div id="error-dialog"   class="w3-modal dialog"></div>
+	<div id="message-dialog" class="w3-modal dialog"></div>
+
+	<div id='gchart'>
+	</div>
+	<script>
+		$('#page-caption').load('html/page.html #caption')
+		
+		var tabMgr = new TabManager($('#tab-bar'), $('#tabs'));
+		tabMgr.addTab('demo',        'workbench-view',    'html/demo.html #view')
+		tabMgr.addTab('utilization', '#utilization-view', 'html/utilization.html #view')
+	
+	$('#new-database-dialog')   .load('html/db.html  #dialog')
+	$('#take-snapshot-dialog')  .load('html/snapshot.html #dialog')
+	$('#run-benchmark-dialog')  .load('html/benchmark.html #dialog')
+    
+ 	$('#error-dialog')   .load('html/dialogs.html #error')
+	$('#message-dialog') .load('html/dialogs.html #message')
+ 
+	google.charts.load('current', {'packages':['corechart', 'bar']});
+	
+	
+	$('.dialog').hide()
+    $('.tab-content').hide()
+    $('.cancel-button').on('click', function(e){
+        var $dialog = $(this).parents('.dialog').first()
+        console.log('found dialog ' + $dialog.attr('id')
+        		+ ' as parent of ' + $(this).attr('id'))
+        dialog.remove()
+    })
+	
+	
+	$('#workbench-view').show()
+	$('#task-count').data('count', 0)
+	
+	
+	
+<!-- =============== Record database ================ -->	
+    $('#database-new').on('click', function(e) {
+        new Database().createNew(e)
+    })
+    
+    
+    $('#show-tasks').on('click', function() {
+    	Task.showAll($('#task-table'))
+    	new Tab('task-view').show()
+    })
+    
+    $('#run-benchmark').on('click', function(e){
+        new Benchmark().runBenchmark(e)
+    })
+    
+<!-- =============== take snapshot ================ -->	
+    $('#take-snapshot').on('click', function(e) {
+    	console.log('clicked ' + $(this).attr('id'))
+    	e.preventDefault()
+    	e.stopPropagation()
+    	var $dialog = $('#take-snapshot-dialog')
+    	var $form = $dialog.find('form').first()
+	    var $databaseOptions = $form
+		          .find('#snapshot-database').first()
+        populateComboBox($databaseOptions, 
+        	new Database().getAllDatabases());
+	    var $metricsOptions = $form
+        	.find('#snapshot-metrics').first()
+		populateComboBox($metricsOptions, 
+			new Database().getAllMetrics());
+	    
+    	showDialog($dialog)
+    	$form.submit(function(e) {
+    		new Snapshot().takeSnapshot(e, $(this))
+   			return
+    	})
+    })
+    
+</script>
+</body>
+
+
+</html>

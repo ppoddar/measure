@@ -1,0 +1,12 @@
+# ------------------------------------
+# configuration for avaialble clusters
+# and their assignment to resource pools
+# ------------------------------------
+clusters: 
+  # each cluster has an unique name
+  # host/port and other details fro cluster
+  tomahawk: 
+      host: 'tomahawk-v1.eng.nutanix.com'
+      port: 9440
+      
+     

@@ -1,4 +1,4 @@
-package com.nutanix.bpg;
+package com.nutanix.bpg.repo;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,14 +11,14 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.model.Catalog;
-import com.nutanix.bpg.measure.model.CatalogBuilder;
-import com.nutanix.bpg.measure.model.Database;
-import com.nutanix.bpg.measure.model.DatabaseFactory;
-import com.nutanix.bpg.measure.model.Factory;
-import com.nutanix.bpg.measure.model.Metrics;
-import com.nutanix.bpg.measure.model.MetricsFactory;
-import com.nutanix.bpg.measure.model.Named;
+import com.nutanix.bpg.model.Catalog;
+import com.nutanix.bpg.model.CatalogBuilder;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.DatabaseFactory;
+import com.nutanix.bpg.model.Factory;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.model.MetricsFactory;
+import com.nutanix.bpg.model.Named;
 
 
 public class RepositoryImpl implements Repository {
@@ -162,6 +162,7 @@ public class RepositoryImpl implements Repository {
 	 * @return a catalog
 	 * @throws Exception
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static <T extends Named> Catalog<T> getCatalog(
 			Factory<T> factory, String path) 
 					throws Exception {

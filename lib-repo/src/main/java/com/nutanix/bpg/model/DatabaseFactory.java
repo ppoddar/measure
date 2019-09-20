@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.io.InputStream;
 

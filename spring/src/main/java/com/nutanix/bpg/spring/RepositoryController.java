@@ -1,7 +1,6 @@
-package com.nutanix.bpg.measure.spring;
+package com.nutanix.bpg.spring;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -17,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nutanix.bpg.Repository;
-import com.nutanix.bpg.RepositoryImpl;
-import com.nutanix.bpg.measure.model.Database;
-import com.nutanix.bpg.measure.model.DatabaseBuilder;
-import com.nutanix.bpg.measure.model.DatabaseProperties;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.DatabaseBuilder;
+import com.nutanix.bpg.model.DatabaseProperties;
+import com.nutanix.bpg.repo.Repository;
+import com.nutanix.bpg.repo.RepositoryImpl;
+import com.nutanix.bpg.spring.config.YAMLConfig;
 
 @RestController
 @RequestMapping("/repo")

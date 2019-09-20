@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.spring.serde;
+package com.nutanix.bpg.spring.serde;
 
 public class DatabaseMixIn {
 

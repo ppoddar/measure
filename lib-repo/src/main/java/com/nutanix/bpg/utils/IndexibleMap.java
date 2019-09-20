@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.utils;
+package com.nutanix.bpg.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.nutanix.bpg.measure.model.Named;
 
 /**
  * A data structure to maintain {@link Named named items} 

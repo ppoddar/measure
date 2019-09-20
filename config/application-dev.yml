@@ -18,8 +18,8 @@ database:
     
 logging: 
   level:
-     com.nutanix: debug
+     com.nutanix: info
      org.springframework: error
-     org.springframework.web: debug
+     org.springframework.web: error
 
  

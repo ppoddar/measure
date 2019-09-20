@@ -1,8 +1,8 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.util.Arrays;
 
-import com.nutanix.bpg.measure.utils.StringUtils;
+import com.nutanix.bpg.utils.StringUtils;
 
 /**
  * properties to specify a database.

@@ -1,0 +1,230 @@
+
+
+div.editable {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+input:invalid {
+  border: 2px dashed red;
+}
+/**
+ */
+ul#database-tree li {
+	list-style: square;
+}
+
+
+ 
+
+li {
+	overflow: hidden;
+	
+}
+
+
+.metrics-list {
+	list-style-image: url('../images/png/metrics.png')
+}
+
+.metrics-list li {
+	overflow: hidden;
+}
+
+
+
+
+#main {
+	display: flex;
+} 
+
+#template-area {
+	flex: 1;
+	border: 1px solid red;
+	position: relative;
+}
+
+#template-name {
+	font-weight: bold;
+}
+
+#template-properties {
+	height:500px;
+	overflow:scroll;
+	padding-bottom: 12px;
+}
+
+#template-button-bar {
+	bottom: -10%;
+	position: absolute;
+	margin: 0 auto;
+	width: 100%;
+}
+#best-practices-list {
+	list-style: none;
+	margin-left: 1em;
+}
+
+#best-practices-list #database-parameter-list {
+	list-style: none;
+}
+
+
+
+
+#template-list li {
+	font-size: 0.8em;
+	color: blue;
+}
+
+.property  label {
+	margin: 2em;
+	font-weight: bold;
+	display: inline;
+}
+
+.property input {
+	display: inline;
+	
+}
+
+.property > .description {
+	font-size: 0.9em;
+	margin-left: 8em;
+	
+}
+
+.version {
+	color: white;
+	margin: 12px;
+	padding: 4px;
+}
+
+.dialog {
+	width: 600px;
+    background-color: white;
+    overflow: auto;
+    
+    top:10%;
+    left:25%;
+}
+
+
+.added {
+	background-color: green;
+}
+
+.removed {
+	background-color: red;
+}
+
+.replaced {
+	background-color: yellow;
+}
+
+
+tbody{
+  display:block;
+  overflow:auto;
+}
+thead tr{
+  display:block;
+}
+
+
+.container{
+    display: flex;
+}
+.fixed{
+    width: 400px;
+}
+.flex-item{
+    flex-grow: 1;
+}
+
+/**
+*/
+/* The container must be positioned relative: */
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: DodgerBlue;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* Position the tooltip */
+    position: absolute;
+    display: block;
+    z-index: 1;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }

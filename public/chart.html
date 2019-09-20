@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+</head>
+
+<body>
+<div id='chart'></div>
+
+
+<script type="text/javascript">
+google.charts.load('current', {'packages':['corechart']});
+
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+	var chartData = new google.visualization.DataTable();
+	chartData.addColumn('string', 'Quantity')
+	chartData.addColumn('number', 'available')
+	chartData.addColumn('number', 'used')
+	chartData.addRow(['memory', 10, 12])
+	chartData.addRow(['cpu',     1, 2])
+	chartData.addRow(['storage', 35, 40])
+	
+	var options = {
+	        title: 'Capacity utilization',
+	        chartArea: {width: '50%'},
+	        legend:{position:'bottom'},
+	        bar: {groupWidth:'95%'},
+	        isStacked:'percent',
+	        series: ['red', 'green', 'blue']
+	      };
+	var chart = new google.visualization.BarChart(document.getElementById('chart'));
+	chart.draw(chartData, options)
+	
+
+}
+</script>
+</body>
+
+</html>

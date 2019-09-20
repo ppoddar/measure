@@ -1,9 +1,9 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.utils.StringUtils;
+import com.nutanix.bpg.utils.StringUtils;
 
 public class DatabaseBuilder {
 	@SuppressWarnings("unused")

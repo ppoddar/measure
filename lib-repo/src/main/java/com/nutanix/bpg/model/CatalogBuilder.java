@@ -1,14 +1,10 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import org.slf4j.Logger;
@@ -37,8 +33,8 @@ public class CatalogBuilder<T extends Named>
 	 * builds an element from every selected file
 	 * and adds the to a catalog.
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return a catalog
+	 * @throws IllegalArgumentException when things go wrong
 	 */
 	public Catalog<T> build() {
 		if (factory == null) {

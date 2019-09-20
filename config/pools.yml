@@ -1,0 +1,5 @@
+# pools are enumerated by name
+# for each pool, clusters are assigned by name  
+pools: 
+  default: 
+     - tomahawk 

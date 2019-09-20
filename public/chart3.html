@@ -1,0 +1,39 @@
+<html>
+   <head>
+      <title>Google Charts Tutorial</title>
+      <script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
+      </script>
+      <script type = "text/javascript">
+         google.charts.load('current', {packages: ['corechart']});     
+      </script>
+   </head>
+   
+   <body>
+      <div id = "container" style = "width: 550px; height: 400px; margin: 0 auto">
+      </div>
+      <script language = "JavaScript">
+         function drawChart() {
+            var chartData = []
+            chartData.push(['Student Roll No', 'Height', 'Weight'])
+            chartData.push(['1', 80, 40])
+            chartData.push(['2', 55, 30])
+            chartData.push(['3', 68, 34])
+            chartData.push(['4', 80, 40])
+                
+            // Define the chart to be drawn.
+            var data = google.visualization.arrayToDataTable(chartData)
+             
+            // Set chart options
+            var options = {
+               title: 'Students Height and Weight',
+               legend: { position: 'bottom' }      
+            };					
+
+            // Instantiate and draw the chart.
+            var chart = new google.visualization.Histogram(document.getElementById('container'));
+            chart.draw(data, options);
+         }
+         google.charts.setOnLoadCallback(drawChart);
+      </script>
+   </body>
+</html>

@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.sql.Connection;
 
@@ -19,7 +19,7 @@ public interface Database extends Named {
 	 * A kind specifies default properties of database.
 	 * Every database has a kind.
 	 * 
-	 * @return
+	 * @return kind of databse
 	 */
 	DatabaseKind getKind();
 	
@@ -32,6 +32,7 @@ public interface Database extends Named {
 	
 	/**
 	 * gets description of a database.
+	 * @return description of this database
 	 */
 	String getDescription();
 	
@@ -40,21 +41,21 @@ public interface Database extends Named {
 	 * The name/IP address must be resolved by DNS
 	 * for connecting to the databs eremotely.
 	 * 
-	 * @return
+	 * @return host for the databse
 	 */
 	String getHost();
 	
 	/**
 	 * gets listen port of database server host.
 	 * 
-	 * @return
+	 * @return listen port 
 	 */
 	int getPort();
 	
 	/**
 	 * gets database user name.
 	 * 
-	 * @return
+	 * @return user name
 	 */
 	String getUser();
 	String getUrl();
@@ -63,14 +64,14 @@ public interface Database extends Named {
 	 * gets database catalog for statistics tables.
 	 * can return null.
 	 * 
-	 * @return
+	 * @return catalog name of database
 	 */
 	String getCatalog();
 	/**
 	 * gets database schema for statistics tables.
 	 * can return null.
 	 * 
-	 * @return
+	 * @return schea name 
 	 */
 	String getSchema();
 
@@ -92,21 +93,21 @@ public interface Database extends Named {
 	 * gets pattern for statistics tables.
 	 * can return null.
 	 * 
-	 * @return
+	 * @return pattern for tables to inspect
 	 */
 	String getTableNamePattern();
 	/**
 	 * affirms is given table is name for a
 	 * statistics table.
 	 * 
-	 * @return
+	 * @return true if statistics table
 	 */
 	boolean isStatisticsTable(String tableName);
 	
 	/**
 	 * gets types of statistics table.
 	 * 
-	 * @return
+	 * @return table types
 	 */
 	String[] getStatisticsTableTypes();
 	

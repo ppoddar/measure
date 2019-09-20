@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.nutanix.bpg.measure.utils.JsonUtils;
+import com.nutanix.bpg.utils.JsonUtils;
 
 public class MetricsFactory implements Factory<Metrics> {
 	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());

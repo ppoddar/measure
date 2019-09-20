@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.utils;
+package com.nutanix.bpg.utils;
 
 public interface Identifable {
 	public String getId();

@@ -8,6 +8,7 @@
 		<project>lib-measure</project>
 		<project>lib-repo</project>
 		<project>lib-resource</project>
+		<project>lib-tasks</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

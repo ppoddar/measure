@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 public class PostgresDatabase extends AbstractDatabase {
 	

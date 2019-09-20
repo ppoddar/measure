@@ -1,11 +1,11 @@
-package com.nutanix.bpg.measure.spring.serde;
+package com.nutanix.bpg.spring.serde;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.nutanix.bpg.measure.model.DatabaseKind;
+import com.nutanix.bpg.model.DatabaseKind;
 
 @SuppressWarnings("serial")
 public class DatabaseKindSerializer extends StdSerializer<DatabaseKind>{

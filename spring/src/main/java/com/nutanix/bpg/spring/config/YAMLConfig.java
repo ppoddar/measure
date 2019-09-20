@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.spring;
+package com.nutanix.bpg.spring.config;
 
 import java.util.HashMap;
 import java.util.Map;

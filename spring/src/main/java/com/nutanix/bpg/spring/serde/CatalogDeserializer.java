@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.spring.serde;
+package com.nutanix.bpg.spring.serde;
 
 import java.io.IOException;
 
@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.nutanix.bpg.measure.model.Catalog;
-import com.nutanix.bpg.measure.model.Metrics;
+import com.nutanix.bpg.model.Catalog;
+import com.nutanix.bpg.model.Metrics;
 
 @SuppressWarnings("serial")
 public class CatalogDeserializer extends 

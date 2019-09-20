@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.spring.serde;
+package com.nutanix.bpg.spring.serde;
 
 import java.io.IOException;
 
@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.nutanix.bpg.measure.model.Catalog;
-import com.nutanix.bpg.measure.model.Metrics;
+import com.nutanix.bpg.model.Catalog;
+import com.nutanix.bpg.model.Metrics;
 
 @SuppressWarnings("serial")
 public class CatalogSerializer extends StdSerializer<Catalog<Metrics>> {

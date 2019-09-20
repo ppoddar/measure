@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.spring.serde;
+package com.nutanix.bpg.spring.serde;
 
 import java.io.IOException;
 
@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.nutanix.bpg.measure.model.MetricsDimension;
-import com.nutanix.bpg.measure.utils.IndexibleMap;
+import com.nutanix.bpg.model.MetricsDimension;
+import com.nutanix.bpg.utils.IndexibleMap;
 
 @SuppressWarnings("serial")
 public class IndexibleMapDeserializer extends 

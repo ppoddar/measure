@@ -1,16 +1,16 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.nutanix.bpg.measure.utils.NamedMap;
+import com.nutanix.bpg.utils.NamedMap;
 
 /**
  * a repository of generic type indexed by 
  * @author pinaki.poddar
  *
- * @param <T>
+ * @param <T> type of elements
  */
 
 public class Catalog<T extends Named> implements Iterable<T> {
@@ -25,7 +25,7 @@ public class Catalog<T extends Named> implements Iterable<T> {
 	
 	/**
 	 * adds an identifiable element to this receiver.
-	 * @param t
+	 * @param t element
 	 */
 	public void add(T t) {
 		map.add(t);
@@ -42,7 +42,7 @@ public class Catalog<T extends Named> implements Iterable<T> {
 	
 	/**
 	 * gets an identifiable by its id
-	 * @param name
+	 * @param name name of an element
 	 * @return can be null
 	 */
 	public T get(String name) {
@@ -51,7 +51,7 @@ public class Catalog<T extends Named> implements Iterable<T> {
 	
 	/**
 	 * affirms if this receiver contains given identity
-	 * @param name
+	 * @param name name of an element
 	 * @return true if given name exists
 	 */
 	public boolean has(String name) {
@@ -60,7 +60,7 @@ public class Catalog<T extends Named> implements Iterable<T> {
 
 	/**
 	 * gets all elements in this receiver
-	 * @return
+	 * @return all values
 	 */
 	public Collection<T> values() {
 		return map.values();

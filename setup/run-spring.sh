@@ -11,9 +11,10 @@ echo ----------------------------------------
 
 PROFILE=dev
 echo Spring application configuration at $PROJECT_HOME/config/application.yml 
-cat $PROJECT_HOME/config/application-$PROFILE.yml
-
+#cat $PROJECT_HOME/config/application-$PROFILE.yml
+DEBUG_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:$PORT
 java \
+  -D$DEBUG_OPTIONS \
   -Dspring.profiles.active=$PROFILE \
   -Dserver.port=$PORT \
   -jar $MAIN_JAR 

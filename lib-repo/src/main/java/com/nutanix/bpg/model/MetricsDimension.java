@@ -1,11 +1,11 @@
-package com.nutanix.bpg.measure.model;
+package com.nutanix.bpg.model;
 
 import java.io.Serializable;
 import java.sql.Types;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.nutanix.bpg.measure.utils.Identifable;
+import com.nutanix.bpg.utils.Identifable;
 
 /**
  * a dimension encodes meta information
@@ -59,7 +59,7 @@ public class MetricsDimension implements Named, Identifable, Serializable {
 	 * affirms if value in this dimension
 	 * is numeric.
 	 * 
-	 * @return
+	 * @return true if numeric
 	 */
 	public boolean getNumeric() {
 		return numeric;

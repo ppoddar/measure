@@ -1,11 +1,11 @@
-package com.nutanix.bpg.measure.utils;
+package com.nutanix.bpg.utils;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.nutanix.bpg.measure.model.Named;
+import com.nutanix.bpg.model.Named;
 
 public class NamedMap<V extends Named> {
 	private final Map<String, V> map;

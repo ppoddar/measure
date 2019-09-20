@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.utils;
+package com.nutanix.bpg.utils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,7 +11,7 @@ public class ResourceUtils {
 			url = new URL(path);
 		} else {
 			String cwd = System.getProperty("user.dir");
-				url = new URL("file::///" + cwd + "/" + path);
+				url = new URL("file:///" + cwd + "/" + path);
 		}
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);

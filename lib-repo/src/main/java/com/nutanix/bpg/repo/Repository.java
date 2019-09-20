@@ -1,10 +1,10 @@
-package com.nutanix.bpg;
+package com.nutanix.bpg.repo;
 
 import java.sql.Connection;
 import java.util.Collection;
 
-import com.nutanix.bpg.measure.model.Database;
-import com.nutanix.bpg.measure.model.Metrics;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
 
 public interface Repository {
 
