@@ -6,14 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.MeasuremementTaker;
-import com.nutanix.bpg.measure.model.Database;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.model.MetricsDimension;
 import com.nutanix.bpg.measure.model.Measurement;
-import com.nutanix.bpg.measure.model.Metrics;
-import com.nutanix.bpg.measure.model.MetricsDimension;
 import com.nutanix.bpg.measure.script.CommandExecutor;
 import com.nutanix.bpg.measure.script.QuietParser;
 import com.nutanix.bpg.measure.script.StreamParser;
-import com.nutanix.bpg.measure.utils.StringUtils;
+import com.nutanix.bpg.utils.StringUtils;
 
 /**
  * executes PGBench command in a separate process.
@@ -91,7 +91,7 @@ public class PGBench implements MeasuremementTaker {
 		commands[0] = EXECUATABLE;
 		System.arraycopy(commandOptions, 0, commands, 1, commandOptions.length);
 		logger.debug("running Postgres for collecting benchmark "
-				+ "[" + StringUtils.join(" ", commands) + "]");
+				+ "[" + StringUtils.join(' ', commands) + "]");
 		StreamParser<Measurement> outputParser 
 			= new PGBenchoutputParser();
 		StreamParser<Object> errorParser 

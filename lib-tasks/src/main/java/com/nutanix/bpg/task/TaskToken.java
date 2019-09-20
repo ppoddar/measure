@@ -1,10 +1,8 @@
-package com.nutanix.bpg.measure.spring;
+package com.nutanix.bpg.task;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,14 +14,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author pinaki.poddar
  *
  */
-public class TaskToken<T>  {
+public class TaskToken {
 	private final String id;
 	private final String name;
 	private final String category;
 	private final long startTime;
 	private final long expectedDuration;
-	private final CompletableFuture<T> promise;
-	private static Logger logger = LoggerFactory.getLogger(TaskToken.class);
+	private final CompletableFuture<?> promise;
 
 	/**
 	 * create a token with given promise.
@@ -34,7 +31,7 @@ public class TaskToken<T>  {
 	public TaskToken(String name, 
 			String category,
 			long expectedDuration,
-			CompletableFuture<T> p) {
+			CompletableFuture<?> p) {
 		this.id        = UUID.randomUUID().toString();
 		this.name      = name;
 		this.category  = category;

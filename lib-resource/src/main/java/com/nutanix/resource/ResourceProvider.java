@@ -7,12 +7,16 @@ package com.nutanix.resource;
  *
  */
 public interface ResourceProvider extends Iterable<Resource> {
+	String getId();
 	String getName();
 	void setName(String name);
-	Capacities getAvailableCapacities();
-	Capacities getTotalCapacities();
+	Capacity getAvailableCapacity();
+	Capacity getTotalCapacity();
+	Utilization getUtilization();
 	
 	ResourceProvider addResource(Resource r);
+	
+	int getResourceCount();
 	
 	
 }

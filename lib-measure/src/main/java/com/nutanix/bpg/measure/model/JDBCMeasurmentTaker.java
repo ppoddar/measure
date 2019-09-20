@@ -11,6 +11,8 @@ import com.nutanix.bpg.measure.MeasuremementTaker;
 import com.nutanix.bpg.measure.jdbc.SQL;
 import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
 import com.nutanix.bpg.measure.jdbc.SelectSQL;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
 
 /**
  * takes a measurement on a database table.

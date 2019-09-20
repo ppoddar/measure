@@ -21,7 +21,7 @@ public interface AllocationPolicy {
 	 */
 	Allocation reserveAllocation(
 			ResourcePool pool,  
-			Capacities demand);
+			Capacity demand);
 	
 	
 }

@@ -1,4 +1,4 @@
-package com.nutanix.resource.impl.unit;
+package com.nutanix.resource.unit;
 
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.Unit;

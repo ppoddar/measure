@@ -9,12 +9,12 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.Repository;
-import com.nutanix.bpg.RepositoryImpl;
+import com.nutanix.bpg.repo.Repository;
+import com.nutanix.bpg.repo.RepositoryImpl;
 import com.nutanix.bpg.measure.jdbc.SnapshotPlugin;
-import com.nutanix.bpg.measure.model.Database;
+import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.measure.model.JDBCMeasurmentTaker;
-import com.nutanix.bpg.measure.model.Metrics;
+import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.measure.model.Snapshot;
 import com.nutanix.bpg.measure.model.SnapshotSchedule;
 import com.nutanix.bpg.workload.Benchmarker;

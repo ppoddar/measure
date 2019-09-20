@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.nutanix.bpg.measure.utils.ClasspathUtils;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.model.MetricsDimension;
 
 /**
  * maps a name to a {@link MetricsDimension}.

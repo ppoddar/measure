@@ -11,28 +11,37 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapLikeType;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.nutanix.bpg.measure.model.Catalog;
-import com.nutanix.bpg.measure.utils.JsonUtils;
-import com.nutanix.bpg.measure.utils.ResourceUtils;
+import com.nutanix.bpg.model.Catalog;
+import com.nutanix.bpg.utils.JsonUtils;
+import com.nutanix.bpg.utils.ResourceUtils;
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.AllocationPolicy;
 import com.nutanix.resource.Capacity;
+import com.nutanix.resource.Quantity;
 import com.nutanix.resource.ResourceManager;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.model.Cluster;
+import com.nutanix.resource.model.ClusterBuilder;
+import com.nutanix.resource.model.serde.CapacityDeserilaizer;
+import com.nutanix.resource.model.serde.CapacitySerializer;
+import com.nutanix.resource.model.serde.QuantityDeserializer;
+import com.nutanix.resource.model.serde.QuantitySerializer;
 
 public class ResourceManagerImpl 
 	implements ResourceManager {
 	private static ResourceManagerImpl singleton;
 	private static Properties config;
-	private List<ResourcePool> pools;
+	private Catalog<Cluster> clusters;
+	private Catalog<ResourcePool> pools;
 	private List<Allocation>   allocations;
 	private AllocationPolicy allocationPolicy;
-	private Catalog<Cluster> clusters;
+	private ObjectMapper mapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ResourceManager.class);
 	
@@ -61,13 +70,24 @@ public class ResourceManagerImpl
 	 * 
 	 */
 	private ResourceManagerImpl() throws Exception {
+		mapper = configureObjectMapper();
 		allocationPolicy = (AllocationPolicy)config.get(POLICY_ALLOCATION);
-		pools = new ArrayList<>();
+		pools = new Catalog<ResourcePool>();
 		
 		String catalogLocation = config.getProperty(CATALOG_CLUSTER_URL);
 		URL url = ResourceUtils.getURL(catalogLocation);
-		JsonNode json = JsonUtils.readResource(url, true);
-		readClusterAndResourcePoolAssignment(json);
+		JsonNode clusterDescriptor = JsonUtils.readResource(url, true);
+		clusters = readClusterDesciptiors(clusterDescriptor);
+		
+		String poolAssignmentLocation = config.getProperty(POOL_ASSIGNMENT_URL);
+		url = ResourceUtils.getURL(poolAssignmentLocation);
+		JsonNode poolAssignment = JsonUtils.readResource(url, true);
+		pools = assignPools(poolAssignment, clusters);
+		for (Cluster cluster : clusters) {
+			new ClusterBuilder().build(cluster);
+		}
+		allocations = new ArrayList<>();
+			
 	}
 	
 	public static void setProperties(Properties p) {
@@ -83,29 +103,46 @@ public class ResourceManagerImpl
 		Properties props = new Properties();
 		props.put(POLICY_ALLOCATION, new DefaultAllocationPolicy());
 		props.put(CATALOG_CLUSTER_URL, "config/clusters.yml");
+		props.put(POOL_ASSIGNMENT_URL, "config/pools.yml");
 		return props;
 	}
 	
 	@Override
-	public ResourcePool getResourcePool(String id) {
+	public ResourcePool getResourcePoolByName(String name) {
 		ResourcePool pool = null;
-		for (ResourcePool p : pools) {
-			if (p.getId().equals(id)) {
+		for (ResourcePool p : pools.values()) {
+			if (p.getName().equalsIgnoreCase(name)) {
 				pool = p;
 				break;
 			}
 		}
 		return pool;
 	}
+	
+	@Override
+	public ResourcePool getResourcePool(String id) {
+		
+		return pools.get(id);
+	}
+
 
 	@Override
-	public List<ResourcePool> getResourcePools() {
-		return pools;
+	public Collection<ResourcePool> getResourcePools() {
+		return pools.values();
+	}
+	@Override
+	public List<String> getPoolNames() {
+		List<String> names = new ArrayList<>();
+		for (ResourcePool pool : pools.values()) {
+			names.add(pool.getName());
+		}
+		return names;
 	}
 
 	@Override
-	public Allocation allocate(ResourcePool pool, Collection<Capacity> demand) {
-		Allocation allocation = pool.allocate(new DefaultCapacities(demand));
+	public Allocation allocate(ResourcePool pool, Collection<Quantity> demand) {
+		logger.debug("allocating " + demand);
+		Allocation allocation = pool.allocate(new DefaultCapacity(demand));
 		allocations.add(allocation);
 		return allocation;
 	}
@@ -130,27 +167,28 @@ public class ResourceManagerImpl
 		return alloc;
 	}
 
+	public ObjectMapper getObjectMapper() {
+		return mapper;
+	}
+	private ObjectMapper configureObjectMapper() {
+		mapper = new ObjectMapper();
+		SimpleModule module = new SimpleModule();
+		module.addSerializer(new CapacitySerializer());
+		module.addSerializer(new QuantitySerializer());
+		module.addDeserializer(Capacity.class, new CapacityDeserilaizer());
+		module.addDeserializer(Quantity.class, new QuantityDeserializer());
+		mapper.registerModule(module);
+		
+		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		mapper.disable(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS);
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		return mapper;
+	}
 	
-	
-	public void readClusterAndResourcePoolAssignment(JsonNode json) throws Exception {
+	public Catalog<ResourcePool> assignPools(JsonNode json, Catalog<Cluster> clusters) throws Exception {
+		Catalog<ResourcePool> pools = new Catalog<ResourcePool>();
 		try {
-			
-			JsonNode clustersNode = JsonUtils.assertProperty(json, "clusters", true);
-			ObjectMapper mapper = new ObjectMapper();
-			MapLikeType type = mapper.getTypeFactory()
-				.constructMapLikeType(Map.class, String.class, Cluster.class);
-			
-			Map<String, Cluster> clusterMap = mapper.convertValue(clustersNode, type);
-
-			clusters = new Catalog<>();
-			for (Map.Entry<String, Cluster> e : clusterMap.entrySet()) {
-				Cluster cluster = e.getValue();
-				cluster.setName(e.getKey());
-				clusters.add(cluster);
-			}
-			
-			JsonNode poolsNode  = JsonUtils.assertProperty(json, "pools", true);
-			pools = new ArrayList<ResourcePool>();
+			JsonNode poolsNode  = JsonUtils.assertProperty(json, "pools");
 			Iterator<String> poolNames = poolsNode.fieldNames();
 			while (poolNames.hasNext()) {
 				String poolName = poolNames.next();
@@ -176,6 +214,33 @@ public class ResourceManagerImpl
 				throw new RuntimeException(ex);
 			}
 		}
+		return pools;
 	}
+	
+	public Catalog<Cluster> readClusterDesciptiors(JsonNode json) throws Exception {
+		Catalog<Cluster> clusters = new Catalog<>();
+		try {
+			JsonNode clustersNode = JsonUtils.assertProperty(json, "clusters");
+			MapLikeType type = mapper.getTypeFactory()
+				.constructMapLikeType(Map.class, String.class, Cluster.class);
+			
+			Map<String, Cluster> clusterMap = mapper.convertValue(clustersNode, type);
+
+			for (Map.Entry<String, Cluster> e : clusterMap.entrySet()) {
+				Cluster cluster = e.getValue();
+				cluster.setName(e.getKey());
+				clusters.add(cluster);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			if (RuntimeException.class.isInstance(ex)) {
+				throw ex;
+			} else {
+				throw new RuntimeException(ex);
+			}
+		}
+		return clusters;
+	}
+
 	
 }

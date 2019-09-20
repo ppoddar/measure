@@ -100,7 +100,7 @@ public class PrismGateway {
 		String encoded = Base64.getEncoder().encodeToString((username+":"+password).getBytes(StandardCharsets.UTF_8)); 
 		con.setRequestProperty("Authorization", "Basic "+encoded);
 		
-		logger.debug("Prism request:" + url);
+		logger.info("Prism request:" + url);
 		InputStream in = con.getInputStream();
 		return mapper.readTree(in);
 	}

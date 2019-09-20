@@ -1,9 +1,8 @@
 package com.nutanix.resource;
 
 import java.time.Duration;
-import java.util.Map;
 
-import com.nutanix.bpg.measure.utils.Identifable;
+import com.nutanix.bpg.utils.Identifable;
 /**
  * Allocation of resource demand to a resource.
  * A {@link AllocationPolicy#reserveAllocation(ResourcePool, Capacities)
@@ -12,6 +11,11 @@ import com.nutanix.bpg.measure.utils.Identifable;
  * @author pinaki.poddar
  *
  */
+//@JsonTypeInfo(use=Id.CLASS, include=As.PROPERTY,property="class")
+//@JsonSubTypes({
+//	@JsonSubTypes.Type(DefaultAllocation.class)
+//})
+
 public interface Allocation 
 	extends Identifable, Comparable<Allocation> {
 	/**
@@ -23,7 +27,7 @@ public interface Allocation
 	 * gets the demand that has been allocated
 	 * @return a set of capacities. never null.
 	 */
-	Capacities getDemand();
+	Capacity getDemand();
 	
 	/**
 	 * get duration to which this allocation would

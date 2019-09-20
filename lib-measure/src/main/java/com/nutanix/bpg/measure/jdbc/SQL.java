@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.model.DataMapping;
-import com.nutanix.bpg.measure.model.Metrics;
-import com.nutanix.bpg.measure.model.MetricsDimension;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.model.MetricsDimension;
 import com.nutanix.bpg.measure.utils.TypeUtils;
 /**
  * Creates SQL step-by-step. 

@@ -3,24 +3,18 @@ package com.nutanix.bpg.measurer.dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.jdbc.DynamicTable;
 import com.nutanix.bpg.measure.jdbc.InsertSQL;
-import com.nutanix.bpg.measure.jdbc.SQL;
 import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
-import com.nutanix.bpg.measure.jdbc.SelectSQL;
 import com.nutanix.bpg.measure.model.DataMapping;
 import com.nutanix.bpg.measure.model.Measurement;
-import com.nutanix.bpg.measure.model.Metrics;
-import com.nutanix.bpg.measure.model.MetricsDimension;
-import com.nutanix.bpg.measure.utils.StringUtils;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.model.MetricsDimension;
+import com.nutanix.bpg.utils.StringUtils;
 
 /**
  * Manages persistent CRUD operations for  {@link Measurement 

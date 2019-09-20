@@ -3,7 +3,6 @@ package com.nutanix.resource.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.collections.iterators.IteratorChain;
@@ -11,11 +10,11 @@ import org.apache.commons.collections.iterators.IteratorChain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.AllocationPolicy;
-import com.nutanix.resource.Capacities;
 import com.nutanix.resource.Capacity;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.ResourceProvider;
+import com.nutanix.resource.Utilization;
 
 /**
  * ResourcePool is collection of {@link com.nutanix.resource.Resource}.
@@ -29,7 +28,33 @@ import com.nutanix.resource.ResourceProvider;
  * @author pinaki.poddar
  *
  */
+
 public class DefaultResourcePool implements ResourcePool {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DefaultResourcePool other = (DefaultResourcePool) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
 	private String id;
 	private String name;
 	private List<ResourceProvider> providers
@@ -59,7 +84,7 @@ public class DefaultResourcePool implements ResourcePool {
 	}
 
 	@Override
-	public Allocation allocate(Capacities demand) {
+	public Allocation allocate(Capacity demand) {
 		assertProviders();
 		Allocation alloc = getAllocationPolicy()
 					.reserveAllocation(this, demand);
@@ -73,22 +98,24 @@ public class DefaultResourcePool implements ResourcePool {
 		throw new AbstractMethodError();
 	}
 
+	@JsonIgnore
 	@Override
-	public Capacities getTotalCapacity() {
-		Capacities cap = new DefaultCapacities();
+	public Capacity getTotalCapacity() {
+		Capacity cap = new DefaultCapacity();
 		for (ResourceProvider provider : providers) {
-			cap.addCapacities(provider.getTotalCapacities());
+			cap.addCapacities(provider.getTotalCapacity());
 		}
-		return cap;
+		return cap.convert();
 	}
 
+	@JsonIgnore
 	@Override
-	public Capacities getAvailableCapacity() {
-		Capacities cap = new DefaultCapacities();
+	public Capacity getAvailableCapacity() {
+		Capacity cap = new DefaultCapacity();
 		for (ResourceProvider provider : providers) {
-			cap.addCapacities(provider.getAvailableCapacities());
+			cap.addCapacities(provider.getAvailableCapacity());
 		}
-		return cap;
+		return cap.convert();
 	}
 	
 	@JsonIgnore
@@ -124,10 +151,11 @@ public class DefaultResourcePool implements ResourcePool {
 		}
 	}
 
+	@JsonIgnore
 	@Override
 	public int getSize() {
 		int size = 0;
-		for (Resource r : this) {
+		for (@SuppressWarnings("unused") Resource r : this) {
 			size++;
 		}
 		return size;
@@ -139,4 +167,23 @@ public class DefaultResourcePool implements ResourcePool {
 		providers.forEach((p)->{names.add(p.getName());});
 		return names;
 	}
+
+	@Override
+	public List<ResourceProvider> getProviders() {
+		return providers;
+	}
+
+	@Override
+	public Utilization getUtilization() {
+		Utilization result = new DefaultUtilization();
+		for (Resource.Kind k : Resource.Kind.values()) {
+			result.put(k, 0.0);
+		}
+		for (ResourceProvider provider : providers) {
+			result = result.accumulate(provider.getUtilization());
+		}
+		return result;
+	}
+	
+
 }

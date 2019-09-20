@@ -1,10 +1,13 @@
 package com.nutanix.resource.impl;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.AllocationPolicy;
-import com.nutanix.resource.Capacities;
 import com.nutanix.resource.Capacity;
+import com.nutanix.resource.Quantity;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourcePool;
 /**
@@ -18,25 +21,27 @@ import com.nutanix.resource.ResourcePool;
  *
  */
 public class DefaultAllocationPolicy implements AllocationPolicy {
-	
+	private static Logger logger = LoggerFactory.getLogger(DefaultAllocationPolicy.class);
 	/**
 	 * selects the resource wit best fitness.
 	 * fitness is sum of fitness for each capacity
 	 * of given demand. If any capacity is absent,
 	 * or insufficient, overall fitness is -1 
 	 * 
-	 * @throws RuntimeException is no resoure fits
+	 * @throws RuntimeException is no resource fits
 	 */
 	@Override
-	public Allocation reserveAllocation(ResourcePool provider, Capacities demand) {
+	public Allocation reserveAllocation(ResourcePool provider, Capacity demand) {
 		Allocation alloc = null;
-		for (Capacity c : demand) {
+		logger.debug("allocating " + demand + " with " + provider);
+		for (Quantity c : demand) {
 			double bestFitness = 0;
 			Resource bestFit = null;
 			for (Resource rsrc : provider) { 
 				double fitness = fitness(rsrc, c);
 				if (fitness < 0) break;
 				if (fitness > bestFitness) {
+					logger.debug("found candidate resource " + rsrc + " with fitness " + fitness + " for quantity " + c);
 					bestFitness = fitness;
 					bestFit = rsrc;
 				}
@@ -61,13 +66,13 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 	 * @param c a demand
 	 * @return a number between 0 and 1. 
 	 */
-	public double fitness(Resource supply, Capacity c) {
+	public double fitness(Resource supply, Quantity c) {
 		double fitness = 0;
 			if (!supply.hasKind(c.getKind())) 
 				return -1;
-			Capacity c2 = supply.getCapacity(c.getKind());
+			Quantity c2 = supply.getAvailableCapacity().getQuantity(c.getKind());
 			if (c2.compareTo(c) < 0) return -1;
-			fitness += supply.getCapacity(c.getKind())
+			fitness += supply.getAvailableCapacity().getQuantity(c.getKind())
 					.fraction(c);
 		return bound(fitness, 1, 0);
 	}

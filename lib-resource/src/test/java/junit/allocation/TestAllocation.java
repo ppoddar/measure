@@ -7,16 +7,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.nutanix.resource.Allocation;
-import com.nutanix.resource.Capacities;
+import com.nutanix.resource.Capacity;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.ResourceProvider;
-import com.nutanix.resource.impl.DefaultCapacities;
+import com.nutanix.resource.impl.DefaultCapacity;
 import com.nutanix.resource.impl.DefaultResourcePool;
-import com.nutanix.resource.impl.unit.CPU;
-import com.nutanix.resource.impl.unit.Memory;
-import com.nutanix.resource.impl.unit.MemoryUnit;
 import com.nutanix.resource.model.Cluster;
 import com.nutanix.resource.model.VirtualMachine;
+import com.nutanix.resource.unit.CPU;
+import com.nutanix.resource.unit.Memory;
+import com.nutanix.resource.unit.MemoryUnit;
 
 public class TestAllocation {
 	private static ResourcePool pool;
@@ -25,18 +25,14 @@ public class TestAllocation {
 	public static void setUp() throws Exception {
 		pool = new DefaultResourcePool();
 		
-		cluster = new Cluster();
-		VirtualMachine vm1 = new VirtualMachine();
-		vm1.setId("large");
-		vm1.setName("large");
-		vm1.addCapacity(new Memory(100, MemoryUnit.GB))
-		   .addCapacity(new CPU(10));
+		cluster = new Cluster("test");
+		VirtualMachine vm1 = new VirtualMachine("large");
+		vm1.addQuanity(new Memory(100, MemoryUnit.GB))
+		   .addQuanity(new CPU(10));
 		
-		VirtualMachine vm2 = new VirtualMachine();
-		vm2.setId("small");
-		vm2.setName("small");
-		vm2.addCapacity(new Memory(10, MemoryUnit.GB))
-		   .addCapacity(new CPU(1));
+		VirtualMachine vm2 = new VirtualMachine("small");
+		vm2.addQuanity(new Memory(10, MemoryUnit.GB))
+		   .addQuanity(new CPU(1));
 
 		
 		cluster.addResource(vm1);
@@ -49,11 +45,11 @@ public class TestAllocation {
 	@Test
 	public void testPoolIteratesOverMultipleClusters() {
 		ResourcePool pool = new DefaultResourcePool();
-		ResourceProvider c1 = new Cluster();
+		ResourceProvider c1 = new Cluster("test");
 		c1.addResource(new VirtualMachine("vm1"));
 		c1.addResource(new VirtualMachine("vm2"));
 		
-		ResourceProvider c2 = new Cluster();
+		ResourceProvider c2 = new Cluster("test2");
 		c1.addResource(new VirtualMachine("vm3"));
 		pool.addProvider(c1);
 		pool.addProvider(c2);
@@ -65,12 +61,12 @@ public class TestAllocation {
 	
 	@Test
 	public void testSimpleAllocation() {
-		Capacities demand = new DefaultCapacities();
-		demand.addCapacity(new Memory(100, MemoryUnit.GB));
-		demand.addCapacity(new CPU(2));
+		Capacity demand = new DefaultCapacity();
+		demand.addQuantity(new Memory(100, MemoryUnit.GB));
+		demand.addQuantity(new CPU(2));
 		
-		Capacities availableBefore = pool.getAvailableCapacity();
-		Capacities totalBefore = pool.getTotalCapacity();
+		Capacity availableBefore = pool.getAvailableCapacity();
+		Capacity totalBefore = pool.getTotalCapacity();
 		System.err.println("total capacities (before)    :" + totalBefore);
 		System.err.println("available capacities (before):" + availableBefore);
 		
@@ -78,13 +74,13 @@ public class TestAllocation {
 		assertNotNull(alloc);
 		assertEquals("large", alloc.getSupply().getId());
 		
-		Capacities availableAfter = pool.getAvailableCapacity();
-		Capacities totalAfter = pool.getTotalCapacity();
+		Capacity availableAfter = pool.getAvailableCapacity();
+		Capacity totalAfter = pool.getTotalCapacity();
 		System.err.println("total capacities (after)    :" + totalAfter);
 		System.err.println("available capacities (after):" + availableAfter);
 		assertEquals(totalAfter, totalBefore);
-		Capacities actual = new DefaultCapacities(availableBefore);
-		actual.reduceCapacities(availableAfter);
+		Capacity actual = new DefaultCapacity(availableBefore);
+		actual.reduceCapacity(availableAfter);
 		assertEquals(demand, actual);
 		
 	}

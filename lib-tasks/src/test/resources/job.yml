@@ -1,0 +1,29 @@
+job: 
+  name: test Job
+  stages: 
+    - 
+        name: first stage
+        tasks: 
+            - 
+             name: t1.1
+            - 
+             name: t1.2
+              
+    -  
+        name: second stage
+        parallel: true
+        tasks: 
+            - 
+             name: t2.1
+            - 
+             name: t2.2
+            - 
+             name: t2.3
+              
+    - 
+        name: third stage
+        tasks: 
+            - 
+             name: t3.1
+            
+    

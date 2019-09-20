@@ -8,7 +8,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.utils.StringUtils;
+import com.nutanix.bpg.utils.StringUtils;
 
 /**
  * Executes a command by invoking a remote process. 
@@ -122,13 +122,13 @@ public class CommandExecutor {
 		
 		Objects.requireNonNull(outputParser);
 		Objects.requireNonNull(errorParser);
-		logger.info("running [" + StringUtils.join(" ", commands) + "]");
+		logger.info("running [" + StringUtils.join(' ', commands) + "]");
 		Process p = null;
 		try {
 			p = pb.command(commands).start();
 			setStreamReader(p, outputParser, errorParser);
 		} catch (Exception ex) {
-			String msg = "error starting command " + StringUtils.join(" " , commands);
+			String msg = "error starting command " + StringUtils.join(' ' , commands);
 			ex.printStackTrace();
 			if (commands.length == 1) {
 				msg += " commnon cause of this error is commands were "
@@ -142,7 +142,7 @@ public class CommandExecutor {
 	public void executeRemoteProcessAndWait(
 			String[] commands) throws Exception {
 		
-		logger.info("running [" + StringUtils.join(" ", commands) + "]");
+		logger.info("running [" + StringUtils.join(' ', commands) + "]");
 		Process p = null;
 		try {
 			p = pb.command(commands).start();
@@ -153,11 +153,11 @@ public class CommandExecutor {
 				return;
 			} else {
 				throw new RuntimeException("can not initailize PGBench."
-						+ " commad was [" + StringUtils.join(" ", commands)
+						+ " commad was [" + StringUtils.join(' ', commands)
 						+ "] returned process status " + status);
 			}
 		} catch (Throwable ex) {
-			String msg = "error starting command " + StringUtils.join(" ", commands);
+			String msg = "error starting command " + StringUtils.join(' ', commands);
 			ex.printStackTrace();
 			if (commands.length == 1) {
 				msg += " commnon cause of this error is commands were "

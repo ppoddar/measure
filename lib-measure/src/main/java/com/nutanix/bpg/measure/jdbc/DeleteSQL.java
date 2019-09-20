@@ -1,6 +1,6 @@
 package com.nutanix.bpg.measure.jdbc;
 
-import com.nutanix.bpg.measure.model.MetricsDimension;
+import com.nutanix.bpg.model.MetricsDimension;
 
 public class DeleteSQL extends SQL {
 	

@@ -4,12 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.nutanix.resource.Capacities;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nutanix.resource.Capacity;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourceProvider;
+import com.nutanix.resource.Utilization;
 
 public class DefaultResourceProvider implements ResourceProvider {
+	private String id;
 	private String name;
+	private List<Resource> resources = new ArrayList<Resource>();
+
+	@JsonCreator
+	public DefaultResourceProvider(@JsonProperty("id") String id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -19,32 +31,33 @@ public class DefaultResourceProvider implements ResourceProvider {
 	}
 
 
-	private List<Resource> resources = new ArrayList<Resource>();
 
 	/**
 	 * available capacity is sum of available capacity
 	 * of all resources.
 	 */
+	@JsonProperty(required=false)
 	@Override
-	public Capacities getAvailableCapacities() {
-		Capacities cap = new DefaultCapacities();
+	public Capacity getAvailableCapacity() {
+		Capacity cap = new DefaultCapacity();
 		for (Resource r : this) {
-			cap.addCapacities(r.getCapacities());
+			cap.addCapacities(r.getAvailableCapacity());
 		}
-		return cap;
+		return cap.convert();
 	}
 
 	/**
 	 * total capacity is sum of total capacity
 	 * of all resources.
 	 */
+	@JsonProperty(required=false)
 	@Override
-	public Capacities getTotalCapacities() {
-		Capacities cap = new DefaultCapacities();
+	public Capacity getTotalCapacity() {
+		Capacity cap = new DefaultCapacity();
 		for (Resource r : this) {
-			cap.addCapacities(r.getMaxCapacities());
+			cap.addCapacities(r.getTotalCapacity());
 		}
-		return cap;
+		return cap.convert();
 	}
 
 	@Override
@@ -67,4 +80,33 @@ public class DefaultResourceProvider implements ResourceProvider {
 	public Iterator<Resource> iterator() {
 		return resources.iterator();
 	}
+	
+	public List<? extends Resource> getResources() {
+		return resources;
+	}
+
+	@JsonIgnore
+	@Override
+	public int getResourceCount() {
+		return resources.size();
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public Utilization getUtilization() {
+		Utilization result = new DefaultUtilization();
+		for (Resource.Kind k : Resource.Kind.values()) {
+			result.put(k, 0.0);
+		}
+		for (Resource r : resources) {
+			result = result.accumulate(r.getUtilization());
+		}
+		
+		return result;
+	}
+	
 }

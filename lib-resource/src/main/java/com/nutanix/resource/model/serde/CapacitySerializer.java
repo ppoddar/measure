@@ -5,24 +5,38 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.nutanix.resource.Capacities;
 import com.nutanix.resource.Capacity;
-
-public class CapacitySerializer extends StdSerializer<Capacities> {
-
+import com.nutanix.resource.Quantity;
+/**
+ * Serializes capacities as follows:
+ * <pre>
+ *   {
+ *    "MEMORY": "1234 MB",
+ *    "COMPUTE": 4,
+ *    "STORAGE": "50 GB"
+ *   }
+ * </pre>
+ * 
+ * @see CapacityDeserilaizer
+ * @author pinaki.poddar
+ *
+ */
+@SuppressWarnings("serial")
+public class CapacitySerializer extends StdSerializer<Capacity> {
+	public static String QUANTITIES = "quantities";
 	public CapacitySerializer() {
-		super(Capacities.class);
+		super(Capacity.class);
 	}
 
 	@Override
-	public void serialize(Capacities capacities, JsonGenerator gen, SerializerProvider provider) throws IOException {
-		gen.writeStartArray();
-		for (Capacity c : capacities) {
-			gen.writeStartObject();
-			gen.writeStringField(c.getKind().toString(), c.getAmount() + " " + c.getUnit().toString());
-			gen.writeEndObject();
+	public void serialize(Capacity capacities, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		gen.writeStartObject();
+		gen.writeArrayFieldStart(QUANTITIES);
+		for (Quantity q : capacities) {
+			gen.writeObject(q);
 		}
 		gen.writeEndArray();
+		gen.writeEndObject();
 	}
 
 }

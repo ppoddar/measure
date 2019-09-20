@@ -1,26 +1,28 @@
 package junit.allocation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.nutanix.resource.Capacities;
 import com.nutanix.resource.Capacity;
+import com.nutanix.resource.Quantity;
 import com.nutanix.resource.Resource;
-import com.nutanix.resource.Unit;
-import com.nutanix.resource.impl.DefaultCapacities;
-import com.nutanix.resource.impl.unit.Memory;
-import com.nutanix.resource.impl.unit.MemoryUnit;
+import com.nutanix.resource.impl.DefaultCapacity;
+import com.nutanix.resource.unit.Memory;
+import com.nutanix.resource.unit.MemoryUnit;
 
 public class TestCapacity {
 	private static double epsilon = 1.0E-8;
 	@Test
 	public void testCapacityCanBeCompared() {
-		Capacity q  = new Memory(100, MemoryUnit.GB);
-		Capacity q2 = new Memory(50, MemoryUnit.GB);
-		Capacity q3 = new Memory(100, MemoryUnit.MB);
+		Quantity q  = new Memory(100, MemoryUnit.GB);
+		Quantity q2 = new Memory(50, MemoryUnit.GB);
+		Quantity q3 = new Memory(100, MemoryUnit.MB);
 		
-		assertEquals(100, q.getAmount(), epsilon);
+		assertEquals(100, q.getValue(), epsilon);
 		assertSame(MemoryUnit.GB, q.getUnit());
 		
 		assertTrue(q.compareTo(q2) > 0);
@@ -30,21 +32,42 @@ public class TestCapacity {
 	
 	@Test
 	public void testNewCapacityResultFromOperation() {
-		Capacity q = new Memory(100, MemoryUnit.GB);
-		Capacity q2 = new Memory(50, MemoryUnit.GB);
+		Quantity q = new Memory(100, MemoryUnit.GB);
+		Quantity q2 = new Memory(50, MemoryUnit.GB);
 
-		Capacity q3 = q.minus(q2);
-		Capacity q4 = q.plus(q2);
-		Capacity q5 = q.times(5);
+		Quantity q3 = q.minus(q2);
+		Quantity q4 = q.plus(q2);
+		Quantity q5 = q.times(5);
 		
 		assertNotSame(q, q3);
 		assertNotSame(q, q4);
 		assertNotSame(q, q5);
 		
-		assertEquals(100-50, q3.getAmount(), epsilon);
-		assertEquals(100+50, q4.getAmount(), epsilon);
-		assertEquals(5*100,  q5.getAmount(), epsilon);
+		assertEquals(100-50, q3.getValue(), epsilon);
+		assertEquals(100+50, q4.getValue(), epsilon);
+		assertEquals(5*100,  q5.getValue(), epsilon);
 	}
+	
+	@Test 
+	public void testAdditionResultCapacityUnitOfReceiver() {
+		Quantity q1 = new Memory(1, MemoryUnit.KB);
+		Quantity q2 = new Memory(1, MemoryUnit.MB);
+		
+		Quantity q3 = q1.plus(q2);
+		assertEquals(q1.getUnit(), q3.getUnit());
+		
+		Quantity q4 = q2.plus(q1);
+		assertEquals(q2.getUnit(), q4.getUnit());
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testCanNotSubtractNegativeResult() {
+		Quantity small = new Memory(1, MemoryUnit.KB);
+		Quantity large = new Memory(1, MemoryUnit.MB);
+		
+		small.minus(large);
+	}
+
 	
 	@Test
 	public void testUnitConversion() {
@@ -55,53 +78,61 @@ public class TestCapacity {
 		// 1024MB == 1GB
 		assertEquals(1024,  
 			MemoryUnit.MB.getConversionFactor(MemoryUnit.GB), epsilon);
+		
+		Memory q = new Memory(1024*2, MemoryUnit.MB);
+		Quantity c = q.convert();
+		
+		assert(Memory.class.isInstance(q));
+		assertSame(q.getKind().getHighestUnit(), c.getUnit());
+		assertEquals(MemoryUnit.GB, c.getUnit());
+		assertEquals(2, c.getValue(), epsilon);
 	}
 	
 	@Test
 	public void testCapacities() {
 		Resource.Kind memory = Resource.Kind.MEMORY;
-		Capacities cap = new DefaultCapacities();
-		Capacity q  = new Memory(100, MemoryUnit.GB);
-		Capacity q2 = new Memory(10, MemoryUnit.GB);
-		cap.addCapacity(q);
+		Capacity cap = new DefaultCapacity();
+		Quantity q  = new Memory(100, MemoryUnit.GB);
+		Quantity q2 = new Memory(10, MemoryUnit.GB);
+		cap.addQuantity(q);
 		
 		assertTrue(cap.hasKind(memory));
-		assertEquals(q, cap.getCapacity(memory));
+		assertEquals(q, cap.getQuantity(memory));
 		
-		cap.addCapacity(q2);
-		assertEquals(q.plus(q2), cap.getCapacity(memory));
-		assertNotSame(q.plus(q2), cap.getCapacity(memory));
+		cap.addQuantity(q2);
+		assertEquals(q.plus(q2), cap.getQuantity(memory));
+		assertNotSame(q.plus(q2), cap.getQuantity(memory));
 	}
 	
 	@Test
 	public void testReduceCapacities() {
 		Resource.Kind memory = Resource.Kind.MEMORY;
-		Capacities cap1 = new DefaultCapacities();
-		Capacity q1 = new Memory(100, MemoryUnit.GB);
+		Capacity cap1 = new DefaultCapacity();
+		Quantity q1 = new Memory(100, MemoryUnit.GB);
 		
 		
-		Capacities cap2 = new DefaultCapacities();
-		Capacity q2 = new Memory(10, MemoryUnit.GB);
+		Capacity cap2 = new DefaultCapacity();
+		Quantity q2 = new Memory(10, MemoryUnit.GB);
 
 
-		cap1.addCapacity(q1);
-		cap2.addCapacity(q2);
+		cap1.addQuantity(q1);
+		cap2.addQuantity(q2);
 		
-		Capacities cap3 = new DefaultCapacities();
-		cap3.addCapacity(q1.minus(q2));
+		Capacity cap3 = new DefaultCapacity();
+		cap3.addQuantity(q1.minus(q2));
 		
-		cap1.reduceCapacities(cap2);
+		cap1.reduceCapacity(cap2);
 		
-		assertEquals(q1.minus(q2), cap3.getCapacity(memory));
+		assertEquals(q1.minus(q2), cap3.getQuantity(memory));
 	}
 	
 	@Test
 	public void testUnits() {
-		Resource.Kind memory = Resource.Kind.MEMORY;
-		
 		assertEquals(MemoryUnit.B, Resource.Kind.getUnit(null, "B"));
 		
 	}
+	
+	
 
 
 

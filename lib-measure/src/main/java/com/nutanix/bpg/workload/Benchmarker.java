@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.model.Database;
+import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.measure.model.Measurement;
 import com.nutanix.bpg.measure.model.Snapshot;
 

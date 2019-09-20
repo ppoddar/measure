@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.MeasuremementTaker;
-import com.nutanix.bpg.measure.model.Database;
-import com.nutanix.bpg.measure.model.Metrics;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.measure.model.Snapshot;
 import com.nutanix.bpg.measure.model.SnapshotSchedule;
 import com.nutanix.bpg.measurer.dao.SnapshotDAO;

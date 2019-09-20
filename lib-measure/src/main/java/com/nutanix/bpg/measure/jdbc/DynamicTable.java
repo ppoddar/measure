@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.nutanix.bpg.measure.model.Metrics;
-import com.nutanix.bpg.measure.model.MetricsDimension;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.model.MetricsDimension;
 import com.nutanix.bpg.measurer.dao.MeasurementDAO;
 
 /**

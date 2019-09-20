@@ -2,8 +2,8 @@ package com.nutanix.bpg.measure.model;
 
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
 
 
 
@@ -34,9 +34,7 @@ public class Snapshot {
 	private Database db;
 	private Metrics metrics;
 	int expectedMeasurementCount;
-//	private Measurements measurements;
 	
-	private static final Logger logger = LoggerFactory.getLogger(Snapshot.class);
 	
 	public static final String CONTEXT_SNAPSHOT  = "snapshot";
 	public static final String CONTEXT_BENCHMARK = "benchmark";
@@ -44,17 +42,8 @@ public class Snapshot {
 	 * create an empty snapshot
 	 */
 	public Snapshot() {
-		//measurements = new Measurements();
 	}
 
-//	public Measurements getMeasurements() {
-//		return measurements;
-//	}
-//	
-//	public void addMeasurement(Measurement m) {
-//		measurements.addMeasurement(m);
-//		logger.debug("added " + measurements.getSize() + " measurenent " + m);
-//	}
 	
 	public String getId() {
 		return id;
@@ -83,6 +72,7 @@ public class Snapshot {
 	public Database getDatabase() {
 		return db;
 	}
+	
 	public void setDatabase(Database db) {
 		 this.db = db;
 	}
@@ -119,23 +109,6 @@ public class Snapshot {
 		return expectedMeasurementCount;
 	}
 	
-//	public int getActualMeasurementCount() {
-//		return getMeasurements().getSize();
-//	}
-	
-//	public boolean isComplete() {
-//		return getActualMeasurementCount() >= getExpectedMeasurementCount();
-//	}
-	
-//	public long getStartTime() {
-//		return getMeasurements().getStartTime();
-//	}
-//	
-//	public long getEndTime() {
-//		if (!isComplete()) return -1;
-//		return getMeasurements().getEndTime();
-//	}
-
 	
 	public String toString() {
 		return "snapshot:" + getName();

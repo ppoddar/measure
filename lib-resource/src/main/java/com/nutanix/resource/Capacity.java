@@ -1,21 +1,47 @@
 package com.nutanix.resource;
+
+import java.util.Set;
+
 /**
- * amount of something in a specific unit
+ * A set of capacities.
  * 
  * @author pinaki.poddar
  *
  */
-public interface Capacity extends Comparable<Capacity>{
-	Capacity clone(double amount);
+public interface Capacity extends Iterable<Quantity> {
+	/**
+	 * affirms if this container has any capacity 
+	 * of given kind
+	 * @param kind
+	 * @return
+	 */
+	boolean hasKind(Resource.Kind kind);
 	
-	Resource.Kind getKind();
-	double getAmount();
-	Unit   getUnit();
-	Capacity convert(Unit to);
-	boolean isIntegral();
+	/**
+	 * gets kind of capacities held by this receiver
+	 * @return
+	 */
+	Set<Resource.Kind> getKinds();
 	
-	Capacity plus(Capacity other);
-	Capacity minus(Capacity other);
-	Capacity times(int n);
-	double fraction(Capacity other);
+	/**
+	 * gets capacity of given kind
+	 * @param kind a kind of capacity
+	 * @return
+	 * @throws IllegalArgumentException if {@link #hasKind(com.nutanix.resource.Resource.Kind)}
+	 * has returned false
+	 */
+	Quantity getQuantity(Resource.Kind kind);
+	
+	/**
+	 * adds given {@link Capacity}.
+	 * 
+	 * @param cap a capacity
+	 * @throws IllegalArgumentException if capacity is null
+	 */
+	void addQuantity(Quantity cap);
+	void addCapacities(Capacity cap);
+	void reduceQuantity(Quantity cap);
+	void reduceCapacity(Capacity cap);
+	
+	Capacity convert();
 }

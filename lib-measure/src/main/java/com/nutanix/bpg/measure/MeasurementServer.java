@@ -2,8 +2,8 @@ package com.nutanix.bpg.measure;
 
 import java.util.concurrent.CompletableFuture;
 
-import com.nutanix.bpg.measure.model.Database;
-import com.nutanix.bpg.measure.model.Metrics;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.measure.model.Snapshot;
 import com.nutanix.bpg.measure.model.SnapshotSchedule;
 import com.nutanix.bpg.workload.PGBenchOptions;

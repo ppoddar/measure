@@ -6,7 +6,7 @@ package com.nutanix.resource;
  * @author pinaki.poddar
  *
  */
-public interface Unit {
+public interface Unit extends Comparable<Unit> {
 	/**
 	 * how many of base unit is equivalent to
 	 * one single unit of this receiver
@@ -29,5 +29,5 @@ public interface Unit {
 	Resource.Kind getKind();
 	Unit getBaseUnit();
 	String getSymbol();
-	
+		
 }

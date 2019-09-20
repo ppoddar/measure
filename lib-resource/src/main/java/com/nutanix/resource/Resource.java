@@ -2,8 +2,10 @@ package com.nutanix.resource;
 
 import java.util.Collection;
 
-import com.nutanix.bpg.measure.utils.Identifable;
-import com.nutanix.resource.impl.unit.MemoryUnit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nutanix.bpg.utils.Identifable;
+import com.nutanix.resource.unit.CpuUnit;
+import com.nutanix.resource.unit.MemoryUnit;
 
 /**
  * A resource represents capacity -- 
@@ -20,11 +22,38 @@ import com.nutanix.resource.impl.unit.MemoryUnit;
  *
  */
 public interface Resource extends Identifable {
-	
 	public static enum Kind {
 		COMPUTE, 
 		MEMORY, 
 		STORAGE;
+		
+		String[] unitSymbols;
+		
+		public Unit getBaseUnit() {
+			switch (this) {
+			case MEMORY: 
+			case STORAGE: return MemoryUnit.KB;
+			case COMPUTE: 
+				return CpuUnit.NONE;
+			default: return null;
+			}
+		}
+		public Unit getHighestUnit() {
+			switch (this) {
+			case MEMORY: 
+			case STORAGE: return MemoryUnit.GB;
+			case COMPUTE: 
+			default: return null;
+			}
+		}
+		public Unit getSmallestUnit() {
+			switch (this) {
+			case MEMORY: 
+			case STORAGE: return MemoryUnit.B;
+			case COMPUTE: 
+			default: return null;
+			}
+		}
 		
 		public static Unit getUnit(Kind kind, String symbol) {
 			switch (symbol) {
@@ -35,16 +64,18 @@ public interface Resource extends Identifable {
 			default:
 				return null;
 			}
-			
 		}
 	}
 		
 	/**
-	 * get capacity of all kinds
+	 * get capacity of all kinds.
+	 * each quantity in returned capacity is expressed in
+	 * {@link #getUnit(Kind) preferred unit} for the quantity.
+	 * 
 	 * @return a collection of capacities
 	 */
-	Capacities getCapacities();
-	Capacities getMaxCapacities();
+	Capacity getAvailableCapacity();
+	Capacity getTotalCapacity();
 	
 	/**
 	 * get capacity of given kind.
@@ -52,7 +83,6 @@ public interface Resource extends Identifable {
 	 * @throws IllegalArgumentException if capcity
 	 * of given kind does not exist
 	 */
-	Capacity getCapacity(Resource.Kind kind);
 	
 	/**
 	 * affirms if any capacity of given kind exists
@@ -64,23 +94,41 @@ public interface Resource extends Identifable {
 	boolean hasKind(Resource.Kind kind);
 	
 	/**
-	 * get kinds of capacities of this receiver
-	 * @return
+	 * get kinds of capacities provided by this receiver
+	 * 
+	 * @return a set of {@link Resource.Kind kinds}
+	 * {@link Resource.Kind#MEMORY memory}.
 	 */
+	@JsonIgnore
 	Collection<Resource.Kind> getKinds();
 	
 	/**
+	 * the unit in which given kind of resource capcity
+	 * is expressed.
+	 * @param kind
+	 * @return an unit.
+	 */
+	Unit getUnit(Resource.Kind kind);
+	
+	/**
 	 * add capacity to this resource.
-	 * @param q
+	 * @param q a quantity.
 	 * @return same receiver
 	 */
-	Resource addCapacity(Capacity q);
+	Resource addQuanity(Quantity q);
 	
 	/**
 	 * reduce capacity from this resource.
 	 * @param q
 	 * @return same receiver
 	 */
-	Resource reduceCapacity(Capacities q);
+	Resource reduceCapacity(Capacity q);
 
+	/**
+	 * gets utilization of this receiver.
+	 * 
+	 * @return utilization
+	 */
+	Utilization getUtilization();
+	
 }
