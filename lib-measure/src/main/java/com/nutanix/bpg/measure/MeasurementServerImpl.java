@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.repo.Repository;
 import com.nutanix.bpg.repo.RepositoryImpl;
-import com.nutanix.bpg.measure.jdbc.SnapshotPlugin;
 import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.measure.model.JDBCMeasurmentTaker;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.measure.model.Snapshot;
+import com.nutanix.bpg.measure.model.SnapshotPlugin;
 import com.nutanix.bpg.measure.model.SnapshotSchedule;
 import com.nutanix.bpg.workload.Benchmarker;
 import com.nutanix.bpg.workload.PGBenchOptions;

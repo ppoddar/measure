@@ -44,7 +44,7 @@ public class TestJob {
 	
 	@Test
 	public void testJobExcutionNormally() {
-		Job job = new JobImpl("normal");
+		Job job = new JobImpl().setName("normal");;
 		Stage stage = new StageImpl("stage-1");
 		Task t = new TestTask();
 		stage.addTask(t);
@@ -55,7 +55,7 @@ public class TestJob {
 	}
 	@Test(expected=RuntimeException.class)
 	public void testJobExcutionExceptionally() {
-		Job job = new JobImpl("error");
+		Job job = new JobImpl().setName("error");
 		Stage stage = new StageImpl("stage-1");
 		Task t = new TestTask(true);
 		stage.addTask(t);
@@ -70,7 +70,7 @@ public class TestJob {
 		JsonNode json = JsonUtils.readResource(url, true);
 		JsonNode jobNode = JsonUtils.assertProperty(json, "job");
 		
-		Job job = new JobImpl(jobNode.get("name").asText());
+		Job job = new JobImpl().setName(jobNode.get("name").asText());
 		JsonNode stagesNode = JsonUtils.assertProperty(jobNode, "stages", true);
 		for (JsonNode stageNode : stagesNode) {
 			String name = JsonUtils.assertProperty(stageNode, "name").asText();

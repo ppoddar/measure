@@ -29,8 +29,19 @@ public interface Job extends Iterable<Stage> {
 	public static char JOB_OPEN_GROUP = '(';
 	public static char JOB_CLOSE_GROUP = ')';
 	
+	public static enum Status {INIT, ALLOCATED, SCHEDULED, 
+		RUNNING, COMPLETED, FAILED}
+	
+	String getId();
 	String getName();
 	String getDesciptor();
+	Status getStatus();
+	
+	
+	
 	int addStage(Stage stage);
+	
 	void execute(long time, TimeUnit unit);
+	
+	
 }

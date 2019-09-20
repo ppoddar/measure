@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.jdbc.DynamicTable;
-import com.nutanix.bpg.measure.jdbc.InsertSQL;
-import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
 import com.nutanix.bpg.measure.model.DataMapping;
 import com.nutanix.bpg.measure.model.Measurement;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.model.MetricsDimension;
+import com.nutanix.bpg.sql.InsertSQL;
+import com.nutanix.bpg.sql.SQLQueryExcutor;
 import com.nutanix.bpg.utils.StringUtils;
 
 /**
@@ -73,12 +73,12 @@ public class MeasurementDAO {
 			validateContext(m);
 			InsertSQL sql = new InsertSQL();
 			sql.into(DataMapping.getTableForMetrics(m.getMetrics()));
-			sql.insert(ID,         m.getId());
-			sql.insert(METRICS,    m.getMetrics().getName());
-			sql.insert(START_TIME, m.getStartTime());
-			sql.insert(END_TIME,   m.getEndTime());
-			sql.insert(CONTEXT_TYPE, m.getContextType());
-			sql.insert(CONTEXT,    m.getContext());
+			sql.insert(DataMapping.getMappedDimension(ID),         m.getId());
+			sql.insert(DataMapping.getMappedDimension(METRICS),    m.getMetrics().getName());
+			sql.insert(DataMapping.getMappedDimension(START_TIME), m.getStartTime());
+			sql.insert(DataMapping.getMappedDimension(END_TIME),   m.getEndTime());
+			sql.insert(DataMapping.getMappedDimension(CONTEXT_TYPE), m.getContextType());
+			sql.insert(DataMapping.getMappedDimension(CONTEXT),    m.getContext());
 			for (MetricsDimension dim : m.getMetrics()) {
 				sql.insert(dim, m.getValue(dim.getName()));
 			}

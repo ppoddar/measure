@@ -1,6 +1,8 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.sql;
 
-import com.nutanix.bpg.measure.model.DataMapping;
+import com.nutanix.bpg.sql.SQL;
+import com.nutanix.bpg.sql.SQL.TableAlias;
+import com.nutanix.bpg.sql.SQL.VERB;
 import com.nutanix.bpg.model.MetricsDimension;
 /**
  * an SQL statement for insert
@@ -53,18 +55,4 @@ public class InsertSQL extends SQL {
 		bind(dim, value);
 		return this;
 	}
-	
-	/**
-	 * Inserts a column of given name.
-	 * 
-	 * @param name name of a column that must be resolvable 
-	 * @param value
-	 * @return
-	 */
-	public SQL insert(String name, Object value) {
-		MetricsDimension dim = DataMapping.getMappedDimension(name);
-		return insert(dim, value);
-	}
-
-
 }

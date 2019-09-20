@@ -103,7 +103,7 @@ public class DefaultResourcePool implements ResourcePool {
 	public Capacity getTotalCapacity() {
 		Capacity cap = new DefaultCapacity();
 		for (ResourceProvider provider : providers) {
-			cap.addCapacities(provider.getTotalCapacity());
+			cap.addCapacity(provider.getTotalCapacity());
 		}
 		return cap.convert();
 	}
@@ -113,7 +113,7 @@ public class DefaultResourcePool implements ResourcePool {
 	public Capacity getAvailableCapacity() {
 		Capacity cap = new DefaultCapacity();
 		for (ResourceProvider provider : providers) {
-			cap.addCapacities(provider.getAvailableCapacity());
+			cap.addCapacity(provider.getAvailableCapacity());
 		}
 		return cap.convert();
 	}

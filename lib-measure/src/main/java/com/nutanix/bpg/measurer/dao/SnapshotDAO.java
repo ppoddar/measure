@@ -9,10 +9,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.jdbc.InsertSQL;
-import com.nutanix.bpg.measure.jdbc.SQL;
-import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
+import com.nutanix.bpg.measure.model.DataMapping;
 import com.nutanix.bpg.measure.model.Snapshot;
+import com.nutanix.bpg.sql.InsertSQL;
+import com.nutanix.bpg.sql.SQL;
+import com.nutanix.bpg.sql.SQLQueryExcutor;
 
 public class SnapshotDAO  {
 	public static final String SNAPSHOT_TABLE       = "SNAPSHOTS";
@@ -34,9 +35,10 @@ public class SnapshotDAO  {
 	public void insert(Connection con, Snapshot sn) throws SQLException {
 		InsertSQL sql = new InsertSQL();
 		sql.into(SNAPSHOT_TABLE);
-		sql.insert(ID,             sn.getId());
-		sql.insert(NAME,           sn.getName());
-		sql.insert(EXPECTED_COUNT, sn.getExpectedMeasurementCount());
+		
+		sql.insert(DataMapping.getMappedDimension(ID), sn.getId());
+		sql.insert(DataMapping.getMappedDimension(NAME),           sn.getName());
+		sql.insert(DataMapping.getMappedDimension(EXPECTED_COUNT), sn.getExpectedMeasurementCount());
 		
 		con.setAutoCommit(false);
 		SQLQueryExcutor.execute(con, sql);

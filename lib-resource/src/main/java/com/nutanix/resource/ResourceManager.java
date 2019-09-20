@@ -30,10 +30,16 @@ public interface ResourceManager {
 	 * @return an allocation 
 	 */
 	Allocation allocate(ResourcePool pool, 
-			Collection<Quantity> demand);
+			Capacity demand);
 // TODO:			Options options);
-	boolean deallocate(String allocId);
-	Allocation findAllocation(String allocId);
+	
+	/**
+	 * releases the capacity referred by given identifier.
+	 * Does nothing if no allocation can be found.
+	 * 
+	 * @param allocId identifier to an allocation.
+	 * @return true if allocated
+	 */
 	List<String> getPoolNames();
 
 }

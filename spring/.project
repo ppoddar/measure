@@ -6,9 +6,9 @@
 		<project>bpg-lib-measure</project>
 		<project>bpg-lib-dataaccess</project>
 		<project>lib-measure</project>
-		<project>lib-repo</project>
 		<project>lib-resource</project>
 		<project>lib-tasks</project>
+		<project>lib-common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

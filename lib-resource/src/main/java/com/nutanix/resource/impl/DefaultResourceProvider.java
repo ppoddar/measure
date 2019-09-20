@@ -41,7 +41,7 @@ public class DefaultResourceProvider implements ResourceProvider {
 	public Capacity getAvailableCapacity() {
 		Capacity cap = new DefaultCapacity();
 		for (Resource r : this) {
-			cap.addCapacities(r.getAvailableCapacity());
+			cap.addCapacity(r.getAvailableCapacity());
 		}
 		return cap.convert();
 	}
@@ -55,7 +55,7 @@ public class DefaultResourceProvider implements ResourceProvider {
 	public Capacity getTotalCapacity() {
 		Capacity cap = new DefaultCapacity();
 		for (Resource r : this) {
-			cap.addCapacities(r.getTotalCapacity());
+			cap.addCapacity(r.getTotalCapacity());
 		}
 		return cap.convert();
 	}

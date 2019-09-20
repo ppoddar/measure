@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.model.MetricsDimension;
+import com.nutanix.bpg.sql.SQLQueryExcutor;
 
 /**
  * A measurement is a vector of values associated

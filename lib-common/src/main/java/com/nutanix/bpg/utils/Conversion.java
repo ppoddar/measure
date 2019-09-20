@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.utils;
+package com.nutanix.bpg.utils;
 
 import java.util.HashMap;
 import java.util.Map;

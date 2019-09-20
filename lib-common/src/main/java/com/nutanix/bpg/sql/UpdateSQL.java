@@ -1,6 +1,5 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.sql;
 
-import com.nutanix.bpg.measure.model.DataMapping;
 import com.nutanix.bpg.model.MetricsDimension;
 /**
  * an SQL statement for insert
@@ -59,12 +58,7 @@ public class UpdateSQL extends SQL {
 		bind(dim, value);
 		return this;
 	}
-	
-	public UpdateSQL set(String name, Object value) {
-		MetricsDimension dim = DataMapping.getMappedDimension(name);
-		return set(dim, value);
-	}
-	public UpdateSQL where(String dim, SQL.OP op, Object value) {
+	public UpdateSQL where(MetricsDimension dim, SQL.OP op, Object value) {
 		super.where(dim, op, value);
 		return this;
 	}

@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.sql;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,10 +8,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.model.DataMapping;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.model.MetricsDimension;
-import com.nutanix.bpg.measure.utils.TypeUtils;
+import com.nutanix.bpg.utils.TypeUtils;
 /**
  * Creates SQL step-by-step. 
  * SQL provides invisible, general purpose methods.
@@ -87,11 +86,6 @@ public abstract class SQL {
 		return this;
 	}
 	
-	protected SQL where(String name, OP op, Object value) {
-		MetricsDimension dim = DataMapping.getMappedDimension(name);
-		return where(dim, op, value);
-	}
-
 	
 	protected SQL projectAll(Metrics m, String alias) {
 		for (MetricsDimension dim : m) {

@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nutanix.bpg.measure.utils.Conversion;
-import com.nutanix.bpg.measure.utils.TypeUtils;
+import com.nutanix.bpg.utils.Conversion;
+import com.nutanix.bpg.utils.TypeUtils;
 /**
  * Performs basic SQL operations.
  * @author pinaki.poddar

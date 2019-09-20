@@ -84,7 +84,7 @@ public class ResourceAllocationController {
 		consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Allocation allocate(
 			@PathVariable("name")  String name,
-			@RequestBody Collection<Quantity> demand) {
+			@RequestBody Capacity demand) {
 		try {
 			logger.info("received allcation request for [" + name + "] pool");
 			ResourcePool pool = getResourcePoolByName(name);

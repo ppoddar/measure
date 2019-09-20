@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.measure.model;
 
 import java.sql.Connection;
 import java.util.UUID;
@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.nutanix.bpg.measure.MeasuremementTaker;
 import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.model.Metrics;
-import com.nutanix.bpg.measure.model.Snapshot;
-import com.nutanix.bpg.measure.model.SnapshotSchedule;
 import com.nutanix.bpg.measurer.dao.SnapshotDAO;
 
 /**

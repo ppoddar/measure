@@ -67,7 +67,7 @@ public class DefaultCapacity implements Capacity {
 	}
 	
 	@Override
-	public void addCapacities(Capacity cap) {
+	public void addCapacity(Capacity cap) {
 		for (Quantity c : cap) {
 			addQuantity(c);
 		}

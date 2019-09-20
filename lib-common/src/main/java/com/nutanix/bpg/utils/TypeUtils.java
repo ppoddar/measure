@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.utils;
+package com.nutanix.bpg.utils;
 
 import java.lang.reflect.Field;
 import java.sql.Types;
@@ -10,10 +10,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
 
 public class TypeUtils {
-	private static Logger logger = LoggerFactory.getLogger(SQLQueryExcutor.class);
+	private static Logger logger = LoggerFactory.getLogger(TypeUtils.class);
 	private static String[] NUMERIC_TYPE_NAMES = {
 			"bigint", "double"};
 	private static Map<String, Class<?>> typeCatalog = new HashMap<>();

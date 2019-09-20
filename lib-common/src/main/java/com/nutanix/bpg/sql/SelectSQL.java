@@ -1,6 +1,9 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.sql;
 
-import com.nutanix.bpg.measure.model.DataMapping;
+import com.nutanix.bpg.sql.SQL;
+import com.nutanix.bpg.sql.SQL.OP;
+import com.nutanix.bpg.sql.SQL.TableAlias;
+import com.nutanix.bpg.sql.SQL.VERB;
 import com.nutanix.bpg.model.MetricsDimension;
 
 public class SelectSQL extends SQL {
@@ -42,21 +45,13 @@ public class SelectSQL extends SQL {
 		return this;
 	}
 	
-	public SelectSQL select(String name, String alias) {
-		project(DataMapping.getMappedDimension(name), alias);
+	public SelectSQL select(MetricsDimension dim, String alias) {
+		project(dim, alias);
 		return this;
-	}
-	
-	public SelectSQL select(String name) {
-		return select(name, null);
 	}
 
 	
 	public SelectSQL where(MetricsDimension dim, SQL.OP op, Object value) {
-		super.where(dim, op, value);
-		return this;
-	}
-	public SelectSQL where(String dim, SQL.OP op, Object value) {
 		super.where(dim, op, value);
 		return this;
 	}

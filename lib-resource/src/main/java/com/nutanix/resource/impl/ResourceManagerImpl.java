@@ -39,7 +39,6 @@ public class ResourceManagerImpl
 	private static Properties config;
 	private Catalog<Cluster> clusters;
 	private Catalog<ResourcePool> pools;
-	private List<Allocation>   allocations;
 	private AllocationPolicy allocationPolicy;
 	private ObjectMapper mapper;
 	
@@ -86,7 +85,6 @@ public class ResourceManagerImpl
 		for (Cluster cluster : clusters) {
 			new ClusterBuilder().build(cluster);
 		}
-		allocations = new ArrayList<>();
 			
 	}
 	
@@ -140,32 +138,12 @@ public class ResourceManagerImpl
 	}
 
 	@Override
-	public Allocation allocate(ResourcePool pool, Collection<Quantity> demand) {
+	public Allocation allocate(ResourcePool pool, Capacity demand) {
 		logger.debug("allocating " + demand);
 		Allocation allocation = pool.allocate(new DefaultCapacity(demand));
-		allocations.add(allocation);
 		return allocation;
 	}
 
-	@Override
-	public boolean deallocate(String allocId) {
-		Allocation alloc = findAllocation(allocId);
-		boolean removed = allocations.remove(alloc);
-		
-		return removed;
-	}
-
-	@Override
-	public Allocation findAllocation(String allocId) {
-		Allocation alloc = null;
-		for (Allocation a : allocations) {
-			if (a.getId().equals(allocId)) {
-				alloc = a;
-				break;
-			}
-		}
-		return alloc;
-	}
 
 	public ObjectMapper getObjectMapper() {
 		return mapper;

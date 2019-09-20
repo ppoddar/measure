@@ -8,13 +8,13 @@
         <dependent-module archiveName="lib-measure-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lib-measure/lib-measure">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="lib-repo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lib-repo/lib-repo">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="lib-resource-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lib-resource/lib-resource">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/resource/lib-tasks/lib-tasks">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/lib-common/lib-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="spring"/>

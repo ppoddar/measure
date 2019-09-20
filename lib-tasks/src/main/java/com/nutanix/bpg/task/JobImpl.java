@@ -3,6 +3,7 @@ package com.nutanix.bpg.task;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadFactory;
@@ -12,19 +13,40 @@ import java.util.concurrent.TimeoutException;
 import com.nutanix.bpg.utils.StringUtils;
 
 public class JobImpl implements Job, ThreadFactory {
+	private String id;
 	private String name;
+	private Status status;
 	List<Stage> stages = new ArrayList<Stage>();
 	
 	public JobImpl() {
-		this("no name");
+		this(UUID.randomUUID().toString(), "no name");
 	}
 	
-	public JobImpl(String name) {
-		this.name = name;
+	public JobImpl(String id, String name) {
+		setId(id);
+		setName(name);
+	}
+	
+	public String getId() {
+		return id;
+	}
+	protected void setId(String id) {
+		this.id = id;
 	}
 	
 	public String getName() {
 		return name;
+	}
+	public Job setName(String name) {
+		this.name = name;
+		return this;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	
 	@Override

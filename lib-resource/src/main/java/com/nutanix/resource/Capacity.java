@@ -39,7 +39,7 @@ public interface Capacity extends Iterable<Quantity> {
 	 * @throws IllegalArgumentException if capacity is null
 	 */
 	void addQuantity(Quantity cap);
-	void addCapacities(Capacity cap);
+	void addCapacity(Capacity cap);
 	void reduceQuantity(Quantity cap);
 	void reduceCapacity(Capacity cap);
 	

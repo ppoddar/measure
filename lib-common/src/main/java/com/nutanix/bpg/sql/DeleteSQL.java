@@ -1,4 +1,4 @@
-package com.nutanix.bpg.measure.jdbc;
+package com.nutanix.bpg.sql;
 
 import com.nutanix.bpg.model.MetricsDimension;
 
@@ -27,10 +27,7 @@ public class DeleteSQL extends SQL {
 		super.where(dim, op, value);
 		return this;
 	}
-	public DeleteSQL where(String dim, SQL.OP op, Object value) {
-		super.where(dim, op, value);
-		return this;
-	}
+	
 	
 	public String toString() {
 		String sql = verb.toString()

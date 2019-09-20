@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.bpg.measure.MeasuremementTaker;
-import com.nutanix.bpg.measure.jdbc.SQL;
-import com.nutanix.bpg.measure.jdbc.SQLQueryExcutor;
-import com.nutanix.bpg.measure.jdbc.SelectSQL;
 import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.sql.SQL;
+import com.nutanix.bpg.sql.SQLQueryExcutor;
+import com.nutanix.bpg.sql.SelectSQL;
 
 /**
  * takes a measurement on a database table.

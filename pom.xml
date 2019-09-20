@@ -14,10 +14,11 @@
         <additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 	<modules>
-		<module>lib-repo</module>
+		<module>lib-common</module>
 		<module>lib-measure</module>
 		<module>lib-resource</module>
 		<module>lib-tasks</module>
+		<module>lib-scheduler</module>
 		<module>spring</module>
 	</modules>
 	<build>
@@ -102,6 +103,5 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 </project>
