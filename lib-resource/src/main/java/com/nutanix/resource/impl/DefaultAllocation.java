@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nutanix.resource.Allocation;
-import com.nutanix.resource.Capacity;
 import com.nutanix.resource.Resource;
+import com.nutanix.capacity.Capacity;
 
 public class DefaultAllocation implements Allocation {
 	@Override

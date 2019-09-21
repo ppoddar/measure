@@ -1,5 +1,6 @@
 package com.nutanix.bpg.model;
 
+import com.nutanix.bpg.utils.Named;
 
 public enum DatabaseKind implements Named {
 	POSTGRES("POSTGRES", "jdbc:postgresql",

@@ -18,12 +18,9 @@ import com.nutanix.bpg.spring.serde.CatalogSerializer;
 import com.nutanix.bpg.spring.serde.IndexibleMapDeserializer;
 import com.nutanix.bpg.spring.serde.IndexibleMapSerializer;
 import com.nutanix.bpg.utils.IndexibleMap;
-import com.nutanix.resource.Capacity;
-import com.nutanix.resource.Quantity;
-import com.nutanix.resource.model.serde.CapacityDeserilaizer;
-import com.nutanix.resource.model.serde.CapacitySerializer;
-import com.nutanix.resource.model.serde.QuantityDeserializer;
-import com.nutanix.resource.model.serde.QuantitySerializer;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.serde.CapacityDeserilaizer;
+import com.nutanix.capacity.serde.CapacitySerializer;
 
 @Configuration
 public class CustomObjectMapper {
@@ -39,10 +36,8 @@ public class CustomObjectMapper {
 		module.addSerializer(new CatalogSerializer(type));
 		module.addSerializer(new IndexibleMapSerializer(type2));
 		module.addSerializer(new CapacitySerializer());
-		module.addSerializer(new QuantitySerializer());
 
 		module.addDeserializer(Capacity.class,     new CapacityDeserilaizer());
-		module.addDeserializer(Quantity.class,     new QuantityDeserializer());
 		module.addDeserializer(Catalog.class,      new CatalogDeserializer(type));
 		module.addDeserializer(IndexibleMap.class, new IndexibleMapDeserializer(type2));
 

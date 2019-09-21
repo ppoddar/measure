@@ -5,32 +5,45 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.nutanix.bpg.model.Named;
-
 public class NamedMap<V extends Named> {
 	private final Map<String, V> map;
+	private final boolean caseinsenstive;
 	
 	public NamedMap() {
+		this(false);
+	}
+	
+	public NamedMap(boolean flag) {
 		map = new LinkedHashMap<String, V>();
+		caseinsenstive = flag;
+	}
+	
+	String createKey(String s) {
+		return caseinsenstive ? s.toLowerCase() : s;
 	}
 	
 	public void add(V v) {
 		if (v == null) throw new IllegalArgumentException("null element can not be added");
 		if (v.getName() == null) throw new IllegalArgumentException("element with null name can not be added");
 		if (v.getName().trim().isEmpty()) throw new IllegalArgumentException("element with empty name can not be added");
-		map.put(v.getName(), v);
+		
+		String key = createKey(v.getName());
+		map.put(key, v);
 	}
 	
 	public boolean containsKey(String name) {
-		return map.containsKey(name);
+		String key = createKey(name);
+		return map.containsKey(key);
 	}
 	
 	public V get(String name) {
-		return get(name, true);
+		String key = createKey(name);
+		return get(key, true);
 	}
 	
 	public V get(String name, boolean mustExist) {
-		if (!map.containsKey(name)) {
+		String key = createKey(name);
+		if (!map.containsKey(key)) {
 			if (mustExist) {
 				throw new IllegalArgumentException("no element named [" + name + "]"
 						+ " Available elements are " + getNames());
@@ -38,7 +51,7 @@ public class NamedMap<V extends Named> {
 				return null;
 			}
 		}
-		return (V)map.get(name);
+		return (V)map.get(key);
 	}
 	
 	

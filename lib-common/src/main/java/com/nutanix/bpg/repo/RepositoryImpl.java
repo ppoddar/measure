@@ -18,7 +18,7 @@ import com.nutanix.bpg.model.DatabaseFactory;
 import com.nutanix.bpg.model.Factory;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.model.MetricsFactory;
-import com.nutanix.bpg.model.Named;
+import com.nutanix.bpg.utils.Named;
 
 
 public class RepositoryImpl implements Repository {

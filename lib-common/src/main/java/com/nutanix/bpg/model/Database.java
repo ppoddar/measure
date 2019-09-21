@@ -3,6 +3,7 @@ package com.nutanix.bpg.model;
 import java.sql.Connection;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nutanix.bpg.utils.Named;
 
 /**
  * Description of a database from statistics/metrics

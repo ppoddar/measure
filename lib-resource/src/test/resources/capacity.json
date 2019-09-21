@@ -1,0 +1,7 @@
+{
+	"demand": {
+		"MEMORY": "100 MB",
+		"COMPUTE": 4
+	}
+}
+

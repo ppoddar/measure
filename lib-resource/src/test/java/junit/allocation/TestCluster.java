@@ -11,11 +11,11 @@ public class TestCluster {
 
 	@Test
 	public void testBuildClusterByPrismRequest() throws Exception {
-		ClusterBuilder builder = new ClusterBuilder();
 		Cluster cluster = new Cluster("tomahawk");
+		ClusterBuilder builder = new ClusterBuilder(cluster);
 		cluster.setHost("tomahawk-v1.eng.nutanix.com");
 		cluster.setPort(9440);
-		builder.build(cluster);
+		builder.call();
 		
 		System.err.println(cluster.getTotalCapacity());
 		assertEquals(309, cluster.getResourceCount());

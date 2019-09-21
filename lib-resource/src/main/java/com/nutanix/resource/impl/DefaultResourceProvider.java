@@ -1,21 +1,23 @@
 package com.nutanix.resource.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nutanix.resource.Capacity;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.DefaultUtilization;
+import com.nutanix.capacity.Utilization;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourceProvider;
-import com.nutanix.resource.Utilization;
 
 public class DefaultResourceProvider implements ResourceProvider {
 	private String id;
 	private String name;
-	private List<Resource> resources = new ArrayList<Resource>();
+	protected List<Resource> resources;
 
 	@JsonCreator
 	public DefaultResourceProvider(@JsonProperty("id") String id) {
@@ -71,6 +73,9 @@ public class DefaultResourceProvider implements ResourceProvider {
 		if (r.getId().trim().isEmpty()) {
 			throw new IllegalStateException("can not add resource with empty id");
 		}
+		if (resources == null) {
+			resources = new ArrayList<>();
+		}
 		resources.add(r);
 		return this;
 	}
@@ -78,6 +83,9 @@ public class DefaultResourceProvider implements ResourceProvider {
 
 	@Override
 	public Iterator<Resource> iterator() {
+		if (resources == null) {
+			return Collections.emptyIterator();
+		}
 		return resources.iterator();
 	}
 	
@@ -88,7 +96,7 @@ public class DefaultResourceProvider implements ResourceProvider {
 	@JsonIgnore
 	@Override
 	public int getResourceCount() {
-		return resources.size();
+		return resources == null ? -1 : resources.size();
 	}
 
 	@Override
@@ -99,9 +107,6 @@ public class DefaultResourceProvider implements ResourceProvider {
 	@Override
 	public Utilization getUtilization() {
 		Utilization result = new DefaultUtilization();
-		for (Resource.Kind k : Resource.Kind.values()) {
-			result.put(k, 0.0);
-		}
 		for (Resource r : resources) {
 			result = result.accumulate(r.getUtilization());
 		}

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import org.junit.BeforeClass;
@@ -14,9 +15,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.nutanix.bpg.utils.JsonUtils;
+import com.nutanix.bpg.utils.ResourceUtils;
 import com.nutanix.resource.Allocation;
-import com.nutanix.resource.Capacity;
-import com.nutanix.resource.Quantity;
 import com.nutanix.resource.ResourceManager;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.ResourceProvider;
@@ -25,13 +26,12 @@ import com.nutanix.resource.impl.DefaultResourcePool;
 import com.nutanix.resource.impl.ResourceManagerImpl;
 import com.nutanix.resource.model.Cluster;
 import com.nutanix.resource.model.VirtualMachine;
-import com.nutanix.resource.model.serde.CapacityDeserilaizer;
-import com.nutanix.resource.model.serde.CapacitySerializer;
-import com.nutanix.resource.model.serde.QuantityDeserializer;
-import com.nutanix.resource.model.serde.QuantitySerializer;
-import com.nutanix.resource.unit.CPU;
-import com.nutanix.resource.unit.Memory;
-import com.nutanix.resource.unit.MemoryUnit;
+import com.nutanix.capacity.serde.CapacityDeserilaizer;
+import com.nutanix.capacity.serde.CapacitySerializer;
+import com.nutanix.capacity.CPU;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.Memory;
+import com.nutanix.capacity.MemoryUnit;
 
 public class TestSerde {
 	private static ObjectMapper mapper;
@@ -46,9 +46,9 @@ public class TestSerde {
 		mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		module.addSerializer(new CapacitySerializer());
-		module.addSerializer(new QuantitySerializer());
+		//module.addSerializer(new QuantitySerializer());
 		module.addDeserializer(Capacity.class, new CapacityDeserilaizer());
-		module.addDeserializer(Quantity.class, new QuantityDeserializer());
+		//module.addDeserializer(Quantity.class, new QuantityDeserializer());
 		mapper.registerModule(module);
 		
 //		mapper.registerSubtypes(new NamedType(DefaultResourcePool.class));
@@ -109,7 +109,7 @@ public class TestSerde {
 		
 	}
 	@Test
-	public void testSerializePool() throws Exception  {
+	public void testPoolRoundtrip() throws Exception  {
 		ResourcePool pool = new DefaultResourcePool();
 		pool.setName("test");
 		ResourceProvider cluster = new Cluster("test");
@@ -138,5 +138,21 @@ public class TestSerde {
 	}
 	
 	
-
+	@Test
+	public void testCapacityRoundtrip() throws Exception {
+		Capacity demand = new DefaultCapacity();
+		demand.addQuantity(new Memory(10, "GB"));
+		
+		assertRoundTrip(demand, Capacity.class);
+	}
+	
+	
+	@Test
+	public void testCapacity() {
+		String cwd = System.getProperty("user.dir");
+		String rsrcURL = "file:///" + cwd + "/src/test/resources/capacity.json";
+		URL url = ResourceUtils.getURL(rsrcURL);
+		JsonNode json = JsonUtils.readResource(url, false);
+		mapper.convertValue(json.get("demand"), Capacity.class);
+	}
 }

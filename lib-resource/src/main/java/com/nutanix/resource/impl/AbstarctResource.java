@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nutanix.resource.Capacity;
-import com.nutanix.resource.Quantity;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.DefaultUtilization;
+import com.nutanix.capacity.Quantity;
+import com.nutanix.capacity.ResourceKind;
+import com.nutanix.capacity.Unit;
+import com.nutanix.capacity.Utilization;
 import com.nutanix.resource.Resource;
-import com.nutanix.resource.Unit;
-import com.nutanix.resource.Utilization;
 
 /**
  * abstract resource maintains capacity management 
@@ -53,10 +55,10 @@ public class AbstarctResource implements Resource {
 
 	private String uuid;
 	private String name;
-	private Capacity limit     = new DefaultCapacity();
+	private com.nutanix.capacity.Capacity limit     = new DefaultCapacity();
 	private Capacity available = new DefaultCapacity();
-	private Map<Resource.Kind, Unit> preferredUnits =
-			new HashMap<Resource.Kind, Unit>();
+	private Map<ResourceKind, Unit> preferredUnits =
+			new HashMap<ResourceKind, Unit>();
 	
 	protected AbstarctResource(String id) {
 		setId(id);
@@ -82,7 +84,7 @@ public class AbstarctResource implements Resource {
 
 	
 	@Override
-	public Unit getUnit(Kind kind) {
+	public Unit getUnit(ResourceKind kind) {
 		return preferredUnits.get(kind);
 	}
 
@@ -95,12 +97,12 @@ public class AbstarctResource implements Resource {
 	
 
 	@Override
-	public boolean hasKind(Resource.Kind kind) {
+	public boolean hasKind(ResourceKind kind) {
 		return available.hasKind(kind);
 	}
 
 	@Override
-	public Collection<Resource.Kind> getKinds() {
+	public Collection<ResourceKind> getKinds() {
 		return available.getKinds();
 	}
 	
@@ -127,7 +129,7 @@ public class AbstarctResource implements Resource {
 		return this;
 	}
 
-    protected void setPreferredUnit(Resource.Kind kind, Unit unit) {
+    protected void setPreferredUnit(ResourceKind kind, Unit unit) {
     	preferredUnits.put(kind, unit);
     }
     
@@ -142,7 +144,7 @@ public class AbstarctResource implements Resource {
     
     public Utilization getUtilization() {
     	Utilization result = new DefaultUtilization();
-    	for (Resource.Kind kind : getKinds()) {
+    	for (ResourceKind kind : getKinds()) {
     		double available = getAvailableCapacity().getQuantity(kind).getValue();
     		double total     = getTotalCapacity().getQuantity(kind).getValue();
     		double used = total - available;

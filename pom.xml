@@ -15,6 +15,7 @@
 	</properties>
 	<modules>
 		<module>lib-common</module>
+		<module>lib-capacity</module>
 		<module>lib-measure</module>
 		<module>lib-resource</module>
 		<module>lib-tasks</module>

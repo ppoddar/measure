@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class StringUtils {
-	private static final char COMMA = ',';
 	
 	/**
 	 * join given string separated by comma.

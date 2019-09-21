@@ -1,5 +1,7 @@
 package com.nutanix.resource.model;
 
+import java.util.concurrent.Callable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +16,15 @@ import com.nutanix.resource.prism.PrismGateway;
  * @author pinaki.poddar
  *
  */
-public class ClusterBuilder {
+public class ClusterBuilder implements Callable<Boolean> {
+	
+	private final Cluster cluster;
 	private static Logger logger = LoggerFactory.getLogger(ClusterBuilder.class);
+
+	public ClusterBuilder(Cluster c) {
+		cluster = c;
+	}
+	
 	
 	/**
 	 * populates given cluster with resource capacity
@@ -29,9 +38,9 @@ public class ClusterBuilder {
 	 * @param cluster
 	 * @throws Exception
 	 */
-	public void build(Cluster cluster) throws Exception {
+	public void build() throws Exception {
 		logger.debug("building " + cluster);
-		PrismGateway gateway = new PrismGateway(cluster.getHost(), cluster.getPort());
+		PrismGateway gateway = new PrismGateway(cluster);
 		JsonNode response = gateway.getResponse("vms/?include_vm_disk_config=true");
 		JsonNode entities = response.get("entities");
 		logger.debug("found " + entities.size() + " vms for " + cluster);
@@ -56,6 +65,20 @@ public class ClusterBuilder {
 			vm.setDiskSize(diskSize);
 			logger.info("virtual machine: [" + vm + "] capacity:" + vm.getAvailableCapacity());
 			cluster.addResource(vm);
+		}
+	}
+
+
+	@Override
+	public Boolean call() {
+		try {
+			build();
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.warn("can not get resources from cluster " + cluster);
+			cluster.markUnavailable(ex.getMessage());
+			return false;
 		}
 	}
 }

@@ -8,13 +8,14 @@ import java.util.UUID;
 import org.apache.commons.collections.iterators.IteratorChain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.DefaultUtilization;
+import com.nutanix.capacity.Utilization;
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.AllocationPolicy;
-import com.nutanix.resource.Capacity;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.ResourceProvider;
-import com.nutanix.resource.Utilization;
 
 /**
  * ResourcePool is collection of {@link com.nutanix.resource.Resource}.
@@ -176,9 +177,6 @@ public class DefaultResourcePool implements ResourcePool {
 	@Override
 	public Utilization getUtilization() {
 		Utilization result = new DefaultUtilization();
-		for (Resource.Kind k : Resource.Kind.values()) {
-			result.put(k, 0.0);
-		}
 		for (ResourceProvider provider : providers) {
 			result = result.accumulate(provider.getUtilization());
 		}

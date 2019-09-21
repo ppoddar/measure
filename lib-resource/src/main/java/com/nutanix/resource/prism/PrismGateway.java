@@ -2,8 +2,10 @@ package com.nutanix.resource.prism;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -23,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nutanix.resource.model.Cluster;
 
 
 /**
@@ -36,22 +39,20 @@ public class PrismGateway {
 	private String base     = "PrismGateway/services/rest";
 	private String version  = "v2.0";
 	private String protocol = "https";
-	private String host     = null;
-	private int port        = 9440;
+	Cluster cluster;
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	private static final String ACCEPT = "Accept";
 	private static final String APPLICATION_JSON = "application/json";
 	private static final Logger logger = LoggerFactory.getLogger(PrismGateway.class);
 	
-	public static void main(String[] args) throws Exception {
-		String host = "tomahawk-v1.eng.nutanix.com";
-		String path = "clusters";
-		JsonNode json = new PrismGateway(host).getResponse(path);
-		mapper.writerWithDefaultPrettyPrinter()
-		.writeValue(System.out, json);
-		
-	}
+//	public static void main(String[] args) throws Exception {
+//		String host = "tomahawk-v1.eng.nutanix.com";
+//		String path = "clusters";
+//		JsonNode json = new PrismGateway(host).getResponse(path);
+//		mapper.writerWithDefaultPrettyPrinter()
+//		.writeValue(System.out, json);
+//	}
 	
 	static {
 		try {
@@ -68,13 +69,36 @@ public class PrismGateway {
 				
 	}
 	
-	public PrismGateway(String host) {
-		this(host, 9440);
+	public PrismGateway(Cluster cluster) {
+		this.cluster = cluster;
+		
 	}
 	
-	public PrismGateway(String host, int port) {
-		this.host = host;
-		this.port = port;
+	URL getURLForPath(String path) {
+		String uri = protocol + "://"
+				+ cluster.getHost() + ":" 
+				+ cluster.getPort()
+				+ "/" + base + "/"
+				+ version + "/" + path;
+		URL url;
+		try {
+			url = new URL(uri);
+			return url;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public void verifyConnection() {
+		try {
+			getResponse("/");
+		} catch (UnknownHostException ex) {
+			throw new RuntimeException("host [" + cluster.getHost() + "]"
+					+ " is not recognized. Check if you can "
+					+ " conncet to cluster", ex);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	/**
@@ -86,18 +110,13 @@ public class PrismGateway {
 	 * @throws Exception
 	 */
 	public JsonNode getResponse(String path) throws Exception {
-		String uri = protocol + "://"
-				+ host + ":" + port
-				+ "/" + base + "/"
-				+ version + "/" + path;
-		URL url = new URL(uri);
-		
+		URL url = getURLForPath(path);
 		HttpURLConnection con = (HttpURLConnection)
 				url.openConnection();
 		con.setRequestProperty(ACCEPT, APPLICATION_JSON);
-		String username = "admin";
-		String password = "Nutanix.1";
-		String encoded = Base64.getEncoder().encodeToString((username+":"+password).getBytes(StandardCharsets.UTF_8)); 
+		String encoded = Base64.getEncoder()
+				.encodeToString((cluster.getUser()+":"+cluster.getPassword())
+				.getBytes(StandardCharsets.UTF_8)); 
 		con.setRequestProperty("Authorization", "Basic "+encoded);
 		
 		logger.info("Prism request:" + url);

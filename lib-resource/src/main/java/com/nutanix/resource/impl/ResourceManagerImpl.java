@@ -3,10 +3,16 @@ package com.nutanix.resource.impl;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,18 +26,15 @@ import com.fasterxml.jackson.databind.type.MapLikeType;
 import com.nutanix.bpg.model.Catalog;
 import com.nutanix.bpg.utils.JsonUtils;
 import com.nutanix.bpg.utils.ResourceUtils;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.serde.CapacityDeserilaizer;
+import com.nutanix.capacity.serde.CapacitySerializer;
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.AllocationPolicy;
-import com.nutanix.resource.Capacity;
-import com.nutanix.resource.Quantity;
 import com.nutanix.resource.ResourceManager;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.model.Cluster;
 import com.nutanix.resource.model.ClusterBuilder;
-import com.nutanix.resource.model.serde.CapacityDeserilaizer;
-import com.nutanix.resource.model.serde.CapacitySerializer;
-import com.nutanix.resource.model.serde.QuantityDeserializer;
-import com.nutanix.resource.model.serde.QuantitySerializer;
 
 public class ResourceManagerImpl 
 	implements ResourceManager {
@@ -78,14 +81,30 @@ public class ResourceManagerImpl
 		JsonNode clusterDescriptor = JsonUtils.readResource(url, true);
 		clusters = readClusterDesciptiors(clusterDescriptor);
 		
+		ExecutorService threadPool = Executors.newCachedThreadPool();
+		Map<Cluster,Future<Boolean>> futures = 
+				new HashMap<Cluster, Future<Boolean>>();
+		for (Cluster cluster : clusters) {
+			futures.put(cluster, threadPool.submit(new ClusterBuilder(cluster)));
+		}
+		for (Map.Entry<Cluster, Future<Boolean>> e: futures.entrySet()) {
+			try {
+				boolean available = e.getValue().get(10, TimeUnit.SECONDS);
+				if (!available)
+					logger.warn("cluster " + e.getKey() + " is unavailable"
+							+ e.getKey().getReasonForUnavailability());
+			} catch (TimeoutException e1) {
+				e.getKey().markUnavailable("unreachable");
+				logger.warn("cluster " + e.getKey() + " is unreachable");
+			}
+		}
+		
 		String poolAssignmentLocation = config.getProperty(POOL_ASSIGNMENT_URL);
 		url = ResourceUtils.getURL(poolAssignmentLocation);
 		JsonNode poolAssignment = JsonUtils.readResource(url, true);
 		pools = assignPools(poolAssignment, clusters);
-		for (Cluster cluster : clusters) {
-			new ClusterBuilder().build(cluster);
-		}
-			
+		
+		
 	}
 	
 	public static void setProperties(Properties p) {
@@ -152,9 +171,7 @@ public class ResourceManagerImpl
 		mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		module.addSerializer(new CapacitySerializer());
-		module.addSerializer(new QuantitySerializer());
 		module.addDeserializer(Capacity.class, new CapacityDeserilaizer());
-		module.addDeserializer(Quantity.class, new QuantityDeserializer());
 		mapper.registerModule(module);
 		
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -164,7 +181,7 @@ public class ResourceManagerImpl
 	}
 	
 	public Catalog<ResourcePool> assignPools(JsonNode json, Catalog<Cluster> clusters) throws Exception {
-		Catalog<ResourcePool> pools = new Catalog<ResourcePool>();
+		Catalog<ResourcePool> pools = new Catalog<ResourcePool>(true);
 		try {
 			JsonNode poolsNode  = JsonUtils.assertProperty(json, "pools");
 			Iterator<String> poolNames = poolsNode.fieldNames();
@@ -181,7 +198,12 @@ public class ResourceManagerImpl
 								+ " but it is not defiend");
 					}
 					Cluster cluster = clusters.get(clusterName.asText());
-					pool.addProvider(cluster);
+					if (cluster.isAvalable()) {
+						pool.addProvider(cluster);
+					} else {
+						logger.warn("" + cluster + " is unavailable due to:"
+								+ cluster.getReasonForUnavailability());
+					}
 				}
 			}
 		} catch (Exception ex) {
@@ -196,17 +218,50 @@ public class ResourceManagerImpl
 	}
 	
 	public Catalog<Cluster> readClusterDesciptiors(JsonNode json) throws Exception {
-		Catalog<Cluster> clusters = new Catalog<>();
+		Catalog<Cluster> clusters = new Catalog<>(true);
 		try {
 			JsonNode clustersNode = JsonUtils.assertProperty(json, "clusters");
-			MapLikeType type = mapper.getTypeFactory()
-				.constructMapLikeType(Map.class, String.class, Cluster.class);
+//			MapLikeType type = mapper.getTypeFactory()
+//				.constructMapLikeType(Map.class, String.class, Cluster.class);
+//			
+//			Map<String, Cluster> clusterMap = mapper.convertValue(clustersNode, type);
+			int DEFAULT_PORT = 9440;
+			String DEFAULT_USER = "admin";
+			String DEFAULT_PWD = "Nutanix.1";
+			String DEFAULT_HV = "AHV";
 			
-			Map<String, Cluster> clusterMap = mapper.convertValue(clustersNode, type);
-
-			for (Map.Entry<String, Cluster> e : clusterMap.entrySet()) {
-				Cluster cluster = e.getValue();
-				cluster.setName(e.getKey());
+			Iterator<String> names = clustersNode.fieldNames();
+			while (names.hasNext()) {
+				String clusterName = names.next();
+				JsonNode clusterNode = clustersNode.get(clusterName);
+				Cluster cluster = new Cluster(clusterName);
+				cluster.setName(clusterName);
+				cluster.setHost(clusterNode.get("host").asText());
+				if (clusterNode.has("port")) {
+					cluster.setPort(clusterNode.get("port").asInt());
+				} else {
+					cluster.setPort(DEFAULT_PORT);
+				}
+				if (clusterNode.has("user")) {
+					cluster.setUser(clusterNode.get("user").asText());
+				} else {
+					cluster.setUser(DEFAULT_USER);
+				}
+				if (clusterNode.has("user")) {
+					cluster.setUser(clusterNode.get("user").asText());
+				} else {
+					cluster.setUser(DEFAULT_USER);
+				}
+				if (clusterNode.has("pwd")) {
+					cluster.setPassword(clusterNode.get("pwd").asText());
+				} else {
+					cluster.setPassword(DEFAULT_PWD);
+				}
+				if (clusterNode.has("hypervisor")) {
+					cluster.setHypervisor(clusterNode.get("hypervisor").asText());
+				} else {
+					cluster.setHypervisor(DEFAULT_HV);
+				}
 				clusters.add(cluster);
 			}
 		} catch (Exception ex) {

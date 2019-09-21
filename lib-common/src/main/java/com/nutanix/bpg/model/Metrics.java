@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nutanix.bpg.utils.IndexibleMap;
+import com.nutanix.bpg.utils.Named;
 
 /**
  * A metrics is named, ordered group of 

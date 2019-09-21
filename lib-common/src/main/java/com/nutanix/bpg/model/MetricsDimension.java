@@ -6,6 +6,7 @@ import java.sql.Types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.nutanix.bpg.utils.Identifable;
+import com.nutanix.bpg.utils.Named;
 
 /**
  * a dimension encodes meta information

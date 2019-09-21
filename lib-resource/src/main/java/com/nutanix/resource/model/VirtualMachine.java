@@ -3,13 +3,13 @@ package com.nutanix.resource.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nutanix.resource.Resource;
 import com.nutanix.resource.impl.AbstarctResource;
-import com.nutanix.resource.unit.CPU;
-import com.nutanix.resource.unit.CpuUnit;
-import com.nutanix.resource.unit.Memory;
-import com.nutanix.resource.unit.MemoryUnit;
-import com.nutanix.resource.unit.Storage;
+import com.nutanix.capacity.CPU;
+import com.nutanix.capacity.CpuUnit;
+import com.nutanix.capacity.Memory;
+import com.nutanix.capacity.MemoryUnit;
+import com.nutanix.capacity.ResourceKind;
+import com.nutanix.capacity.Storage;
 
 public class VirtualMachine extends AbstarctResource {
 	@JsonCreator
@@ -21,9 +21,9 @@ public class VirtualMachine extends AbstarctResource {
 		super(id);
 		setName(name);
 		
-		setPreferredUnit(Resource.Kind.MEMORY,  MemoryUnit.MB);
-		setPreferredUnit(Resource.Kind.STORAGE, MemoryUnit.GB);
-		setPreferredUnit(Resource.Kind.COMPUTE, CpuUnit.NONE);
+		setPreferredUnit(ResourceKind.MEMORY,  MemoryUnit.MB);
+		setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.GB);
+		setPreferredUnit(ResourceKind.COMPUTE, CpuUnit.NONE);
 		
 	}
 	@JsonIgnore

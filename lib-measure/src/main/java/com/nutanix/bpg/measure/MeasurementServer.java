@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.measure.model.Measurement;
 import com.nutanix.bpg.measure.model.Snapshot;
 import com.nutanix.bpg.measure.model.SnapshotSchedule;
 import com.nutanix.bpg.workload.PGBenchOptions;
@@ -33,7 +34,9 @@ import com.nutanix.bpg.workload.PGBenchOptions;
  *
  */
 public interface MeasurementServer  {
-	
+	Measurement takeMeasurement(String name, 
+			Database database, 
+			Metrics metrics) throws Exception ;
 	/**
 	 * Takes snapshot.
 	 * A snapshot is a finite sequence of measurements

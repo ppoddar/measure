@@ -7,16 +7,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.nutanix.resource.Allocation;
-import com.nutanix.resource.Capacity;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.ResourceProvider;
 import com.nutanix.resource.impl.DefaultCapacity;
 import com.nutanix.resource.impl.DefaultResourcePool;
 import com.nutanix.resource.model.Cluster;
 import com.nutanix.resource.model.VirtualMachine;
-import com.nutanix.resource.unit.CPU;
-import com.nutanix.resource.unit.Memory;
-import com.nutanix.resource.unit.MemoryUnit;
+import com.nutanix.capacity.CPU;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.Memory;
+import com.nutanix.capacity.MemoryUnit;
 
 public class TestAllocation {
 	private static ResourcePool pool;

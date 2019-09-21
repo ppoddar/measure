@@ -3,9 +3,16 @@ package com.nutanix.resource;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.nutanix.bpg.utils.Identifable;
-import com.nutanix.resource.unit.CpuUnit;
-import com.nutanix.resource.unit.MemoryUnit;
+import com.nutanix.capacity.Utilization;
+import com.nutanix.resource.model.VirtualMachine;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.Quantity;
+import com.nutanix.capacity.ResourceKind;
+import com.nutanix.capacity.Unit;
 
 /**
  * A resource represents capacity -- 
@@ -21,51 +28,14 @@ import com.nutanix.resource.unit.MemoryUnit;
  * @author pinaki.poddar
  *
  */
+
+@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS,
+	include=As.PROPERTY,
+	property="class")
+@JsonSubTypes({
+	@JsonSubTypes.Type(VirtualMachine.class)
+})
 public interface Resource extends Identifable {
-	public static enum Kind {
-		COMPUTE, 
-		MEMORY, 
-		STORAGE;
-		
-		String[] unitSymbols;
-		
-		public Unit getBaseUnit() {
-			switch (this) {
-			case MEMORY: 
-			case STORAGE: return MemoryUnit.KB;
-			case COMPUTE: 
-				return CpuUnit.NONE;
-			default: return null;
-			}
-		}
-		public Unit getHighestUnit() {
-			switch (this) {
-			case MEMORY: 
-			case STORAGE: return MemoryUnit.GB;
-			case COMPUTE: 
-			default: return null;
-			}
-		}
-		public Unit getSmallestUnit() {
-			switch (this) {
-			case MEMORY: 
-			case STORAGE: return MemoryUnit.B;
-			case COMPUTE: 
-			default: return null;
-			}
-		}
-		
-		public static Unit getUnit(Kind kind, String symbol) {
-			switch (symbol) {
-			case "B": return MemoryUnit.B; 
-			case "KB": return MemoryUnit.KB; 
-			case "MB": return MemoryUnit.MB; 
-			case "GB": return MemoryUnit.GB; 
-			default:
-				return null;
-			}
-		}
-	}
 		
 	/**
 	 * get capacity of all kinds.
@@ -91,7 +61,7 @@ public interface Resource extends Identifable {
 	 * not case-sensitive
 	 * @return
 	 */
-	boolean hasKind(Resource.Kind kind);
+	boolean hasKind(ResourceKind kind);
 	
 	/**
 	 * get kinds of capacities provided by this receiver
@@ -100,15 +70,15 @@ public interface Resource extends Identifable {
 	 * {@link Resource.Kind#MEMORY memory}.
 	 */
 	@JsonIgnore
-	Collection<Resource.Kind> getKinds();
+	Collection<ResourceKind> getKinds();
 	
 	/**
-	 * the unit in which given kind of resource capcity
+	 * the unit in which given kind of resource capacity
 	 * is expressed.
 	 * @param kind
 	 * @return an unit.
 	 */
-	Unit getUnit(Resource.Kind kind);
+	Unit getUnit(ResourceKind kind);
 	
 	/**
 	 * add capacity to this resource.

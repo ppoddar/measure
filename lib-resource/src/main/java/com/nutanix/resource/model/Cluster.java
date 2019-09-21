@@ -1,8 +1,11 @@
 package com.nutanix.resource.model;
 
+import java.util.Iterator;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nutanix.bpg.model.Named;
+import com.nutanix.bpg.utils.Named;
+import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourceProvider;
 import com.nutanix.resource.impl.DefaultResourceProvider;
 
@@ -22,11 +25,16 @@ public class Cluster extends DefaultResourceProvider
 	private String name;
 	private String host;
 	private int    port;
-	
+	private String user;
+	private String password;
+	private String hypervisor;
+	private boolean available;
+	private String reason;
 	
 	@JsonCreator
 	public Cluster(@JsonProperty("id") String id) {
 		super(id);
+		available = true;
 	}
 	
 	public String getName() {
@@ -84,5 +92,40 @@ public class Cluster extends DefaultResourceProvider
 		return getName() + "@" + getHost() + ":" + getPort();
 	}
 
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getHypervisor() {
+		return hypervisor;
+	}
+
+	public void setHypervisor(String hypervisor) {
+		this.hypervisor = hypervisor;
+	}
+
+	public void markUnavailable(String cause) {
+		available = false;
+		reason = cause;
+	}
 	
+	public boolean isAvalable() {
+		return available;
+	}
+	
+	public String getReasonForUnavailability() {
+		return reason;
+	}
 }

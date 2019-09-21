@@ -1,8 +1,6 @@
 package com.nutanix.bpg.spring;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nutanix.bpg.task.JobQueueManager;
-import com.nutanix.bpg.task.TaskQueue;
-import com.nutanix.bpg.task.TaskToken;
+import com.nutanix.bpg.job.JobQueueManager;
+import com.nutanix.bpg.job.JobToken;
+import com.nutanix.bpg.job.impl.JobQueueManagerImpl;
 
 @RestController
 @RequestMapping("/task")
 public class TaskController {
 	private JobQueueManager taskQueues
-		= JobQueueManager.instance();
+		= JobQueueManagerImpl.instance();
 	
 	private static Logger logger = LoggerFactory.getLogger(TaskController.class);
 	
@@ -31,7 +29,7 @@ public class TaskController {
 			@PathVariable("queue") String queue,
 			@PathVariable("id") String id) throws Exception {
 		logger.debug("getting result for task " + id);
-		TaskToken task = taskQueues.getQueue(queue).getTask(id);
+		JobToken task = taskQueues.getQueue(queue).getJob(id);
 		if (task != null) {
 			Object result = task.getResult();
 			logger.debug("sending task result " + result);
@@ -48,27 +46,27 @@ public class TaskController {
 	 * @return no response if task is not queued.
 	 */
 	@GetMapping("{queue}/status/{id}")
-	public ResponseEntity<TaskToken> getTaskStatus(
+	public ResponseEntity<JobToken> getTaskStatus(
 			@PathVariable("queue") String queue,
 			@PathVariable("id") String id) {
-		TaskToken task = taskQueues.getQueue(queue).getTask(id);
+		JobToken task = taskQueues.getQueue(queue).getJob(id);
 		if (task != null) {
-			return new ResponseEntity<TaskToken>(task, HttpStatus.CREATED);
+			return new ResponseEntity<JobToken>(task, HttpStatus.CREATED);
 		} else {
 			// logger.warn("no task [" + id + "] found");
-			return new ResponseEntity<TaskToken>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<JobToken>(HttpStatus.NOT_FOUND);
 		}
 
 	}
 
 	@GetMapping("/{queue}")
-	public Collection<TaskToken> getAllTasks(@PathVariable("queue") String queue) {
-		return taskQueues.getQueue(queue).getTasks();
+	public Collection<JobToken> getAllTasks(@PathVariable("queue") String queue) {
+		return taskQueues.getQueue(queue).getJobs();
 	}
 	
 	@PostMapping("/{queue}/cancel/{id}")
 	public ResponseEntity<?> cancelTask(@PathVariable("queue") String queue, @PathVariable("id") String id) {
-		TaskToken task = taskQueues.getQueue(queue).getTask(id);
+		JobToken task = taskQueues.getQueue(queue).getJob(id);
 		if (task != null) {
 			task.cancel();
 			return new ResponseEntity<String>("canceled task [" + id + "]", HttpStatus.OK);

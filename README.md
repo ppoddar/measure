@@ -47,8 +47,8 @@ The project is organized into following sub-modules.
   
   ### Git commit
   
-  git remote set-url origin git@github.com:ppoddar/measure.git
+     $ git remote set-url origin git@github.com:ppoddar/measure.git
   
-  git push origin master
+     $ git push origin master
   
     	 

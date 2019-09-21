@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.AllocationPolicy;
-import com.nutanix.resource.Capacity;
-import com.nutanix.resource.Quantity;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourcePool;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.Quantity;
 /**
  * default implementation of {@link AllocationPolicy 
  * allocation policy} selects a resource from the pool,

@@ -1,5 +1,7 @@
 package com.nutanix.resource;
 
+import com.nutanix.capacity.Capacity;
+
 /**
  * Policy to select a resource to meet a demand
  * 

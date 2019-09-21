@@ -3,6 +3,8 @@ package com.nutanix.resource;
 import java.util.Collection;
 import java.util.List;
 
+import com.nutanix.capacity.Capacity;
+
 /**
  * main interface to Resource Allocation framework 
  * 

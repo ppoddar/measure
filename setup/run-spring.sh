@@ -2,7 +2,7 @@
 PORT=${1:-8080}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 PROJECT_HOME=$SCRIPT_DIR/..
-MAIN_JAR=$PROJECT_HOME/spring/target/spring-0.0.1-SNAPSHOT.jar
+MAIN_JAR=$PROJECT_HOME/spring/target/spring-boot.jar
 # be happy, be patient
 echo ----------------------------------------
 fortune

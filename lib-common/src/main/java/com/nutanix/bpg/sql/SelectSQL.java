@@ -1,9 +1,5 @@
 package com.nutanix.bpg.sql;
 
-import com.nutanix.bpg.sql.SQL;
-import com.nutanix.bpg.sql.SQL.OP;
-import com.nutanix.bpg.sql.SQL.TableAlias;
-import com.nutanix.bpg.sql.SQL.VERB;
 import com.nutanix.bpg.model.MetricsDimension;
 
 public class SelectSQL extends SQL {

@@ -13,6 +13,7 @@ import com.nutanix.bpg.repo.Repository;
 import com.nutanix.bpg.repo.RepositoryImpl;
 import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.measure.model.JDBCMeasurmentTaker;
+import com.nutanix.bpg.measure.model.Measurement;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.measure.model.Snapshot;
 import com.nutanix.bpg.measure.model.SnapshotPlugin;
@@ -117,6 +118,18 @@ public class MeasurementServerImpl implements MeasurementServer {
 				repo.getConnection());
 		return CompletableFuture.supplyAsync(plugin, pool);
 	}
+	
+	@Override
+	public Measurement takeMeasurement(
+			String name, 
+			Database database, 
+			Metrics metrics)
+			throws Exception {
+		
+		MeasuremementTaker taker = new JDBCMeasurmentTaker(database, metrics);
+		return taker.takeMeasurement();
+	}
+
 
 
 	@Override

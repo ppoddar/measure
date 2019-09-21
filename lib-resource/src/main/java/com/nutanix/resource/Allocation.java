@@ -2,7 +2,12 @@ package com.nutanix.resource;
 
 import java.time.Duration;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.nutanix.bpg.utils.Identifable;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.resource.impl.DefaultAllocation;
 /**
  * Allocation of resource demand to a resource.
  * A {@link AllocationPolicy#reserveAllocation(ResourcePool, Capacities)
@@ -11,10 +16,13 @@ import com.nutanix.bpg.utils.Identifable;
  * @author pinaki.poddar
  *
  */
-//@JsonTypeInfo(use=Id.CLASS, include=As.PROPERTY,property="class")
-//@JsonSubTypes({
-//	@JsonSubTypes.Type(DefaultAllocation.class)
-//})
+@JsonTypeInfo(
+		use=JsonTypeInfo.Id.CLASS, 
+		include=As.PROPERTY,
+		property="class")
+@JsonSubTypes({
+	@JsonSubTypes.Type(DefaultAllocation.class)
+})
 
 public interface Allocation 
 	extends Identifable, Comparable<Allocation> {

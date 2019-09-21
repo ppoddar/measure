@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.nutanix.bpg.utils.Named;
 import com.nutanix.bpg.utils.NamedMap;
 
 /**
@@ -15,13 +16,19 @@ import com.nutanix.bpg.utils.NamedMap;
 
 public class Catalog<T extends Named> implements Iterable<T> {
 	private String name;
-	private NamedMap<T> map = new NamedMap<>();
+	private final NamedMap<T> map;
 	
 	/**
 	 * create an unnamed, empty catalog
 	 */
 	public Catalog() {
+		map = new NamedMap<>();
 	}
+	
+	public Catalog(boolean caseinsensitive) {
+		map = new NamedMap<>(caseinsensitive);
+	}
+
 	
 	/**
 	 * adds an identifiable element to this receiver.

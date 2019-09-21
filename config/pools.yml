@@ -3,3 +3,8 @@
 pools: 
   default: 
      - tomahawk 
+     - tauras
+     - mongoose
+  jenkins: 
+     - tauras01
+     - tomahawk4

@@ -2,8 +2,14 @@ package com.nutanix.resource;
 
 import java.util.List;
 
-import com.nutanix.bpg.model.Named;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.nutanix.bpg.utils.Identifable;
+import com.nutanix.bpg.utils.Named;
+import com.nutanix.capacity.Utilization;
+import com.nutanix.resource.impl.DefaultResourcePool;
+import com.nutanix.capacity.Capacity;
 
 /**
  * a pool of resources for allocation
@@ -11,7 +17,12 @@ import com.nutanix.bpg.utils.Identifable;
  * @author pinaki.poddar
  *
  */
-
+@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS,
+		include=As.PROPERTY,
+		property="class")
+@JsonSubTypes({
+	@JsonSubTypes.Type(DefaultResourcePool.class)
+	})
 
 public interface ResourcePool 
 	extends Identifable, Named, Iterable<Resource> {

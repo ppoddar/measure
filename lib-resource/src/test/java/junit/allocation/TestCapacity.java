@@ -7,12 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.nutanix.resource.Capacity;
-import com.nutanix.resource.Quantity;
-import com.nutanix.resource.Resource;
 import com.nutanix.resource.impl.DefaultCapacity;
-import com.nutanix.resource.unit.Memory;
-import com.nutanix.resource.unit.MemoryUnit;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.Memory;
+import com.nutanix.capacity.MemoryUnit;
+import com.nutanix.capacity.Quantity;
+import com.nutanix.capacity.ResourceKind;
 
 public class TestCapacity {
 	private static double epsilon = 1.0E-8;
@@ -90,7 +90,7 @@ public class TestCapacity {
 	
 	@Test
 	public void testCapacities() {
-		Resource.Kind memory = Resource.Kind.MEMORY;
+		ResourceKind memory = ResourceKind.MEMORY;
 		Capacity cap = new DefaultCapacity();
 		Quantity q  = new Memory(100, MemoryUnit.GB);
 		Quantity q2 = new Memory(10, MemoryUnit.GB);
@@ -106,7 +106,7 @@ public class TestCapacity {
 	
 	@Test
 	public void testReduceCapacities() {
-		Resource.Kind memory = Resource.Kind.MEMORY;
+		ResourceKind memory = ResourceKind.MEMORY;
 		Capacity cap1 = new DefaultCapacity();
 		Quantity q1 = new Memory(100, MemoryUnit.GB);
 		
@@ -128,7 +128,7 @@ public class TestCapacity {
 	
 	@Test
 	public void testUnits() {
-		assertEquals(MemoryUnit.B, Resource.Kind.getUnit(null, "B"));
+		assertEquals(MemoryUnit.B, ResourceKind.MEMORY.getUnit("B"));
 		
 	}
 	
