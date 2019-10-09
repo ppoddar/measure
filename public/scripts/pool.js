@@ -42,26 +42,67 @@ class ResourcePool {
 		})
 	}
 	
+	/**
+	 * Creates list item for pool.
+	 * A list shows all clusters in pool. 
+	 */
 	createItem() {
-		console.log('createPoolItem ' + this.name)
-		console.log(this)
-				
-		var $li = $('<li>')
-		$li.text(this.name + ' (' + this.clusters.length + ' clusters)')
-		$li.data('pool', this)
-		var pool = this
-		$li.on('click', function(e){
-			console.log('show capacity')
-			var pool = $(e.target).data('pool')
-			var $chart = pool.showUtilization()
-			new Tab('#utilization-view').append($chart)
+		var $pool = $('<li>')
+		var $label = $('<span>')
+		$label.text(this.name + ' (' + this.clusters.length + ' clusters)')
+		$pool.append($label)
+		$label.css('font-weight', 'bold')
+		$pool.data('pool', this)
+		$pool.on('click', function(e){
+			//console.log('show capacity')
+			var pool = $(this).data('pool')
+			var $chart = pool.showUtilization('#cluster-view')
 		})
-		var $ul = $('<ul>')
-		$li.append($ul)
+		var $clusters = $('<ul>')
+		$pool.append($clusters)
 		for (var i = 0; i < this.clusters.length; i++) {
-			var $subItem = this.clusters[i].createItem()
-			$ul.append($subItem)
+			var $cluster = this.clusters[i].createItem()
+			$clusters.append($cluster)
 		}
-		return $li
+		return $pool
+	}
+	
+	/**
+	 * show utilization of this pool and 
+	 * capacity distribution over each cluster.
+	 * 
+	 * populates given page template
+	 * 
+	 * @return a jQuery <div>  element. 
+	 */
+	showUtilization(pageId) {
+		var $page = jq(pageId)
+		var $control   = find($page,'#header')
+		$control.text(this.name)
+		
+		var $description = find($page, '#description')
+		$description.html(' <b>' + this.name + '</b> pool has'
+				+ ' <b>' + this.clusters.length + '</b> clusters.<p>'
+				+ ' Showing <b>capacity utilization</b>'
+				+ ' of entire pool '
+				+ ' and of individual clusters<br>'
+				+ ' <b>Capacity utilization</b> of a pool'
+				+ ' is weighted avrage of utilization'
+				+ ' of individual clusters. ')
+				
+				
+		var $utilization = find($page,'#chart-utilization')
+
+		$control.on('click', function(e) {
+			$utilization.toggle()
+		})
+		
+		var total     = new Capacity(this.data['totalCapacity'])
+		var available = new Capacity(this.data['availableCapacity'])
+		new Google().drawQuantityUtilization($utilization, available, total)
+		
+		var $distribution = find($page,'#chart-distribution')
+		new Google().drawQuantityDistribution($distribution, this.clusters)
+		return $page
 	}
 }

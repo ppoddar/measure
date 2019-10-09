@@ -4,7 +4,7 @@
 # assumes that artifcats have been deployed
 # --------------------------------------------
 # directory where this script will run
-DIR=${1:-/root/www/bpg}
+DIR=${1:-/root/www/raf}
 cd $DIR 
 
 # main jar assumed to have been deployed

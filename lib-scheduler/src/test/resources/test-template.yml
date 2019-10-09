@@ -1,0 +1,16 @@
+ name:  nutest
+ command: eratest.py
+ requires: 
+    - cluster
+    
+ option-flag: --
+ 
+ options: 
+    tests: era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
+    config_file: testcases/era/rbac/smoke/config.json
+    clusters: ${cluster}
+    
+        
+        # {10.46.31.26}
+        
+ # --tests  --config_file  --clusters 10.46.31.26

@@ -6,12 +6,14 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nutanix.capacity.Capacity;
-import com.nutanix.capacity.DefaultUtilization;
 import com.nutanix.capacity.Quantity;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Unit;
 import com.nutanix.capacity.Utilization;
+import com.nutanix.capacity.impl.DefaultCapacity;
+import com.nutanix.capacity.impl.DefaultUtilization;
 import com.nutanix.resource.Resource;
+import com.nutanix.resource.model.VirtualMachine;
 
 /**
  * abstract resource maintains capacity management 
@@ -27,35 +29,10 @@ import com.nutanix.resource.Resource;
  * @author pinaki.poddar
  *
  */
-public class AbstarctResource implements Resource {
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AbstarctResource other = (AbstarctResource) obj;
-		if (uuid == null) {
-			if (other.uuid != null)
-				return false;
-		} else if (!uuid.equals(other.uuid))
-			return false;
-		return true;
-	}
-
+public abstract class AbstarctResource implements Resource {
 	private String uuid;
 	private String name;
-	private com.nutanix.capacity.Capacity limit     = new DefaultCapacity();
+	private Capacity total     = new DefaultCapacity();
 	private Capacity available = new DefaultCapacity();
 	private Map<ResourceKind, Unit> preferredUnits =
 			new HashMap<ResourceKind, Unit>();
@@ -95,22 +72,12 @@ public class AbstarctResource implements Resource {
 		return available;
 	}
 	
-
-	@Override
-	public boolean hasKind(ResourceKind kind) {
-		return available.hasKind(kind);
-	}
-
-	@Override
-	public Collection<ResourceKind> getKinds() {
-		return available.getKinds();
-	}
 	
 	@Override
 	public final Resource addQuanity(Quantity q) {
 		q = toPreferredUnit(q);
 		available.addQuantity(q);
-		limit.addQuantity(q);
+		total.addQuantity(q);
 		return this;
 	}
 	
@@ -118,16 +85,25 @@ public class AbstarctResource implements Resource {
 	@JsonProperty(required=false)
 	@Override
 	public Capacity getTotalCapacity() {
-		return limit;
+		return total;
 	}
 
 	@Override
-	public Resource reduceCapacity(Capacity cap) {
+	public boolean acquire(Capacity cap) {
 		for (Quantity q : cap) {
 			available.reduceQuantity(toPreferredUnit(q));
 		}
-		return this;
+		return true;
 	}
+	
+	@Override
+	public boolean release(Capacity cap) {
+		for (Quantity q : cap) {
+			available.addQuantity(toPreferredUnit(q));
+		}
+		return true;
+	}
+
 
     protected void setPreferredUnit(ResourceKind kind, Unit unit) {
     	preferredUnits.put(kind, unit);
@@ -144,7 +120,7 @@ public class AbstarctResource implements Resource {
     
     public Utilization getUtilization() {
     	Utilization result = new DefaultUtilization();
-    	for (ResourceKind kind : getKinds()) {
+    	for (ResourceKind kind : ResourceKind.values()) {
     		double available = getAvailableCapacity().getQuantity(kind).getValue();
     		double total     = getTotalCapacity().getQuantity(kind).getValue();
     		double used = total - available;
@@ -153,5 +129,42 @@ public class AbstarctResource implements Resource {
     	}
     	return result;
     }
+    
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstarctResource other = (AbstarctResource) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+
+	@Override
+	public <R extends Resource> R copy() {
+		R clone = createNew();
+		for (Quantity q : total) {
+			clone.addQuanity(q);
+		}
+		return clone;
+	}
+	
+	protected abstract <R extends Resource> R createNew();
+
 
 }

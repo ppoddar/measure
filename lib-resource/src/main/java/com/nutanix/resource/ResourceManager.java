@@ -15,9 +15,13 @@ public interface ResourceManager {
 	public static final String POLICY_ALLOCATION   = "policy.allocation";
 	public static final String CATALOG_CLUSTER_URL = "catalog.cluster.url";
 	public static final String POOL_ASSIGNMENT_URL = "pool.cluster.url";
-
-	ResourcePool getResourcePool(String id);
-	ResourcePool getResourcePoolByName(String id);
+	
+	/**
+	 * gets a pool by name, or throws error
+	 * @param name
+	 * @return
+	 */
+	ResourcePool getResourcePool(String name);
 	Collection<ResourcePool> getResourcePools();
 	
 	/**

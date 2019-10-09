@@ -1,0 +1,152 @@
+{
+	"entities": [
+		{
+			"allow_live_migrate": true,
+			"boot": {
+				"boot_device_order": [
+					"string"
+				],
+				"boot_device_type": "CDROM",
+				"disk_address": {
+					"device_bus": "SCSI",
+					"device_index": 0,
+					"disk_label": "string",
+					"is_cdrom": true,
+					"ndfs_filepath": "string",
+					"vmdisk_uuid": "string",
+					"volume_group_uuid": "string"
+				},
+				"mac_addr": "string"
+			},
+			"cbr_not_capable_reason": "string",
+			"description": "string",
+			"gpus_assigned": true,
+			"guest_driver_version": "string",
+			"guest_os": "string",
+			"ha_priority": 0,
+			"host_uuid": "string",
+			"memory_mb": 0,
+			"memory_reservation_mb": 0,
+			"name": "string",
+			"num_cores_per_vcpu": 0,
+			"num_vcpus": 0,
+			"power_state": "UNKNOWN",
+			"serial_ports": [
+				{
+					"index": 0,
+					"type": "NULL"
+				}
+			],
+			"storage_container_uuid": "string",
+			"timezone": "string",
+			"tools_installer_mounted": true,
+			"tools_running_status": "UNKNOWN",
+			"uuid": "string",
+			"vcpu_reservation_hz": 0,
+			"vm_customization_config": {
+				"datasource_type": "CONFIG_DRIVE_V2",
+				"files_to_inject_list": [
+					{
+						"destination_path": "string",
+						"source_path": "string"
+					}
+				],
+				"fresh_install": true,
+				"userdata": "string",
+				"userdata_path": "string"
+			},
+			"vm_disk_info": [
+				{
+					"disk_address": {
+						"device_bus": "SCSI",
+						"device_index": 0,
+						"disk_label": "string",
+						"is_cdrom": true,
+						"ndfs_filepath": "string",
+						"vmdisk_uuid": "string",
+						"volume_group_uuid": "string"
+					},
+					"flash_mode_enabled": true,
+					"is_cdrom": true,
+					"is_empty": true,
+					"is_hot_remove_enabled": true,
+					"is_scsi_passthrough": true,
+					"is_thin_provisioned": true,
+					"shared": true,
+					"size": 0,
+					"source_disk_address": {
+						"device_bus": "SCSI",
+						"device_index": 0,
+						"disk_label": "string",
+						"is_cdrom": true,
+						"ndfs_filepath": "string",
+						"vmdisk_uuid": "string",
+						"volume_group_uuid": "string"
+					},
+					"storage_container_uuid": "string"
+				}
+			],
+			"vm_features": {
+				
+			},
+			"vm_gpus": [
+				{
+					"assignable": true,
+					"device_id": 0,
+					"device_name": "string",
+					"fraction": 0,
+					"frame_buffer_size_bytes": 0,
+					"gpu_mode": "UNUSED",
+					"gpu_profile": "string",
+					"gpu_type": "PASS_THROUGH_GRAPHICS",
+					"gpu_vendor": "NVIDIA",
+					"guest_driver_version": "string",
+					"in_use": true,
+					"licenses": [
+						"string"
+					],
+					"max_resolution": "string",
+					"num_virtual_display_heads": 0,
+					"numa_node": 0,
+					"sbdf": "string",
+					"vm_uuids": [
+						"string"
+					]
+				}
+			],
+			"vm_logical_timestamp": 0,
+			"vm_nics": [
+				{
+					"adapter_type": "E1000",
+					"ip_address": "string",
+					"mac_address": "string",
+					"model": "string",
+					"network_uuid": "string",
+					"port_id": "string",
+					"request_ip": true,
+					"requested_ip_address": "string"
+				}
+			]
+		}
+	],
+	"error_info": {
+		"count": 0,
+		"entity_list": [
+			"string"
+		],
+		"message": "string"
+	},
+	"metadata": {
+		"count": 0,
+		"end_index": 0,
+		"filter_criteria": "string",
+		"grand_total_entities": 0,
+		"next_cursor": "string",
+		"page": 0,
+		"previous_cursor": "string",
+		"search_string": "string",
+		"sort_criteria": "string",
+		"start_index": 0,
+		"total_entities": 0
+	}
+}

@@ -1,0 +1,36 @@
+<div class='w3-container w3-row'>
+
+	<div class="w3-col l4 m4">
+		<button id='submit-job' class='w3-teal w3-padding w3-margin'>Submit Job</button>
+		<div class='w3-panel w3-black'>Job Queues</div>
+		<ul id='job-list' class='w3-margin'></ul>
+	</div>
+	<div id="job-view" class="w3-col m7 l7">
+		<div id='job-table'></div>
+		<div id='output'></div>
+		<div id='error-output'></div>
+	</div>
+</div>
+<div id='job-submit-dialog' class="w3-hide"></div>
+
+	
+<script>
+    $('#job-submit-dialog').load('html/dialogs/job-submit.html')
+
+    $('#submit-job').on('click', function(e){
+        openJobSubmitDialog(e)
+    })
+	$.ajax({
+		url: '/task/queues'
+	}).done(function(names){
+		console.log('response of queue names')
+		console.log(names)
+		var $jobList = $('#job-list')
+		for (var i = 0; i < names.length; i++) {
+			var jobQ = new JobQueue(names[i])
+			var $li = jobQ.createItem();
+			$jobList.append($li)
+		}
+	}) 
+
+</script>

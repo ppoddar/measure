@@ -86,8 +86,12 @@ class VM {
 	 * and total value of the given quantity
 	 */
 	getQuantity(q) {
-		if (!(q in this.available)) throw 'missing quantity ' + q 
-		+ ' availble quantires are ' + Object.keys(this.available)
+		if (!(q in this.available)) 
+			throw 'missing quantity [' + q + ']'
+		+ ' availble quantities are [' + Object.keys(this.available) + ']'
+		if (!(q in this.total)) 
+			throw 'missing quantity [' + q + ']'
+		+ ' availble quantities are [' + Object.keys(this.total) + ']'
 		return [this.available[q]['value'],  this.total[q]['value']]
 	}
 }

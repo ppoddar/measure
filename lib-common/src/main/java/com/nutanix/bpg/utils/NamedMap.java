@@ -19,6 +19,9 @@ public class NamedMap<V extends Named> {
 	}
 	
 	String createKey(String s) {
+		if (s == null) {
+			throw new IllegalArgumentException("can not create key from null string");
+		}
 		return caseinsenstive ? s.toLowerCase() : s;
 	}
 	
@@ -32,6 +35,7 @@ public class NamedMap<V extends Named> {
 	}
 	
 	public boolean containsKey(String name) {
+		if (name == null) return false;
 		String key = createKey(name);
 		return map.containsKey(key);
 	}
@@ -46,7 +50,7 @@ public class NamedMap<V extends Named> {
 		if (!map.containsKey(key)) {
 			if (mustExist) {
 				throw new IllegalArgumentException("no element named [" + name + "]"
-						+ " Available elements are " + getNames());
+						+ " Available elements are " + names());
 			} else {
 				return null;
 			}
@@ -55,7 +59,7 @@ public class NamedMap<V extends Named> {
 	}
 	
 	
-	public Set<String> getNames() {
+	public Set<String> names() {
 		return map.keySet();
 	}
 	

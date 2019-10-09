@@ -1,7 +1,6 @@
 package com.nutanix.bpg.measure;
 
 import java.util.Arrays;
-import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -9,17 +8,18 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nutanix.bpg.repo.Repository;
-import com.nutanix.bpg.repo.RepositoryImpl;
-import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.measure.model.JDBCMeasurmentTaker;
 import com.nutanix.bpg.measure.model.Measurement;
-import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.measure.model.Snapshot;
 import com.nutanix.bpg.measure.model.SnapshotPlugin;
 import com.nutanix.bpg.measure.model.SnapshotSchedule;
+import com.nutanix.bpg.model.Database;
+import com.nutanix.bpg.model.Metrics;
+import com.nutanix.bpg.repo.Repository;
+import com.nutanix.bpg.repo.RepositoryImpl;
 import com.nutanix.bpg.workload.Benchmarker;
 import com.nutanix.bpg.workload.PGBenchOptions;
+import com.nutanix.config.Configuration;
 
 /**
  * implements {@link MeasurementServer}.
@@ -40,7 +40,7 @@ public class MeasurementServerImpl implements MeasurementServer {
 	private static Logger logger = LoggerFactory.getLogger(MeasurementServerImpl.class);
 
 	private static MeasurementServer singleton;
-	private static Properties config;
+	private static Configuration config;
 
 	public static MeasurementServer instance() {
 		if (singleton == null) {
@@ -58,33 +58,21 @@ public class MeasurementServerImpl implements MeasurementServer {
 	 * implying default. 
 	 * @throws Exception if anything goes wrong
 	 */
-	public static void init(Properties props) throws Exception {
-		if (props != null) {
-			config = defaultProperties();
-			config.putAll(props);
-		}
+	public static MeasurementServer configure(Configuration conf) throws Exception {
+		config = conf;
+		return instance();
 	}
 
 	private MeasurementServerImpl() {
-		if (config == null) {
-			config = defaultProperties();
+		try {
+			repo  =  RepositoryImpl.configure(config);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		RepositoryImpl.init(config);
-		repo  = RepositoryImpl.instance();
 	}
 
 
 
-	/**
-	 * reads default properties from a classpath
-	 * resource named <code>bpg.properties</code>.
-	 * 
-	 * @return
-	 */
-	private static Properties defaultProperties() {
-		Properties p = new Properties();
-		return p;
-	}
 
 
 	

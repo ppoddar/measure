@@ -10,6 +10,7 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nutanix.bpg.utils.Named;
 
 
@@ -17,15 +18,29 @@ public class CatalogBuilder<T extends Named>
 	extends SimpleFileVisitor<Path> {
 	private Factory<T> factory;
 	private File root;
-	Catalog<T> catalog;
 	private static Logger logger = LoggerFactory.getLogger(CatalogBuilder.class);
 	
 	public CatalogBuilder<T> withFactory(Factory<T> factory) {
 		this.factory = factory;
 		return this;
 	}
-	
+	/**
+	 * path to a root directory.
+	 * All files under this directory will be processed.
+	 * 
+	 * @param dir
+	 * @return
+	 */
 	public CatalogBuilder<T> withDirectory(Path dir) {
+		if (dir == null) {
+			logger.warn("can not build catalog with null directory");
+			return this;
+		}
+		if (!dir.toFile().exists()) {
+			logger.warn("can not build catalog with non-existent directory " 
+					+ dir.toUri());
+			return this;
+		}
 		root = dir.toFile();
 		return this;
 	}
@@ -39,15 +54,18 @@ public class CatalogBuilder<T extends Named>
 	 * @throws IllegalArgumentException when things go wrong
 	 */
 	public Catalog<T> build() {
+		Catalog<T> catalog = new Catalog<T>();
 		if (factory == null) {
-			throw new IllegalArgumentException("no factory to build a catalog");
+			logger.warn("no factory to build a catalog. An empty catalog woud be built");
+			return catalog;
+			
 		}
 		if (root == null) {
-			throw new IllegalArgumentException("no root directory to build a catalog");
+			logger.warn("no root directory to build a catalog");
+			return catalog;
 		}
-		catalog = new Catalog<T>();
 		catalog.setName(factory.getType().getSimpleName());
-		logger.info("building " + catalog);
+		logger.info("building " + catalog + " reading from " + root.getAbsolutePath());
 		Stack<File> files = new Stack<>();
 		files.push(root);
 		while (!files.isEmpty()) {
@@ -60,12 +78,18 @@ public class CatalogBuilder<T extends Named>
 			}
 			if (!file.getName().endsWith(".yml")) continue;
 			try {
+				logger.debug("building " + factory.getType().getSimpleName()
+						+ " from " + file);
 				T e = factory.build(new FileInputStream(file));
 				if (e != null) {
 					catalog.add(e);
 				}
+			} catch (JsonMappingException ex) {
+				logger.warn("error reading " + file
+						+ " check if file content is valid JSON");
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.warn("error reading " + file
+						+ " check if file content is valid JSON");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

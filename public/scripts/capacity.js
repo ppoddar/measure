@@ -28,7 +28,7 @@ class Capacity {
 				+ ' available keys are ' + Object.keys(data)
 			}
 			var tokens = data[k].split(' ')
-			var value = parseFloat(tokens[0])
+			var value = Math.floor(parseFloat(tokens[0]))
 			if (k == 'COMPUTE') {
 				// COMPUTE is unit less
 				_this[k] = {'value' : value}

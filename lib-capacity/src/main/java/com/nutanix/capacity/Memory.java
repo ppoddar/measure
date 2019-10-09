@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.nutanix.capacity.impl.AbstractQuantity;
 
 public class Memory extends AbstractQuantity implements Quantity {
 
@@ -17,7 +18,12 @@ public class Memory extends AbstractQuantity implements Quantity {
 	}
 	@Override
 	public Unit getPreferredUnit() {
-		return MemoryUnit.MB;
+		return MemoryUnit.TB;
 	}
+	@Override
+	public Quantity fraction(double f) {
+		return clone(getValue()*f, getUnit());
+	}
+	
 
 }

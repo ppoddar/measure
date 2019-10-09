@@ -61,7 +61,6 @@ public interface Resource extends Identifable {
 	 * not case-sensitive
 	 * @return
 	 */
-	boolean hasKind(ResourceKind kind);
 	
 	/**
 	 * get kinds of capacities provided by this receiver
@@ -69,8 +68,6 @@ public interface Resource extends Identifable {
 	 * @return a set of {@link Resource.Kind kinds}
 	 * {@link Resource.Kind#MEMORY memory}.
 	 */
-	@JsonIgnore
-	Collection<ResourceKind> getKinds();
 	
 	/**
 	 * the unit in which given kind of resource capacity
@@ -92,7 +89,8 @@ public interface Resource extends Identifable {
 	 * @param q
 	 * @return same receiver
 	 */
-	Resource reduceCapacity(Capacity q);
+	boolean acquire(Capacity q);
+	boolean release(Capacity q);
 
 	/**
 	 * gets utilization of this receiver.
@@ -100,5 +98,7 @@ public interface Resource extends Identifable {
 	 * @return utilization
 	 */
 	Utilization getUtilization();
+	
+	<R extends Resource> R copy();
 	
 }

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nutanix.bpg.utils.URLBuilder;
 import com.nutanix.resource.model.Cluster;
 
 
@@ -74,24 +75,25 @@ public class PrismGateway {
 		
 	}
 	
-	URL getURLForPath(String path) {
-		String uri = protocol + "://"
-				+ cluster.getHost() + ":" 
-				+ cluster.getPort()
-				+ "/" + base + "/"
-				+ version + "/" + path;
-		URL url;
-		try {
-			url = new URL(uri);
-			return url;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+	URL buildURLForPath(String path, String[] params) {
+		URLBuilder builder = new URLBuilder()
+				.withScheme(protocol)
+				.withHost(cluster.getHost())
+				.withPort(cluster.getPort())
+				.withPath(base + "/" + version + "/" + path);
+		for (int i = 0; i < params.length-1; i+=2) {
+			builder.withQueryParams(params[i], params[i+1]);
 		}
-		return null;
+		try {
+			return new URL(builder.build());
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
 	}
+	
 	public void verifyConnection() {
 		try {
-			getResponse("/");
+			getResponse(buildURLForPath("/", null));
 		} catch (UnknownHostException ex) {
 			throw new RuntimeException("host [" + cluster.getHost() + "]"
 					+ " is not recognized. Check if you can "
@@ -101,6 +103,7 @@ public class PrismGateway {
 		}
 	}
 	
+	
 	/**
 	 * Gets JSON response of given path.
 	 * 
@@ -109,10 +112,9 @@ public class PrismGateway {
 	 * 
 	 * @throws Exception
 	 */
-	public JsonNode getResponse(String path) throws Exception {
-		URL url = getURLForPath(path);
-		HttpURLConnection con = (HttpURLConnection)
-				url.openConnection();
+	JsonNode getResponse(URL url) throws Exception {
+		logger.debug("opning connection:" + url);
+		HttpURLConnection con = (HttpURLConnection)url.openConnection();
 		con.setRequestProperty(ACCEPT, APPLICATION_JSON);
 		String encoded = Base64.getEncoder()
 				.encodeToString((cluster.getUser()+":"+cluster.getPassword())
@@ -120,8 +122,29 @@ public class PrismGateway {
 		con.setRequestProperty("Authorization", "Basic "+encoded);
 		
 		logger.info("Prism request:" + url);
-		InputStream in = con.getInputStream();
-		return mapper.readTree(in);
+		try {
+			InputStream in = con.getInputStream();
+			return mapper.readTree(in);
+		} catch (UnknownHostException ex) {
+			logger.warn("can not reach " + cluster.getName()
+			+ " at " + cluster.getHost()
+			+ " typically this error is caused when"
+			+ " Nutanix cluster is not conneted");
+			throw ex;
+		}
+	}
+	
+	/**
+	 * get JSON response for vms/
+	 * @return
+	 * @throws Exception
+	 */
+	public JsonNode getVMs() throws Exception {
+		// "vms/?include_vm_disk_config=true"
+		URL url = buildURLForPath("vms/", 
+				new String[] {"include_vm_disk_config", "true",
+						      "include_vm_nic_config",  "true"});
+		return getResponse(url);
 	}
 	
 

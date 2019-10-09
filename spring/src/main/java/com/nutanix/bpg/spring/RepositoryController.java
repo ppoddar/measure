@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nutanix.bpg.model.Database;
 import com.nutanix.bpg.model.DatabaseBuilder;
 import com.nutanix.bpg.model.DatabaseProperties;
@@ -23,8 +25,8 @@ import com.nutanix.bpg.repo.Repository;
 import com.nutanix.bpg.repo.RepositoryImpl;
 import com.nutanix.bpg.spring.config.YAMLConfig;
 
-@RestController
-@RequestMapping("/repo")
+//@RestController
+//@RequestMapping("/repo")
 public class RepositoryController {
 	private Repository api;
 	private static Logger logger = LoggerFactory.getLogger(RepositoryController.class);
@@ -36,8 +38,9 @@ public class RepositoryController {
 		Properties props = new Properties();
 //		props.setProperty(Repository.CATALOG_DATABASE_URL, 
 //			catalog.get("catalog.database"));
-		
-		RepositoryImpl.init(props);;
+		ObjectNode config = new ObjectMapper().createObjectNode();
+		config.put("database", "");
+		RepositoryImpl.configure(null);;
 		api = RepositoryImpl.instance();
 	}
 

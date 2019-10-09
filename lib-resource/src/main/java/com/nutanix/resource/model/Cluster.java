@@ -1,11 +1,12 @@
 package com.nutanix.resource.model;
 
-import java.util.Iterator;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nutanix.bpg.utils.Named;
-import com.nutanix.resource.Resource;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.MemoryUnit;
+import com.nutanix.capacity.ResourceKind;
+import com.nutanix.capacity.impl.DefaultCapacity;
 import com.nutanix.resource.ResourceProvider;
 import com.nutanix.resource.impl.DefaultResourceProvider;
 
@@ -22,7 +23,6 @@ import com.nutanix.resource.impl.DefaultResourceProvider;
  */
 public class Cluster extends DefaultResourceProvider 
 	implements Named, ResourceProvider {
-	private String name;
 	private String host;
 	private int    port;
 	private String user;
@@ -31,18 +31,16 @@ public class Cluster extends DefaultResourceProvider
 	private boolean available;
 	private String reason;
 	
+	
 	@JsonCreator
 	public Cluster(@JsonProperty("id") String id) {
 		super(id);
+		setName(id);
+		port = 9440;
+		user     = "admin";
+		password = "Nutanix.1";
+		hypervisor = "AHV";
 		available = true;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public String getHost() {
@@ -67,7 +65,7 @@ public class Cluster extends DefaultResourceProvider
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result +  getName().hashCode();
 		return result;
 	}
 
@@ -80,12 +78,8 @@ public class Cluster extends DefaultResourceProvider
 		if (getClass() != obj.getClass())
 			return false;
 		Cluster other = (Cluster) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		
+		return getId().equals(other.getId());
 	}
 
 	public String toString() {
@@ -116,8 +110,11 @@ public class Cluster extends DefaultResourceProvider
 		this.hypervisor = hypervisor;
 	}
 
-	public void markUnavailable(String cause) {
-		available = false;
+	public void setAvailable(boolean flag) {
+		available = flag;
+	}
+	
+	public void setReason(String cause) {
 		reason = cause;
 	}
 	
@@ -127,5 +124,13 @@ public class Cluster extends DefaultResourceProvider
 	
 	public String getReasonForUnavailability() {
 		return reason;
+	}
+
+	@Override
+	protected Capacity newCapacity() {
+		Capacity cap = new DefaultCapacity();
+		cap.setPreferredUnit(ResourceKind.MEMORY,  MemoryUnit.GB);
+		cap.setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.TB);
+		return cap;
 	}
 }

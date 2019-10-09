@@ -7,12 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.nutanix.resource.impl.DefaultCapacity;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Memory;
 import com.nutanix.capacity.MemoryUnit;
 import com.nutanix.capacity.Quantity;
 import com.nutanix.capacity.ResourceKind;
+import com.nutanix.capacity.impl.DefaultCapacity;
 
 public class TestCapacity {
 	private static double epsilon = 1.0E-8;
@@ -80,10 +80,9 @@ public class TestCapacity {
 			MemoryUnit.MB.getConversionFactor(MemoryUnit.GB), epsilon);
 		
 		Memory q = new Memory(1024*2, MemoryUnit.MB);
-		Quantity c = q.convert();
+		Quantity c = q.convert(MemoryUnit.TB);
 		
 		assert(Memory.class.isInstance(q));
-		assertSame(q.getKind().getHighestUnit(), c.getUnit());
 		assertEquals(MemoryUnit.GB, c.getUnit());
 		assertEquals(2, c.getValue(), epsilon);
 	}
@@ -96,7 +95,6 @@ public class TestCapacity {
 		Quantity q2 = new Memory(10, MemoryUnit.GB);
 		cap.addQuantity(q);
 		
-		assertTrue(cap.hasKind(memory));
 		assertEquals(q, cap.getQuantity(memory));
 		
 		cap.addQuantity(q2);

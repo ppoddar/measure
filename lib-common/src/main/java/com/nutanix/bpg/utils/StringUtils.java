@@ -24,7 +24,7 @@ public class StringUtils {
 		return join(sep, elements.iterator());
 	}
 	
-	public static String join(char sep, Object[] elements) {
+	public static String join(char sep, String[] elements) {
 		return join(sep, Arrays.asList(elements));
 	}
 	

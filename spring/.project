@@ -7,7 +7,6 @@
 		<project>bpg-lib-dataaccess</project>
 		<project>lib-measure</project>
 		<project>lib-resource</project>
-		<project>lib-tasks</project>
 		<project>lib-common</project>
 		<project>lib-scheduler</project>
 		<project>lib-capacity</project>

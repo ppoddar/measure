@@ -52,4 +52,12 @@ public class InsertSQL extends SQL {
 		bind(dim, value);
 		return this;
 	}
+	
+	public SQL insert(String column, Object value) {
+		MetricsDimension dim = new MetricsDimension(column);
+		project(dim, null);
+		bind(dim, value);
+		return this;
+	}
+
 }

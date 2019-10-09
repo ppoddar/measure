@@ -13,54 +13,12 @@ import com.nutanix.resource.Resource;
 import com.nutanix.capacity.Capacity;
 
 public class DefaultAllocation implements Allocation {
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DefaultAllocation other = (DefaultAllocation) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-
 	private String id;
 	private long startTime = -1;
 	private Duration duration;
-	private Capacity demand;
-	private Resource supply;
-	
-	public DefaultAllocation() {
-		this(UUID.randomUUID().toString());
-	}
-
-	@JsonCreator
-	public DefaultAllocation(@JsonProperty("id") String id) {
-		this.id = id;
-	}
-	public void setDemand(Capacity demand) {
-		this.demand = demand;
-	}
-	public void setSupply(Resource supply) {
-		this.supply = supply;
-	}
-
+	private final Capacity demand;
+	private final Resource supply;
 	private static final Logger logger = LoggerFactory.getLogger(DefaultAllocation.class);
-	
 	
 	public DefaultAllocation(Capacity demand, Resource   supply) {
 		if (demand == null) 
@@ -71,6 +29,10 @@ public class DefaultAllocation implements Allocation {
 		this.supply = supply;
 		logger.debug("creating allocation " + this);
 	}
+	
+
+	
+	
 	
 	public String getId() {
 		return id;
@@ -115,5 +77,32 @@ public class DefaultAllocation implements Allocation {
 	public String toString() {
 		return "demand " + getDemand() + " allocated to "  + getSupply();
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DefaultAllocation other = (DefaultAllocation) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	
+
+
 	
 }

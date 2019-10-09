@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Quantity;
 import com.nutanix.capacity.ResourceKind;
-import com.nutanix.resource.impl.DefaultCapacity;
+import com.nutanix.capacity.impl.DefaultCapacity;
 
 /**
  * deserializes {@link Capacities} as an array of

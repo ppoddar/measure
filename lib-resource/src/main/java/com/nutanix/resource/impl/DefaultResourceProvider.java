@@ -9,12 +9,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nutanix.capacity.Capacity;
-import com.nutanix.capacity.DefaultUtilization;
 import com.nutanix.capacity.Utilization;
+import com.nutanix.capacity.impl.DefaultUtilization;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourceProvider;
 
-public class DefaultResourceProvider implements ResourceProvider {
+public abstract class DefaultResourceProvider implements ResourceProvider {
 	private String id;
 	private String name;
 	protected List<Resource> resources;
@@ -22,6 +22,7 @@ public class DefaultResourceProvider implements ResourceProvider {
 	@JsonCreator
 	public DefaultResourceProvider(@JsonProperty("id") String id) {
 		this.id = id;
+		this.resources = new ArrayList<>();
 	}
 	
 	public String getName() {
@@ -33,7 +34,6 @@ public class DefaultResourceProvider implements ResourceProvider {
 	}
 
 
-
 	/**
 	 * available capacity is sum of available capacity
 	 * of all resources.
@@ -41,11 +41,11 @@ public class DefaultResourceProvider implements ResourceProvider {
 	@JsonProperty(required=false)
 	@Override
 	public Capacity getAvailableCapacity() {
-		Capacity cap = new DefaultCapacity();
+		Capacity cap = newCapacity();
 		for (Resource r : this) {
 			cap.addCapacity(r.getAvailableCapacity());
 		}
-		return cap.convert();
+		return cap;
 	}
 
 	/**
@@ -55,11 +55,11 @@ public class DefaultResourceProvider implements ResourceProvider {
 	@JsonProperty(required=false)
 	@Override
 	public Capacity getTotalCapacity() {
-		Capacity cap = new DefaultCapacity();
+		Capacity cap = newCapacity();
 		for (Resource r : this) {
 			cap.addCapacity(r.getTotalCapacity());
 		}
-		return cap.convert();
+		return cap;
 	}
 
 	@Override
@@ -72,9 +72,6 @@ public class DefaultResourceProvider implements ResourceProvider {
 		}
 		if (r.getId().trim().isEmpty()) {
 			throw new IllegalStateException("can not add resource with empty id");
-		}
-		if (resources == null) {
-			resources = new ArrayList<>();
 		}
 		resources.add(r);
 		return this;
@@ -113,5 +110,7 @@ public class DefaultResourceProvider implements ResourceProvider {
 		
 		return result;
 	}
+	
+	protected abstract Capacity newCapacity();
 	
 }

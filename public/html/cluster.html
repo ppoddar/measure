@@ -1,0 +1,29 @@
+<!-- cluster resources -->
+
+<div class='w3-container w3-row'>
+	<div class='w3-col m3 l3'>
+		<div class='w3-bar w3-teal'>
+			<div class='w3-bar-item'>Resource Pool</div>
+			<i class='w3-bar-item material-icons w3-right'>search</i>
+		</div>
+		<ul id='pool-list' class='w3-margin'></ul>
+	</div>
+
+	<div id='cluster-view' class='w3-col m8 l8'>
+		<h1 id='header' class='w3-button w3-text-green w3-hover-blue w3-large w3-margin'></h1>
+		<div class='w3-container w3-margin w3-pale-yellow w3-padding-48'>
+			<p id='description'></p>
+		</div>
+		<div id='utilization' class='w3-panel'>
+			<div id="header"      class="w3-xxxlarge"></div>
+			<div id="description" class='w3-panel w3-pale-green'></div>
+			<div id='chart-utilization'></div>
+			<div id='chart-distribution'></div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+ResourcePool.fetchAllPools($('#pool-list'))
+</script>

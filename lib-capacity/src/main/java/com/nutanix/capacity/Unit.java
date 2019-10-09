@@ -28,7 +28,6 @@ public interface Unit extends Comparable<Unit> {
 	 * @return
 	 */
 	ResourceKind getKind();
-	Unit getBaseUnit();
 	String getSymbol();
 		
 }

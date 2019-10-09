@@ -1,0 +1,10 @@
+{
+"category": "nutest",
+"name": "test job",
+"demand": {
+	"MEMORY": "30 MB",
+	"STORAGE": "1 GB",
+	"COMPUTE": 1
+}
+}
+	

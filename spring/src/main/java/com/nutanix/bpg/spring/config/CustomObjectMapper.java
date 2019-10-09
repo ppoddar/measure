@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.nutanix.bpg.model.Catalog;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.model.MetricsDimension;
@@ -40,7 +41,9 @@ public class CustomObjectMapper {
 		module.addDeserializer(Capacity.class,     new CapacityDeserilaizer());
 		module.addDeserializer(Catalog.class,      new CatalogDeserializer(type));
 		module.addDeserializer(IndexibleMap.class, new IndexibleMapDeserializer(type2));
-
+		module.addDeserializer(Capacity.class,     new CapacityDeserilaizer());
+		
+		
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.disable(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS);
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);

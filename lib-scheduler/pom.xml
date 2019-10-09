@@ -26,9 +26,10 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>lib-tasks</artifactId>
+			<artifactId>lib-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 		
 	</dependencies>
 </project>

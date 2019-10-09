@@ -1,0 +1,18 @@
+# ----------------------------------------------------------
+# job template for nutest
+# ----------------------------------------------------------
+
+ name: nutest
+ command: python eratest.py
+ 
+ directory: "~/workspace/airavata/nutest"
+ option-flag: --
+ 
+ # command options are specifed as a map of key value pairs
+ # keys: property names of 'options' object 
+ # value: passed to command execution after variable replacement
+ options: 
+    tests:       era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
+    config_file: testcases/era/rbac/smoke/config.json
+    virtual_env: nutest
+    clusters:    ${cluster} # variable is enclosed in ${...}

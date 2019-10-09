@@ -1,0 +1,19 @@
+# Job specifcation
+
+name: test-job
+category: nutest
+# one or more OS-level commands with possible variables
+# designated by ${<var>} syntax 
+commands:
+  - echo ${msg}
+  - ls 
+# variables to be substitued in command
+variables: 
+  msg: Hello Testing
+# resource demand for this job
+demand: 
+  MEMORY: 30 MB
+  COMPUTE: 2
+  STORAGE: 58 GB
+  
+   

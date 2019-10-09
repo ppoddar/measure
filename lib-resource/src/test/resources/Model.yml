@@ -1,0 +1,13 @@
+# ---------------------------------------
+# Model objects are enumerated
+# ---------------------------------------
+VolumeGroup: 
+    entities: Volume[]
+    error_info: Error
+    metadata  : Meta
+VirtualMachine:
+    entities: VM[]
+    
+VM: 
+    disk_address: 
+    

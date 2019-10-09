@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.nutanix.capacity.impl.AbstractQuantity;
 
 public class CPU extends AbstractQuantity {
 	public CPU(int n) {
@@ -15,5 +16,12 @@ public class CPU extends AbstractQuantity {
 	public Unit getPreferredUnit() {
 		return null;
 	}
+
+	@Override
+	public Quantity fraction(double f) {
+		throw new IllegalStateException("can not fraction");
+	}
+	
+
 
 }

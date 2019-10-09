@@ -5,10 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 
 @SpringBootApplication(
-	exclude=DataSourceAutoConfiguration.class)
+	exclude= {
+		DataSourceAutoConfiguration.class,
+		SecurityAutoConfiguration.class,
+		ManagementWebSecurityAutoConfiguration.class
+	}
+)
+
 public class Application  {
 	Logger logger = LoggerFactory.getLogger(Application.class);
 

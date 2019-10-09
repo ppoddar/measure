@@ -1,0 +1,54 @@
+<html>
+<head>
+<title></title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="./css/bpg.css">
+
+<script src='./scripts/common.js'></script>
+<script src='./scripts/tasks.js'></script>
+<script src='./scripts/tab.js'></script>
+<script src='./scripts/gchart.js'></script>
+<script src='./scripts/pool.js'></script>
+<script src='./scripts/cluster.js'></script>
+<script src='./scripts/vm.js'></script>
+<script src='./scripts/capacity.js'></script>
+<script src='./scripts/jobs.js'></script>
+<script src='./scripts/dialog.js'></script>
+
+</head>
+<body>
+<!-- main page is organized in perspectives          -->
+<!-- it provides a caption and loads a perspectives  -->
+<!-- each perspective is supplied in separate HTML   -->
+<!-- a perspective is rendered in lower part of display  -->
+<div id='caption' class='w3-bar w3-black'>
+	<img class='w3-bar-item w3-margin' width=200px height=43px src="./images/nutanix-logo.jpeg" />
+	<div><h2>Resource Allocation</h2></div>
+</div>
+<div id='tab-bar' class='w3-bar w3-black'>
+	<button id='perspective-home'    class='w3-bar-item w3-button'><i class='material-icons'>home</i></button>
+	<button id="perspective-cluster" class='w3-bar-item w3-button'>Cluster</button>
+	<button id="perspective-jobs"    class='w3-bar-item w3-button'>Jobs</button>
+</div>
+<div id="perspective"></div>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart', 'bar']});
+
+	$('#perspective-home').on('click', function() {
+		$('#perspective').load('html/demo.html')
+	})
+	$('#perspective-cluster').on('click', function() {
+		$('#perspective').load('html/cluster.html')
+	})
+	$('#perspective-jobs').on('click', function() {
+		$('#perspective').load('html/jobs.html')
+	})
+</script>
+</body>
+</html>

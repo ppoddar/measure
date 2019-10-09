@@ -69,7 +69,7 @@ public interface Quantity extends Comparable<Quantity>{
 	 * as this receiver's unit.
 	 * 
 	 * It is not possible to subtract if the resultant
-	 * quantuty is negative
+	 * quantity is negative
 	 */
 	Quantity minus(Quantity other);
 	
@@ -81,7 +81,7 @@ public interface Quantity extends Comparable<Quantity>{
 	 * positive
 	 * @return
 	 */
-	Quantity times(int n);
+	Quantity times(double n);
 	
 	/**
 	 * fraction of this receiver and given quantity,
@@ -91,6 +91,7 @@ public interface Quantity extends Comparable<Quantity>{
 	 * @return
 	 */
 	double fraction(Quantity other);
+	Quantity fraction(double f);
 	
 	Unit getPreferredUnit();
 	

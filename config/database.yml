@@ -1,0 +1,11 @@
+# directory location of catalogs w.r.t running directory
+url: jdbc:postgresql://localhost:5432/bpg
+driver: org.postgresql.Driver
+host: localhost
+user: postgres
+
+catalog-root: catalog/databases
+
+
+
+    

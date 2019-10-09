@@ -1,0 +1,32 @@
+# -----------------------------------------
+# Modular Configuration for Spring Boot Application
+#
+# each module is configured separtately.
+#  
+# -----------------------------------------
+# main context path of this appliction
+server: 
+  servlet: 
+      contextPath: /
+      
+spring: 
+  application: 
+     name: BPG
+     
+     
+logging: 
+  level:
+     com.nutanix:             info
+     org.springframework:     error
+     org.springframework.web: error
+     
+# for each named module, the node is converetd as a properties
+# and used to initailize a micro-service
+modules: 
+  database: database.yml 
+  resource: resource.yml
+  tasks:    tasks.yml    
+    
+    
+
+ 

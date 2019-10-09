@@ -21,7 +21,6 @@ import com.nutanix.resource.Allocation;
 import com.nutanix.resource.ResourceManager;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.resource.ResourceProvider;
-import com.nutanix.resource.impl.DefaultCapacity;
 import com.nutanix.resource.impl.DefaultResourcePool;
 import com.nutanix.resource.impl.ResourceManagerImpl;
 import com.nutanix.resource.model.Cluster;
@@ -32,16 +31,12 @@ import com.nutanix.capacity.CPU;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Memory;
 import com.nutanix.capacity.MemoryUnit;
+import com.nutanix.capacity.impl.DefaultCapacity;
 
 public class TestSerde {
 	private static ObjectMapper mapper;
 	@BeforeClass
 	public static void setResourceManger() {
-		String cwd = System.getProperty("user.dir");
-		String rsrcURL = "file:///" + cwd + "/src/test/resources/clusters.yml";
-		Properties props = new Properties();
-		props.setProperty(ResourceManager.CATALOG_CLUSTER_URL, rsrcURL);
-		ResourceManagerImpl.setProperties(props);
 		
 		mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();

@@ -1,0 +1,27 @@
+2019-10-08 18:03:31 INFO     [GET] https://10.15.254.101:9440/PrismGateway/services/rest/v2.0/cluster
+Traceback (most recent call last):
+  File "eratest.py", line 390, in <module>
+    status = run()  # pylint: disable=invalid-name
+  File "eratest.py", line 371, in run
+    cmd_status = execute_nutests(tests_to_run, options)
+  File "eratest.py", line 335, in execute_nutests
+    cluster_name = get_cluster_name(options.clusters[0])
+  File "eratest.py", line 383, in get_cluster_name
+    prism_service = PrismService(ip_address)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/workflows/nutanix/era/testlib/common/prism_service.py", line 49, in __init__
+    self.get_cluster()
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/workflows/nutanix/era/testlib/common/prism_service.py", line 68, in get_cluster
+    response = self.http_get(uri)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/workflows/nutanix/era/testlib/common/http.py", line 117, in http_get
+    stream=stream, auth=self.basic_auth)
+  File "/usr/local/lib/python2.7/site-packages/requests/api.py", line 75, in get
+    return request('get', url, params=params, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/api.py", line 60, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/sessions.py", line 533, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/sessions.py", line 646, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/adapters.py", line 516, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='10.15.254.101', port=9440): Max retries exceeded with url: /PrismGateway/services/rest/v2.0/cluster (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x10ec2d190>: Failed to establish a new connection: [Errno 60] Operation timed out',))

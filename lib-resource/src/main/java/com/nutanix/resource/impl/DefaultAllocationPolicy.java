@@ -33,22 +33,24 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 	@Override
 	public Allocation reserveAllocation(ResourcePool provider, Capacity demand) {
 		Allocation alloc = null;
-		logger.debug("allocating " + demand + " with " + provider);
+		logger.debug("allocating " + demand + " with provider " + provider.getName() + " with capacity " + provider.getTotalCapacity());
 		for (Quantity c : demand) {
 			double bestFitness = 0;
 			Resource bestFit = null;
 			for (Resource rsrc : provider) { 
 				double fitness = fitness(rsrc, c);
-				if (fitness < 0) break;
+				//logger.debug("fitness=" + fitness + " resource " + rsrc.getId() + " available capacity " + rsrc.getAvailableCapacity());
+				if (fitness < 0) continue;
 				if (fitness > bestFitness) {
-					logger.debug("found candidate resource " + rsrc + " with fitness " + fitness + " for quantity " + c);
+					//logger.debug("found candidate resource " + rsrc + " with fitness " + fitness + " for quantity " + c);
 					bestFitness = fitness;
 					bestFit = rsrc;
 				}
 			}
 			if (bestFit == null) {
 				throw new RuntimeException("can not allocate " + c
-						+ " Available capcity " + provider.getAvailableCapacity());
+						+ " Available capcity " 
+						+ provider.getAvailableCapacity());
 			}
 			alloc = new DefaultAllocation(demand, bestFit);
 		}
@@ -68,11 +70,9 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 	 */
 	public double fitness(Resource supply, Quantity c) {
 		double fitness = 0;
-			if (!supply.hasKind(c.getKind())) 
-				return -1;
-			Quantity c2 = supply.getAvailableCapacity().getQuantity(c.getKind());
-			if (c2.compareTo(c) < 0) return -1;
-			fitness += supply.getAvailableCapacity().getQuantity(c.getKind())
+		Quantity c2 = supply.getAvailableCapacity().getQuantity(c.getKind());
+		if (c2.compareTo(c) < 0) return -1;
+		fitness += supply.getAvailableCapacity().getQuantity(c.getKind())
 					.fraction(c);
 		return bound(fitness, 1, 0);
 	}

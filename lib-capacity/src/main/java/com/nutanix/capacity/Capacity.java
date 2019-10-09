@@ -1,6 +1,7 @@
 package com.nutanix.capacity;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.nutanix.capacity.impl.DefaultCapacity;
 
 
 /**
@@ -9,6 +10,11 @@ import java.util.Set;
  * @author pinaki.poddar
  *
  */
+
+
+@JsonSubTypes({
+	@JsonSubTypes.Type(DefaultCapacity.class)
+})
 public interface Capacity extends Iterable<Quantity> {
 	/**
 	 * affirms if this container has any capacity 
@@ -16,13 +22,13 @@ public interface Capacity extends Iterable<Quantity> {
 	 * @param kind
 	 * @return
 	 */
-	boolean hasKind(ResourceKind kind);
+	//boolean hasKind(ResourceKind kind);
 	
 	/**
 	 * gets kind of capacities held by this receiver
 	 * @return
 	 */
-	Set<ResourceKind> getKinds();
+	//Set<ResourceKind> getKinds();
 	
 	/**
 	 * gets capacity of given kind
@@ -44,5 +50,15 @@ public interface Capacity extends Iterable<Quantity> {
 	void reduceQuantity(Quantity cap);
 	void reduceCapacity(Capacity cap);
 	
-	Capacity convert();
+	/**
+	 * sets the unit for given resource kind. 
+	 * @param kind
+	 * @param unit
+	 */
+	void setPreferredUnit(ResourceKind kind, Unit unit);
+	/**
+	 * gets the unit for given resource kind. 
+	 * @param kind
+	 */
+	Unit getPreferredUnit(ResourceKind kind);
 }

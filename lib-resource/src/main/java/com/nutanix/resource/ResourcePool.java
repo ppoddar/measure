@@ -25,8 +25,7 @@ import com.nutanix.capacity.Capacity;
 	})
 
 public interface ResourcePool 
-	extends Identifable, Named, Iterable<Resource> {
-	String getId();
+	extends Named, Iterable<Resource> {
 	String getName();
 	void setName(String name);
 	void addProvider(ResourceProvider supplier);

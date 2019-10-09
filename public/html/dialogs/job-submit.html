@@ -1,0 +1,181 @@
+<!-- this form is dynamically loaded                         -->
+<!-- this form has javascript that  will execute before load -->
+<!-- only when the docuemnt is loaded without an anchor      -->
+<!-- refer: 'script execution' section in https://api.jquery.com/load/ -->
+<div class='w3-contanier w3-card'>
+	<header class='w3-teal w3-container'>
+		<h1>Submit a Job</h1>
+	</header>
+	<div class='w3-container'>
+<form>
+	<!-- ========== basic section always visible =============== -->
+	<div class='w3-row w3-padding'>
+		<div class='w3-col m3'>
+			<label class="w3-text-teal"><b>Job category</b></label>
+		</div>
+		<div class='w3-col m7'>
+			<select id='job-category'></select>
+		</div>
+	</div>
+	<div class='w3-row w3-container'>
+		<div class='w3-col m3'>
+			<label class="w3-text-teal"><b>Job name</b></label>
+		</div>
+		<div class='w3-col m7'>
+			<input id="job-name" class="w3-input w3-border" type="text" 
+			    value='my first job' required>
+			<p class='w3-small'>would be automatically prefiexed
+			with submitter's name</p>
+		</div>
+	</div>
+	<div class='w3-row w3-padding'>
+		<div class='w3-col m3'>
+			<label class="w3-text-teal"><b>Submitter</b><super>*</super></label>
+		</div>
+		<div class='w3-col m7'>
+			<input id="job-submitter" class="w3-input w3-border" type="text" 
+			    value='engineer@era.com'
+			    required>
+		</div>
+	</div>
+	
+	<!-- other sections are organized in tabs -->
+	<div id='sections' class='w3-bar w3-teal'>
+		<div id='script-tab'    class='w3-bar-item tab-control'>Script</div>
+		<div id='demand-tab'    class='w3-bar-item tab-control'>Demand</div>
+		<div id='placement-tab' class='w3-bar-item tab-control'>Placement</div>
+	</div>
+	
+	<div id='tab-area' style='width:100%;height:200px;overflow:scroll'>
+	
+	
+	
+	<!--  =============== script section ======================= -->
+	<div id='script' class='tab-content'>
+	<div class='w3-row w3-padding'>
+		<div class='w3-col m3'>
+			<label class="w3-text-teal"><b>Script</b><super>*</super></label>
+		</div>
+		<div class='w3-col m7'>
+			<input id='job-script' 
+			    class="w3-input w3-border" 
+			    type='file'>
+			<p class='w3-small'>select a script file.
+			    The script would be executed 
+			    on a VM where resource 
+			    would be allocated. 
+				A script may use command-line arguments
+				or environment variables.
+			</p>
+		</div>
+	</div>
+	<div class='w3-row w3-padding'>
+		<div class='w3-col m3'>
+			<label class="w3-text-teal"><b>Script arguments</b></label>
+		</div>
+		<div class='w3-col m7'>
+			<input id="job-scrip-args" class="w3-input w3-border" type="text">
+			<p class='w3-small'>(optional) separate multiple arguments by spaces</p>
+		</div>
+	</div>
+		<div class='w3-row w3-padding'>
+		<div class='w3-col m3'>
+			<label class="w3-text-teal"><b>Environment Variables</b></label>
+		</div>
+		<div class='w3-col m7'>
+			<input id="job-env" class="w3-input w3-border" type="text">
+			<p class='w3-small'>(optional) environment variables are key=value pairs</p>
+		</div>
+	</div>
+	
+	</div>
+	<!--  =============== demand section ======================= -->
+	<div id='demand' class='tab-content'>
+	<div class='w3-row w3-padding'>
+		<label class="w3-text-teal"><b>Resource requirements</b></label>
+	</div>
+	<div class='w3-row w3-padding'>
+		<label class="w3-col m3 w3-text-teal"><b>MEMORY</b></label> <input
+			id="job-memory" class="w3-col m2 w3-input w3-border" type="number"
+			min="0" step="100" value="100" required> 
+			<select id="job-memory-unit">
+			<option value="MB">MB</option>
+			<option value="GB">GB</option>
+			<option value="TB">TB</option>
+		</select>
+	</div>
+	<div class='w3-row w3-padding'>
+		<label class="w3-col m3 w3-text-teal"><b>STORAGE</b></label> <input
+			id="job-storage" class="w3-col m2 w3-input w3-border" type="number"
+			min="0" step="100" value="100" required> <select
+			id="job-storage-unit">
+			<option value="MB">MB</option>
+			<option value="GB">GB</option>
+			<option value="TB">TB</option>
+		</select>
+	</div>
+	<div class='w3-row w3-padding'>
+		<label class="w3-col m3 w3-text-teal"><b>COMPUTE</b></label> <input
+			id="job-compute" class="w3-col m2 w3-input w3-border" type="number"
+			min="1" step="1" value="1" required>
+	</div>
+	</div>
+	
+   </div>
+	
+	
+	<div id='placement' class='tab-content'>
+		<input class="w3-radio" type="radio" name='location' value="none" checked>
+		<label>anywhere</label>
+		<input class="w3-radio" type="radio" name='location' value="constraint">
+		<label>constrained</label>
+	</div>
+	<hr>	
+
+	<div class='w3-container w3-center'>
+		<button class="w3-button w3-teal" 
+		    type='submit'>Submit Job</button>
+		<button class='w3-margin-left w3-button w3-blue' 
+			type='button'
+			onclick='closeDialog(); return false;'>Cancel</button>
+	</div>
+
+<script type="text/javascript">
+// declare mapping of tab-control to tab-content
+var TABS = {
+		'command-tab':'command',
+		'script-tab' :'script',
+		'demand-tab' :'demand',
+		'placement-tab':'placement'
+}
+$('.tab-content').hide()
+$('#command').toggle()
+
+$('.tab-control').on('click', function(e) {
+	var id = $(this).attr('id')
+	var viewId = '#' + TABS[id]
+	console.log('clicked ' + id + ' view ' + viewId)
+	e.preventDefault()
+	e.stopPropagation()
+    $('.tab-content').hide()
+	$(viewId).toggle()
+	
+})
+
+$('#job-script').on('change', function(e){
+	var selectedFile = $('#job-script')[0].files[0]
+	console.log('selected file ' + selectedFile)
+	var reader  = new FileReader();
+	reader.onloadend = function(e) {
+		console.log('script file has been loaded')
+		var content = reader.result
+		//console.log('file content ' + content)
+		$('#job-script').val(content)
+	}
+	reader.readAsText(selectedFile)
+	
+})
+</script>
+</form>
+</div>
+</div>

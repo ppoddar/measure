@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.nutanix.capacity.impl.AbstractUnit;
 
 public class CpuUnit extends AbstractUnit implements Unit {
 
@@ -9,10 +10,7 @@ public class CpuUnit extends AbstractUnit implements Unit {
 		super(ResourceKind.COMPUTE, 1, "");
 	}
 
-	@Override
-	public Unit getBaseUnit() {
-		return null;
-	}
+	
 
 
 }

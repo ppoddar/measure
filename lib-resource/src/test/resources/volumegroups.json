@@ -1,0 +1,66 @@
+{
+  "entities": [
+    {
+      "attachment_list": [
+        {
+          "client_uuid": "string",
+          "enabled_authentications": [
+            {
+              "auth_type": "CHAP",
+              "password": "string"
+            }
+          ],
+          "initiator_ip_address": "string",
+          "iscsi_initiator_name": "string",
+          "vm_uuid": "string"
+        }
+      ],
+      "description": "string",
+      "disk_list": [
+        {
+          "flash_mode_enabled": true,
+          "index": 0,
+          "storage_container_id": 0,
+          "storage_container_uuid": "string",
+          "vmdisk_size_bytes": 0,
+          "vmdisk_size_mb": 0,
+          "vmdisk_uuid": "string"
+        }
+      ],
+      "enabled_authentications": [
+        {
+          "auth_type": "CHAP",
+          "password": "string"
+        }
+      ],
+      "flash_mode_enabled": true,
+      "is_deleted": true,
+      "is_shared": true,
+      "iscsi_target": "string",
+      "last_modified_timestamp_usecs": 0,
+      "logical_timestamp": 0,
+      "name": "string",
+      "uuid": "string"
+    }
+  ],
+  "error_info": {
+    "count": 0,
+    "entity_list": [
+      "string"
+    ],
+    "message": "string"
+  },
+  "metadata": {
+    "count": 0,
+    "end_index": 0,
+    "filter_criteria": "string",
+    "grand_total_entities": 0,
+    "next_cursor": "string",
+    "page": 0,
+    "previous_cursor": "string",
+    "search_string": "string",
+    "sort_criteria": "string",
+    "start_index": 0,
+    "total_entities": 0
+  }
+}

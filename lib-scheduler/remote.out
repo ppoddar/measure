@@ -1,0 +1,9 @@
+bin
+pom.xml
+remote.err
+remote.out
+src
+target
+test.err
+test.out
+test.script

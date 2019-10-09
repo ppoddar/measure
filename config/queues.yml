@@ -1,0 +1,15 @@
+# root directory for Job Templates.
+# path to template root is resolved with respect 
+# to directory of this file
+template-root: 
+    templates
+# directory of job output
+# should be public to web webserver
+job-output: 
+    ../public/job-output
+# each job category is assigned to a pool 
+# i.e. job of a particulr category can run 
+# in multiple cluster
+# job category is specifed in each job template
+nutest: default 
+    

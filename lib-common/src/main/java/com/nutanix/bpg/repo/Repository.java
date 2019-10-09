@@ -10,7 +10,7 @@ public interface Repository {
 
 	public static final String PROP_DATABASE_NAME = "database.name";
 	public static final String PROP_DATABASE_HOST = "database.host";
-	public static final String PROP_URL           = "database.url";
+	public static final String PROP_DATABASE_URL  = "url";
 	public static final String PROP_DRIVER        = "database.driver";
 	public static final String PROP_USER          = "database.user";
 	public static final String PROP_PASSWORD      = "database.password";
