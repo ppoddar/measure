@@ -32,7 +32,7 @@ The build the entitre project
 ### Run
 Once the project is built, run Spring Boot Application
 
-   $ ./setup/run-spring.sh
+        $ ./setup/run-spring.sh
 
 This will start a web application at http://localhost:8080
   
