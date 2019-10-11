@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nutanix.capacity.impl.AbstractQuantity;
 
 public class Memory extends AbstractQuantity implements Quantity {
@@ -16,6 +17,7 @@ public class Memory extends AbstractQuantity implements Quantity {
 	public Quantity clone(double amount, Unit unit) {
 		return new Memory(amount, (MemoryUnit)unit);
 	}
+	@JsonIgnore
 	@Override
 	public Unit getPreferredUnit() {
 		return MemoryUnit.TB;

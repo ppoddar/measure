@@ -1,18 +1,10 @@
 package com.nutanix.resource.impl;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +14,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nutanix.bpg.model.Catalog;
 import com.nutanix.bpg.utils.JsonUtils;
-import com.nutanix.bpg.utils.ResourceUtils;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.impl.DefaultCapacity;
 import com.nutanix.capacity.serde.CapacityDeserilaizer;
@@ -94,7 +83,7 @@ public class ResourceManagerImpl
 				.getSection("clusters").asJson();
 		
 		clusters = readClusterDesciptiors(clusterDescriptor);
-		buildClusters(clusters);
+		new ClusterBuilder().build(clusters);
 		
 		JsonNode poolAssignment = config.getSection("pools").asJson();
 		pools = assignPools(poolAssignment, clusters);
@@ -164,12 +153,8 @@ public class ResourceManagerImpl
 								+ " but it is not defiend");
 					}
 					Cluster cluster = clusters.get(clusterName.asText());
-					if (cluster.isAvalable()) {
-						pool.addProvider(cluster);
-					} else {
-						logger.warn("" + cluster + " is unavailable due to:"
-								+ cluster.getReasonForUnavailability());
-					}
+					pool.addResource(cluster);
+					cluster.assignTo(pool);
 				}
 			}
 		} catch (Exception ex) {
@@ -205,7 +190,7 @@ public class ResourceManagerImpl
 		while (names.hasNext()) {
 			String clusterName = names.next();
 			JsonNode clusterNode = clustersNode.get(clusterName);
-			Cluster cluster = new Cluster(clusterName);
+			Cluster cluster = new Cluster();
 			cluster.setName(clusterName);
 			cluster.setHost(clusterNode.get("host").asText());
 			
@@ -219,35 +204,6 @@ public class ResourceManagerImpl
 		return clusters;
 	}
 	
-	/**
-	 * For each cluster,
-	 * fetches resource information from the cluster.
-
-	 * @param clusters
-	 */
-	private void buildClusters(Catalog<Cluster> clusters) {
-		ExecutorService threadPool = Executors.newFixedThreadPool(clusters.size());
-		Map<Cluster,Future<Boolean>> futures = 
-				new HashMap<Cluster, Future<Boolean>>();
-		for (Cluster cluster : clusters) {
-			ClusterBuilder builder = new ClusterBuilder(cluster);
-			Future<Boolean> future = threadPool.submit(builder);
-			futures.put(cluster, future);
-		}
-		for (Map.Entry<Cluster, Future<Boolean>> e: futures.entrySet()) {
-			Cluster cluster = e.getKey();
-			Future<Boolean> future = e.getValue();
-			try {
-				future.get(10, TimeUnit.SECONDS);
-			} catch (Exception ex) {
-				markUnavailable(cluster, ex);
-			}
-		}
-	}
 	
-	void markUnavailable(Cluster c, Exception ex) {
-		c.setAvailable(false);
-		c.setReason(ex.getMessage());
-	}
 	
 }

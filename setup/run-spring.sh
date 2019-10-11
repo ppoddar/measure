@@ -17,7 +17,7 @@ echo Spring application configuration at $PROJECT_HOME/config/application.yml
 
 DEBUG_OPTIONS=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$PORT
 java -Xdebug $DEBUG_OPTIONS \
-  -Dconfig=config/application-dev.yml \
+  -Dconfig=config/application-$PROFILE.yml \
   -Dserver.port=$PORT \
   -jar $MAIN_JAR
 

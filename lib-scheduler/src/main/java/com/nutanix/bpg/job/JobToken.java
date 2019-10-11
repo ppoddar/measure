@@ -43,6 +43,7 @@ public class JobToken {
 	private Path root;
 	private Path output;
 	private Path errorOutput;
+	private Job.Status status;
 	
 	private static Logger logger = LoggerFactory.getLogger(JobToken.class);
 	/**
@@ -145,19 +146,18 @@ public class JobToken {
 	 * @return
 	 */
 	public Status getStatus() {
-		Job.Status status = null;
-		if (error != null || hasErrorOutput()) {
-			return Job.Status.FAILED;
+		if (status == Job.Status.FAILED) {
+			return status;
 		}
 		long now = System.currentTimeMillis();
 		if (getExpectedEndTime() > 0 
-		 && getExpectedEndTime()>now) {
-			return Job.Status.EXPIRED;
+		 && getExpectedEndTime() > now) {
+			status =  Job.Status.EXPIRED;
+			return status;
 		}
 		if (promise == null) {
-			return  Job.Status.NOT_SCHEDULED;
-		} 
-		if (promise.isCancelled()) {
+			return status;
+		} if (promise.isCancelled()) {
 			status = Job.Status.CANCELLED;
 		} else if (promise.isCompletedExceptionally()) {
 			status = Job.Status.FAILED;
@@ -167,6 +167,10 @@ public class JobToken {
 			status = Job.Status.RUNNING;
 		}
 		return status;
+	}
+	
+	public void setStatus(Job.Status status) {
+		this.status = status;
 	}
 	
 	public boolean hasErrorOutput() {
@@ -203,12 +207,10 @@ public class JobToken {
 	 */
 	public String getOutputURI() {
 		if (output == null) {
-			logger.warn("token output not set");
-			return "";
+			throw new IllegalStateException("token output not set for " + this);
 		}
 		if (root == null) {
-			logger.warn("root output dir not set");
-			return "";
+			throw new IllegalStateException("root output dir not set for " + this);
 		}
 		return root.relativize(output).toString();
 	}
@@ -240,12 +242,10 @@ public class JobToken {
 	 */
 	public String getErrorOutputURI() {
 		if (errorOutput == null) {
-			logger.warn("token error output not set");
-			return "";
+			throw new IllegalStateException("token error output not set for " + this);
 		}
 		if (root == null) {
-			logger.warn("root output dir not set");
-			return "";
+			throw new IllegalStateException("root output dir not set for " + this);
 		}
 		return root.relativize(errorOutput).toString();
 	}
@@ -261,6 +261,7 @@ public class JobToken {
 		if (path == null) {
 			throw new IllegalArgumentException("can not set null output path");
 		}
+		logger.debug("set output for " + this + " " + path.toUri());
 		output = path;
 	}
 	
@@ -273,6 +274,7 @@ public class JobToken {
 
 	public void setError(Exception ex) {
 		this.error = ex;
+		status = Job.Status.FAILED;
 	}
 	
 	
@@ -293,11 +295,12 @@ public class JobToken {
 		if (!r.toFile().isDirectory()) {
 			throw new IllegalArgumentException("can not set non-directory output root " + r.toUri());
 		}
+		
 		this.root = r;
 	}
 
 	public String toString() {
-		return "job token-" + getId() + ":" + getName();
+		return "job token [" + getName() + "] (" + getStatus() + ")";
 	}
 
 }

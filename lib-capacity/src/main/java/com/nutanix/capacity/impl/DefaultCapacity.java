@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Quantity;
+import com.nutanix.capacity.QuantityFactory;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Unit;
 
@@ -28,6 +29,10 @@ public class DefaultCapacity implements Capacity {
 	public DefaultCapacity() {
 		quantities     = new HashMap<>();
 		preferredUnits = new HashMap<>();
+		for (ResourceKind kind : ResourceKind.values()) {
+			Quantity empty = QuantityFactory.emptyQuantity(kind);
+			addQuantity(empty);
+		}
 	}
 	
 	/**

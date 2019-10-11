@@ -16,3 +16,5 @@
     config_file: testcases/era/rbac/smoke/config.json
     virtual_env: nutest
     clusters:    ${cluster} # variable is enclosed in ${...}
+
+    

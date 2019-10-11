@@ -2,7 +2,6 @@ package com.nutanix.bpg.scheduler;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import com.nutanix.bpg.job.JobQueue;
 import com.nutanix.bpg.job.ResourcePoolSelectionPolicy;
 import com.nutanix.bpg.model.Catalog;
 import com.nutanix.bpg.model.CatalogBuilder;
-import com.nutanix.bpg.repo.Repository;
+import com.nutanix.bpg.utils.JsonUtils;
 import com.nutanix.config.Configuration;
 import com.nutanix.job.execution.JobBuilder;
 import com.nutanix.job.execution.JobTemplate;
@@ -39,7 +38,7 @@ public class JobQueueManagerImpl implements JobQueueManager {
 	private Catalog<JobQueue> queues;
 	private Catalog<JobTemplate> jobTemplates;
 	private Path outputRoot;
-	private ResourcePoolSelectionPolicy policy;
+	private ResourcePoolSelectionPolicy poolSelectionPolicy;
 	private static JobQueueManager singleton;
 	private static Configuration config;
 	public static final Logger logger = LoggerFactory.getLogger(JobQueueManagerImpl.class);
@@ -48,6 +47,7 @@ public class JobQueueManagerImpl implements JobQueueManager {
 		config = conf;
 		return instance();
 	}
+	
 	/**
 	 * get singleton instance
 	 * 
@@ -69,17 +69,8 @@ public class JobQueueManagerImpl implements JobQueueManager {
 			.withDirectory(templateDir)
 		    .withFactory(new TemplateFactory())
 			.build();
-		Map<String, String> job2Pool = new HashMap<String, String>();
-		for (JobTemplate t : jobTemplates) {
-			try {
-				String poolName = config.getString(t.getName());
-				job2Pool.put(t.getName(), poolName);
-				
-			} catch (RuntimeException ex) {
-				throw ex;
-			}
-		}
-		policy = new DefaultResourcePoolSelectionPolicy(job2Pool);
+		Map<String, String> job2Pool = JsonUtils.getMap(config.asJson(), "job2pool");
+		poolSelectionPolicy = new DefaultResourcePoolSelectionPolicy(job2Pool);
 	}
 	
 	/**
@@ -87,18 +78,10 @@ public class JobQueueManagerImpl implements JobQueueManager {
 	 * starts Executor and Cleaner threads 
 	 */
 	@Override
-	public JobQueue newQueue(String name, Repository repo) {
-		logger.info("creating new queue " + name);
+	public JobQueue newQueue(String name) {
 		JobQueueImpl queue = new JobQueueImpl(name);
 		logger.info("created new queue " + queue);
-		
 		queues.add(queue);
-		logger.info("starting  queue cleaner");
-		new Thread(new JobCleaner(queue)).start();
-		JobSchedulerImpl scheduler = new JobSchedulerImpl(queue, outputRoot);
-		new Thread(scheduler).start();
-		
-		queue.setScheduler(scheduler);
 		return queue;
 	}
 	
@@ -110,7 +93,7 @@ public class JobQueueManagerImpl implements JobQueueManager {
 		if (queues.has(name)) {
 			return queues.get(name);
 		} else {
-			JobQueue queue = newQueue(name, null);
+			JobQueue queue = newQueue(name);
 			queues.add(queue);
 			return queue;
 		}
@@ -120,7 +103,8 @@ public class JobQueueManagerImpl implements JobQueueManager {
 	 * add a job to given queue.
 	 */
 	@Override
-	public JobScheduler addJob(JobQueue queue, Job job, Resource r) {
+	public JobScheduler addJob(JobQueue queue, Job job, Resource r) 
+	throws Exception {
 		queue.addJob(job);
 		
 		return null;
@@ -139,9 +123,10 @@ public class JobQueueManagerImpl implements JobQueueManager {
 	public JobTemplate getJobTemplate(String name) {
 		return jobTemplates.get(name);
 	}
+	
 	@Override
 	public ResourcePoolSelectionPolicy getResourcePoolSelectionPolicy() {
-		return policy;
+		return poolSelectionPolicy;
 	}
 	
 	

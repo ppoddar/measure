@@ -1,5 +1,7 @@
 package com.nutanix.capacity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * amount of something in a specific unit.
@@ -21,6 +23,7 @@ public interface Quantity extends Comparable<Quantity>{
 	 * gets kind of this receiver.
 	 * @return an enumerated kind
 	 */
+	@JsonIgnore
 	ResourceKind getKind();
 	
 	/**

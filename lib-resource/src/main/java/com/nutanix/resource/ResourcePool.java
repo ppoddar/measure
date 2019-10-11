@@ -1,15 +1,16 @@
 package com.nutanix.resource;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-import com.nutanix.bpg.utils.Identifable;
 import com.nutanix.bpg.utils.Named;
+import com.nutanix.capacity.Capacity;
+import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Utilization;
 import com.nutanix.resource.impl.DefaultResourcePool;
-import com.nutanix.capacity.Capacity;
 
 /**
  * a pool of resources for allocation
@@ -28,23 +29,14 @@ public interface ResourcePool
 	extends Named, Iterable<Resource> {
 	String getName();
 	void setName(String name);
-	void addProvider(ResourceProvider supplier);
-	
-	List<String> getProviderNames();
-	List<ResourceProvider> getProviders();
-	/**
-	 * allocates given demand to a single resource.
-	 * 
-	 * @param demand an allocation. never null
-	 * @return if no resource available
-	 */
+	void addResource(Resource resource);
+	List<Resource> getResources();
 	Allocation allocate(Capacity demand);
-	boolean deallocate(Allocation demand);
 	
 	int getSize();
 	Capacity getTotalCapacity();
 	Capacity getAvailableCapacity();
-	Utilization getUtilization();
+	Map<ResourceKind, Utilization> getUtilization();
 
 	
 	AllocationPolicy getAllocationPolicy();

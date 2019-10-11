@@ -6,8 +6,9 @@
 clusters: 
   tomahawk: 
       host: 10.46.31.50
-#  tauras: 
-#      host: taurus03-v1.eng.nutanix.com
+  tauras: 
+      host: taurus03-v1.eng.nutanix.com
+      
 #  mongoose: 
 #      host: mongoose-v1.eng.nutanix.com
 #  Gemini01: 

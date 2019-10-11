@@ -1,79 +1,40 @@
 package com.nutanix.bpg.scheduler;
 
-import java.nio.file.Path;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.nutanix.bpg.job.Job;
-import com.nutanix.bpg.job.JobExecutorImpl;
 import com.nutanix.bpg.job.JobQueue;
 import com.nutanix.bpg.job.JobToken;
-import com.nutanix.capacity.Capacity;
-import com.nutanix.resource.Resource;
+import com.nutanix.resource.Allocation;
 
-/**
- * A Job scheduler coordinates allocation of resources for a job, submission to
- * a queue and its subsequent execution.
- * 
- * @author pinaki.poddar
- *
- */
 public class JobSchedulerImpl implements JobScheduler {
 	private final JobQueue queue;
-	private final Path outputRoot;
-	private static final Logger logger = LoggerFactory.getLogger(JobSchedulerImpl.class);
+	private static long WAIT_MS = 1*1000;
 
-	public JobSchedulerImpl(JobQueue q, Path root) {
-		queue = q;
-		outputRoot = root;
-	}
-
-	public String toString() {
-		return "scheduler (queue-" + queue.getName() + ")";
-	}
-
-	/**
-	 * scheduler schedules a job with given supply.
-	 * 
-	 */
-	@Override
-	public void schedule(JobToken token, Resource supply, Capacity demand) {
-
-		logger.debug(this + " schedules " + token + " with " + supply);
-
-		try {
-			new JobExecutorImpl(token, outputRoot)
-				.execute();
-		} catch (Exception ex) {
-			logger.debug("failed to execute asynchorous job " + token + " for following reason");
-			ex.printStackTrace();
-		}
+	public JobSchedulerImpl(JobQueue queue) {
+		this.queue = queue;
 	}
 
 	@Override
-	public void run() {
-		while (true) {
-			synchronized (queue) {
-				try {
-					logger.debug("waiting for " + queue);
-					queue.wait();
-					logger.debug(this + "selecting jobs from " + queue);
-					List<JobToken> tokens = 
-							queue.selectJobByStatus();
-					logger.debug("selected " + tokens.size() + " jobs");
-					for (JobToken token : tokens) {
-						Job job = token.getJob();
-						schedule(token, job.getResource(), job.getDemand());
+	public Void call() throws Exception {
+		while (!Thread.currentThread().isInterrupted()) {
+			if (queue.getPool() == null) {
+				Thread.yield();
+				continue;
+			}
+			for (JobToken token : queue) {
+				switch (token.getStatus()) {
+				case QUEUED:
+					token.setStatus(Job.Status.SCHEDULED);
+					Allocation alloc = queue.getPool().getAllocationPolicy().reserveAllocation(queue.getPool(),
+							token.getJob().getDemand());
+					if (alloc != null) {
+						token.getJob().setSupplier(alloc.getSupply());
 					}
-					Thread.yield();
-				} catch (InterruptedException ex) {
-					ex.printStackTrace();
 					break;
+				default:
 				}
 			}
+			Thread.sleep(WAIT_MS);
 		}
+		return null;
 	}
-	
 }

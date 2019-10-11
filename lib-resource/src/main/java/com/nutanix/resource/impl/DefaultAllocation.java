@@ -1,16 +1,13 @@
 package com.nutanix.resource.impl;
 
 import java.time.Duration;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nutanix.capacity.Capacity;
 import com.nutanix.resource.Allocation;
 import com.nutanix.resource.Resource;
-import com.nutanix.capacity.Capacity;
 
 public class DefaultAllocation implements Allocation {
 	private String id;
@@ -20,7 +17,7 @@ public class DefaultAllocation implements Allocation {
 	private final Resource supply;
 	private static final Logger logger = LoggerFactory.getLogger(DefaultAllocation.class);
 	
-	public DefaultAllocation(Capacity demand, Resource   supply) {
+	public DefaultAllocation(Capacity demand, Resource supply) {
 		if (demand == null) 
 			throw new IllegalArgumentException("can not allocate for null demand");
 		if (supply == null) 

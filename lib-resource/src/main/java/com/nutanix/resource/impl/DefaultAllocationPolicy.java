@@ -49,7 +49,7 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 			}
 			if (bestFit == null) {
 				throw new RuntimeException("can not allocate " + c
-						+ " Available capcity " 
+						+ " Available capacity " 
 						+ provider.getAvailableCapacity());
 			}
 			alloc = new DefaultAllocation(demand, bestFit);
@@ -70,9 +70,9 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 	 */
 	public double fitness(Resource supply, Quantity c) {
 		double fitness = 0;
-		Quantity c2 = supply.getAvailableCapacity().getQuantity(c.getKind());
+		Quantity c2 = supply.getAvailable(c.getKind());
 		if (c2.compareTo(c) < 0) return -1;
-		fitness += supply.getAvailableCapacity().getQuantity(c.getKind())
+		fitness += supply.getAvailable(c.getKind())
 					.fraction(c);
 		return bound(fitness, 1, 0);
 	}

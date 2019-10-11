@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nutanix.capacity.impl.AbstractQuantity;
 
 public class Storage extends AbstractQuantity implements Quantity {
@@ -17,6 +18,7 @@ public class Storage extends AbstractQuantity implements Quantity {
 		return new Storage(amount, (MemoryUnit)unit);
 	}
 
+	@JsonIgnore
 	@Override
 	public Unit getPreferredUnit() {
 		return MemoryUnit.GB;

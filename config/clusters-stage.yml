@@ -1,0 +1,49 @@
+ #configuration for avaialble clusters
+ #each cluster has an unique name
+ # host/port and other details for cluster
+clusters: 
+  tomahawk: 
+      host: 10.46.31.50
+  tauras: 
+      host: taurus03-v1.eng.nutanix.com
+  mongoose: 
+      host: mongoose-v1.eng.nutanix.com
+  Gemini01: 
+      host: 10.46.31.38
+  Gemini03: 
+      host: 10.46.31.50
+  Bella: 
+      host: 10.46.31.10
+  Bella4: 
+      host: 10.46.31.12
+  Tomahawk4: 
+      host: 10.46.31.52
+  tauras01: 
+      host: 10.46.31.24
+  tauras03: 
+      host: 10.46.31.26
+  Mongoose: 
+      host: 10.46.31.86
+  Consul02-1: 
+      host: 10.46.31.70
+  Consul02-2: 
+      host: 10.46.31.72
+  Consul02-3: 
+      host: 10.46.31.74
+  Consul02-4: 
+      host: 10.46.31.76
+      
+  Tade1: 
+      host: 10.46.211.195
+  Tade2: 
+      host: 10.46.211.196
+  Tade3: 
+      host: 10.46.211.197
+  Tade4: 
+      host: 10.46.211.198
+
+  Mosaic0304: 
+       host: 10.46.211.243
+  
+  
+     

@@ -2,7 +2,9 @@ package com.nutanix.bpg.spring;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -82,8 +84,11 @@ public class TaskController extends MicroService {
 	@GetMapping("/{queue}")
 	public Collection<JobToken> getAllTasks(@PathVariable("queue") String queueName) {
 		JobQueue queue = taskQueues.getQueue(queueName);
-		List<JobToken>  tokens = queue.selectJobByStatus();
-		logger.debug("selected " + tokens.size() + " jobs from " + queue);
+		List<JobToken>  tokens = new ArrayList<JobToken>();
+		for (JobToken token : queue) {
+			tokens.add(token);
+		}
+		logger.debug("found " + tokens.size() + " jobs from " + queue);
 		return tokens;
 	}
 	

@@ -1,15 +1,16 @@
+<!-- a view for job queue                        -->
+<!-- left side nadigates throw jobs              -->
+<!-- right shows details of a job with I/O       -->
 <div class='w3-container w3-row'>
 
 	<div class="w3-col l4 m4">
-		<button id='submit-job' class='w3-teal w3-padding w3-margin'>Submit Job</button>
 		<div class='w3-panel w3-black'>Job Queues</div>
 		<ul id='job-list' class='w3-margin'></ul>
+		<button id='submit-job' class='w3-teal w3-padding w3-margin'>Submit Job</button>
 	</div>
-	<div id="job-view" class="w3-col m7 l7">
-		<div id='job-table'></div>
-		<div id='output'></div>
-		<div id='error-output'></div>
+	<div id="job-view" class="w3-col m7 l7 w3-margin">
 	</div>
+	
 </div>
 <div id='job-submit-dialog' class="w3-hide"></div>
 
@@ -20,6 +21,7 @@
     $('#submit-job').on('click', function(e){
         openJobSubmitDialog(e)
     })
+    // fetch all jobs of each queues
 	$.ajax({
 		url: '/task/queues'
 	}).done(function(names){

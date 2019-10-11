@@ -1,12 +1,20 @@
 package com.nutanix.resource.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import javax.xml.ws.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.nutanix.bpg.utils.URLBuilder;
+import com.nutanix.bpg.model.Catalog;
 import com.nutanix.resource.prism.PrismGateway;
 
 /**
@@ -17,18 +25,8 @@ import com.nutanix.resource.prism.PrismGateway;
  * @author pinaki.poddar
  *
  */
-public class ClusterBuilder implements Callable<Boolean> {
-	
-	private final Cluster cluster;
+public class ClusterBuilder {
 	private static Logger logger = LoggerFactory.getLogger(ClusterBuilder.class);
-
-	/**
-	 * create a builder for given cluster.
-	 * @param c a cluster. must not be null.
-	 */
-	public ClusterBuilder(Cluster c) {
-		cluster = c;
-	}
 	
 	
 	/**
@@ -43,81 +41,49 @@ public class ClusterBuilder implements Callable<Boolean> {
 	 * @param cluster
 	 * @throws Exception
 	 */
-	public void build() throws Exception {
-		logger.debug("building " + cluster);
-		PrismGateway gateway = new PrismGateway(cluster);
-		JsonNode response = gateway.getVMs();
-		JsonNode entities = response.get("entities");
-		logger.debug("found " + entities.size() + " vms for " + cluster);
-		for (JsonNode entity : entities) {
-			if (!entity.has("uuid")) {
-				logger.warn("ignore vm because it does not have uuid");
-				continue;
-			}
-			VirtualMachine vm = new VirtualMachine(entity.get("uuid").asText());
-			if (!entity.has("name")) {
-				logger.warn("ignore  " + vm.getId() + " because it does not have name");
-				continue;
-			}
-			if (!entity.has("vm_disk_info")) {
-				logger.warn("ignore " + vm + " because it does not have vm_disk_info");
-				continue;
-			}
-			if (!entity.has("vm_nics")) {
-				logger.warn("ignore  " + vm + " because it does not have vm_nics");
-				continue;
-			}
-			
-			vm.setName(entity.get("name").asText());
-			vm.setMemory(entity.get("memory_mb").asInt());
-			vm.setCpuCount(entity.get("num_cores_per_vcpu").asInt()
-				      	 * entity.get("num_vcpus").asInt());
-			JsonNode diskArray = entity.get("vm_disk_info");
-			//logger.debug(vm.getName() + " has " + diskArray.size() + " disks");
-			long diskSize = 0;
-			for (JsonNode disk : diskArray) {
-				if (disk.has("size")) {
-					long s = disk.get("size").asLong();
-					//logger.debug("adding disk of size " + s);
-					diskSize += s;
-				} else {
-					//logger.warn(disk.path("name").asText() + " does not have size");
-				}
-			}
-			vm.setDiskSize(diskSize);
-			
-			for (JsonNode nic: entity.get("vm_nics")) {
-				if (nic.has("ip_address")) {
-					vm.setIPAddress(nic.get("ip_address").asText());
-					break;
-				}
-			}
-			if (vm.hasIPAddress()) {
-				logger.debug("virtual machine: [" + vm + ":" + vm.getIPAddress() + "] capacity:" + vm.getAvailableCapacity());
-				cluster.addResource(vm);
-			} else {
-				logger.warn("ignore vm " + vm + " becuase it does have an ip address");
+	public void build(Catalog<Cluster> clusters) {
+		
+		ExecutorService threadPool = Executors.newCachedThreadPool();
+		List<Future<Cluster>> futures = new ArrayList<Future<Cluster>>();
+		for (Cluster cluster : clusters) {
+			SingleClusterBuilder builder = 
+					new SingleClusterBuilder(cluster);
+			Future<Cluster> f = threadPool.submit(builder);
+			futures.add(f);
+		}
+		
+		for (Future<Cluster> f : futures) {
+			try {
+				clusters.add(f.get());
+			} catch (Exception ex) {
+				logger.debug("error building cluster", ex);
 			}
 		}
-		logger.info("fetched resource for cluster " + cluster.getName()
-			+ " capacity " + cluster.getTotalCapacity());
+		
 	}
 	
-	
-
-
-	@Override
-	public Boolean call() {
-		try {
-			build();
-			return true;
-		} catch (Exception ex) {
-			logger.warn("can not get resources from cluster " + cluster
-				+ " due to " + ex);
-			ex.printStackTrace();
-			cluster.setAvailable(false);
-			cluster.setReason(ex.getMessage());
-			return false;
+	private static class SingleClusterBuilder implements Callable<Cluster> {
+		private Cluster cluster;
+		
+		SingleClusterBuilder(Cluster c) {
+			cluster = c;
+		}
+		@Override
+		public Cluster call() throws Exception {
+			PrismGateway gateway = new PrismGateway(cluster);
+			JsonNode response = gateway.getResponse("cluster/");
+			cluster.populate(response);
+			Catalog<Host> hosts = new HostBuilder().build(gateway);
+			Catalog<Disk> disks = new DiskBuilder().build(gateway);
+			for (Disk disk : disks) {
+				cluster.addDisk(disk);
+			}
+			for (Host host : hosts) {
+				cluster.addHost(host);
+			}
+			return cluster;
 		}
 	}
+
+
 }

@@ -13,7 +13,7 @@ var QUANTITIES = {
 
 
 class Google {
-	constructior() {
+	constructor() {
 		
 	} 
 
@@ -29,34 +29,44 @@ class Google {
 		var tot = total[attr]['value']
 		var used = tot - available[attr]['value']
 		var unit = total[attr]['unit']
+		console.log('total:' + tot + ' used:' + used + ' unit:' + unit)
 		var chartData = google.visualization.arrayToDataTable([
 			['Total',  'Used'],
-			['Total ' + tot + ' ' + unit, tot],
+			['Total ' + tot + ' ' + unit,  tot],
 			['Used ' + used + ' ' + unit,  used]
 		])
 		
 		var style = QUANTITIES[attr]
 		var options = {
 	          title: attr + ' utilization',
-	          sliceVisibilityThreshold: 0,
+	          sliceVisibilityThreshold: 0.00001,
 	          colors: [style, 'red'],
 	          is3D: true
 	        };
 	
-	    var chart = new google.visualization.PieChart($chart[0]);
+		
+	    var chart = new google.visualization.PieChart(
+	    		$chart[0]);
 	
 	    chart.draw(chartData, options);
 	    
 	    return $chart
     }
     
-     drawQuantityUtilization ($utilization, available, total) {
-    	$utilization.empty()
+    /**
+     * create multiple pie charts and places them
+     * horizontally
+     * 
+     */
+     drawQuantityUtilization (available, total) {
+    	var $utilization = $('<div>')
+    	$utilization.addClass('w3-container w3-border')
     	for (var attr in QUANTITIES) {
     		var $piechart = this.drawPieChart(attr, available, total )
-    		$piechart.addClass('w3-container w3-cell w3-margin')
+    		$piechart.addClass('w3-container w3-cell w3-margin w3-round-large')
     		$utilization.append($piechart)
         }
+    	return $utilization
     }
 
     drawQuantityDistribution($distribution, elements) {

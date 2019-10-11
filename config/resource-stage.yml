@@ -1,0 +1,4 @@
+# enumerates all clusters
+clusters: clusters-stage.yml
+# pools are collection of cluster
+pools: pools-stage.yml

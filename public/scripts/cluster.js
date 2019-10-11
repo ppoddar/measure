@@ -6,15 +6,9 @@ class Cluster {
 	constructor(data) {
 		console.log('cluster data')
 		console.log(data)
-		
 		this.id   = data['id']
 		this.name = data['name']
-		this.data = data
-		this.vms = []
-		for (var j = 0; j < data.resources.length; j++) {
-			var vm = new VM(data.resources[j])
-			this.vms.push(vm)
-		}
+		this.host = data['host']
 		this.total     = new Capacity(data['totalCapacity'])
 		this.available = new Capacity(data['availableCapacity'])
 	}
@@ -27,36 +21,23 @@ class Cluster {
 	 * 
 	 * @return a jQuery <div>  element. 
 	 */
-	showUtilization(pageId) {
-		var $page = jq(pageId)
-		var $control   = find($page,'#header')
+	showUtilization() {
+		var $page = $('<div>')
+		var $control   = $('<h1>')
 		$control.text(this.name)
 		
-		var $description = find($page, '#description')
-		$description.html(' <b>' + this.name + '</b> cluster has'
-				+ ' <b>' + this.vms.length + '</b> VMs.<p>'
-				+ ' Showing <b>capacity utilization</b>'
-				+ ' of entire cluster '
-				+ ' and of individual VMs<br>'
-				+ ' <b>Capacity utilization</b> of a cluster'
-				+ ' is weighted avrage of utilization'
-				+ ' of individual VMs. '
-				+ ' Capacity utilization of a VM is ratio of used and total capacity '
-				+ ' of memory, disk and cpu.<br>')
+		var $description = $('<p>')
+		$description.text('IP address:' + this.host)
 				
-				
-		var $utilization = find($page,'#chart-utilization')
+		var $utilization = new Google()
+			.drawQuantityUtilization(
+					this.available, this.total) 
 
 		$control.on('click', function(e) {
 			$utilization.toggle()
 		})
 		
-		var total     = new Capacity(this.data['totalCapacity'])
-		var available = new Capacity(this.data['availableCapacity'])
-		new Google().drawQuantityUtilization($utilization, available, total)
-		
-		var $distribution = find($page,'#chart-distribution')
-		new Google().drawQuantityDistribution($distribution, this.vms)
+		$page.append($control, $description, $utilization)
 		return $page
 	}
 	
@@ -69,28 +50,22 @@ class Cluster {
 	createItem() {
 		var $cluster = $('<li>')
 		var $text = $('<span>')
-		$text.text(this.name + ' (' + this.vms.length + ' VMs)')
+		$text.text(this.name)
 		$text.addClass('w3-text-green')
 		$cluster.append($text)
 		$cluster.data('cluster', this)
-		$text.on('click', function(e){
-			$(this).parent().find('ol').toggle()
-		})
 		
+		/**
+		 * cluster item on click displays 'cluster-view'
+		 * on t=right side viewing area
+		 */
 		$cluster.on('click', function(e) {
 			e.stopPropagation()
+			$(this).parent().find('ol').toggle()
 			var cluster = $(this).data('cluster')
-			cluster.showUtilization('#cluster-view')
+			$('#cluster-view').empty()
+			$('#cluster-view').append(cluster.showUtilization())
 		})
-		
-		var $vms = $('<ol>')
-		$cluster.append($vms)
-		for (var i = 0; i < this.vms.length; i++) {
-			var vm = this.vms[i]
-			var $vm = vm.createItem()
-			$vms.append($vm)
-		}
-		$vms.hide()
 		return $cluster
 	}
 	

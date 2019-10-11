@@ -37,6 +37,9 @@
 </div>
 <div id="perspective"></div>
 
+<div id="message-dialog" class='w3-hide'></div>
+<div id="error-dialog" class='w3-hide'></div>
+
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart', 'bar']});
 
@@ -49,6 +52,12 @@
 	$('#perspective-jobs').on('click', function() {
 		$('#perspective').load('html/jobs.html')
 	})
+	
+	$('#message-dialog').load('html/dialogs/message.html')
+	$('#error-dialog').load('html/dialogs/error.html')
+	
+	$('#perspective-home').click()
+	
 </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.nutanix.capacity.impl.DefaultCapacity;
 
@@ -60,5 +61,6 @@ public interface Capacity extends Iterable<Quantity> {
 	 * gets the unit for given resource kind. 
 	 * @param kind
 	 */
+	@JsonIgnore
 	Unit getPreferredUnit(ResourceKind kind);
 }

@@ -1,5 +1,6 @@
 package com.nutanix.capacity.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Unit;
 
@@ -18,6 +19,7 @@ public abstract class AbstractUnit implements Unit {
 		this.symbol = symbol == null ? "" : symbol;
 	}
 
+	@JsonIgnore
 	public double getConversionFactor(Unit other) {
 		return other.getBaseConversionFactor()
 			/this.getBaseConversionFactor();
@@ -26,10 +28,12 @@ public abstract class AbstractUnit implements Unit {
 	public ResourceKind getKind() {
 		return kind;
 	}
+	
 	public String getSymbol() {
 		return symbol;
 	}
 
+	@JsonIgnore
 	public double getBaseConversionFactor() {
 		return baseConversionFactor;
 	}

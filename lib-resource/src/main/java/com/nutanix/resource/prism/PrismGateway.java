@@ -81,7 +81,7 @@ public class PrismGateway {
 				.withHost(cluster.getHost())
 				.withPort(cluster.getPort())
 				.withPath(base + "/" + version + "/" + path);
-		for (int i = 0; i < params.length-1; i+=2) {
+		for (int i = 0; params != null && i < params.length-1; i+=2) {
 			builder.withQueryParams(params[i], params[i+1]);
 		}
 		try {
@@ -103,7 +103,10 @@ public class PrismGateway {
 		}
 	}
 	
-	
+	public JsonNode getResponse(String path) throws Exception {
+		URL url = buildURLForPath(path, null);
+		return getResponse(url);
+	}
 	/**
 	 * Gets JSON response of given path.
 	 * 
@@ -112,7 +115,7 @@ public class PrismGateway {
 	 * 
 	 * @throws Exception
 	 */
-	JsonNode getResponse(URL url) throws Exception {
+	public JsonNode getResponse(URL url) throws Exception {
 		logger.debug("opning connection:" + url);
 		HttpURLConnection con = (HttpURLConnection)url.openConnection();
 		con.setRequestProperty(ACCEPT, APPLICATION_JSON);
@@ -146,6 +149,12 @@ public class PrismGateway {
 						      "include_vm_nic_config",  "true"});
 		return getResponse(url);
 	}
+	
+	public JsonNode getClusterDetails() throws Exception {
+		URL url = buildURLForPath("cluster/", null);
+		return getResponse(url);
+	}
+	
 	
 
 	/**

@@ -1,7 +1,6 @@
 var POOLS = {}
 
-//  Pool -> providers[]   -> 
-//         = Clusters[] -> VMS[] -> capacity
+//  Pool -> Clusters[] -> capacity
 class ResourcePool {
 	constructor(data) {
 		console.log('populate:')
@@ -10,8 +9,8 @@ class ResourcePool {
 		this.name = data['name']
 		this.data = data
 		this.clusters = []
-		for (var i = 0; i < data.providers.length; i++) {
-			var cluster = new Cluster(data.providers[i])
+		for (var i = 0; i < data.resources.length; i++) {
+			var cluster = new Cluster(data.resources[i])
 			this.clusters.push(cluster)
 		}
 	}

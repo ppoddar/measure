@@ -2,16 +2,17 @@ package com.nutanix.bpg.job;
 
 /**
  * policy to select a {@link ResourcePool pool} 
- * based on {@link Job job}.
+ * based on category of {@link Job job}.
+ * <p>
+ * A pool can accept job's of multiple categories.
  * 
- * @author pinaki.poddar
  *
  */
 public interface ResourcePoolSelectionPolicy {
 	/**
-	 * select a pool given a job 
-	 * @param job must not be null
-	 * @return a pool. never null
+	 * gets a pool that accepts job of given category 
+	 * @param jobCategory
+	 * @return
 	 */
-	String select(String jobCategory);
+	String getPoolByJobCategory(String jobCategory);
 }

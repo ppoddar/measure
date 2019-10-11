@@ -1,17 +1,31 @@
 package com.nutanix.bpg.job;
 
-import java.util.List;
-
-import com.nutanix.bpg.job.Job.Status;
-import com.nutanix.bpg.scheduler.JobScheduler;
 import com.nutanix.bpg.utils.Named;
+import com.nutanix.resource.ResourcePool;
 
+/**
+ * A queue of {@link JobToken job token}.
+ *
+ */
 public interface JobQueue extends Named, Iterable<JobToken> {
-	
-	JobScheduler getScheduler();
 	/**
-	 * @param id
+	 * the pool associated to this queue.
 	 * @return
+	 */
+	ResourcePool getPool();
+	/**
+	 * sets one side of bi-directional 1:1 relationship
+	 * between a {@link JobQueue} and {@link ResourcePool}.
+	 * 
+	 * @param pool a resource pool
+	 * @return the same reciever
+	 */
+	JobQueue setPool(ResourcePool pool);
+	
+	/** 
+	 * gets token of given identifier
+	 * @param id an identifier
+	 * @return can be null if no such token
 	 */
 	JobToken getJob(String id);
 
@@ -19,19 +33,12 @@ public interface JobQueue extends Named, Iterable<JobToken> {
 	/**
 	 * adds given job to this queue. 
 	 * 
-	 * @param job
-	 * @return a token without a promise
-	 * 
+	 * @param job a non-null job
+	 * @return a token that wraps the job.
+	 * The token does not have  a promise
+	 * @exception IllegalStateException if given job
+	 * lacks requisite information to be executed
+	 * as a script
 	 */
-	JobToken addJob(Job job);
-
-	/**
-	 * gets the jobs with given status. 
-	 * 
-	 * @param statuses set of statuses. 
-	 * null implies all given statuses
-	 * @return all jobs with given status
-	 */
-	List<JobToken> selectJobByStatus(Status... statuses);
-
+	JobToken addJob(Job job)  throws Exception;
 }

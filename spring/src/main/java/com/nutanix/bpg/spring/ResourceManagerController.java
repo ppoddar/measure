@@ -1,6 +1,5 @@
 package com.nutanix.bpg.spring;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,9 +29,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nutanix.bpg.job.JobQueue;
 import com.nutanix.bpg.job.JobToken;
+import com.nutanix.bpg.job.ResourcePoolSelectionPolicy;
 import com.nutanix.bpg.repo.Repository;
 import com.nutanix.bpg.repo.RepositoryImpl;
 import com.nutanix.bpg.scheduler.JobImpl;
+import com.nutanix.bpg.scheduler.JobQueueImpl;
 import com.nutanix.bpg.scheduler.JobQueueManager;
 import com.nutanix.bpg.scheduler.JobQueueManagerImpl;
 import com.nutanix.bpg.utils.JsonUtils;
@@ -42,11 +43,10 @@ import com.nutanix.config.Configuration;
 import com.nutanix.job.execution.JobBuilder;
 import com.nutanix.job.execution.JobTemplate;
 import com.nutanix.resource.Allocation;
+import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourceManager;
 import com.nutanix.resource.ResourcePool;
-import com.nutanix.resource.ResourceProvider;
 import com.nutanix.resource.impl.ResourceManagerImpl;
-import com.nutanix.resource.model.VirtualMachine;
 
 @RequestMapping("/resource")
 @RestController
@@ -65,8 +65,18 @@ public class ResourceManagerController extends MicroService {
 		resourceManager    = ResourceManagerImpl.configure(config);
 		jobQueueManager    = JobQueueManagerImpl.configure(loadConfiguration("jobQueue"));
 		repo               = RepositoryImpl.configure(loadConfiguration("database"));
-		for (String name : resourceManager.getPoolNames()) {
-			jobQueueManager.newQueue(name, repo);
+		
+		
+		/**
+		 * each pool is bi-directionaly associated to 
+		 * a job queue
+		 */
+		for (ResourcePool pool : resourceManager.getResourcePools()) {
+			String queueName = pool.getName();
+			JobQueue queue = jobQueueManager.newQueue(queueName)
+				.setPool(pool);
+			((JobQueueImpl)queue).setOutputRoot(
+					Paths.get(ctx.getRealPath("/")));
 		}
 	}
 	
@@ -108,11 +118,11 @@ public class ResourceManagerController extends MicroService {
 	}
 	
 	@GetMapping("/pool/{name}/clusters")
-	public List<ResourceProvider> getClusters(
+	public List<Resource> getClusters(
 			@PathVariable("name")  String name) {
 		ResourcePool pool = getResourcePoolByName(name);
 		
-		return pool.getProviders();
+		return pool.getResources();
 	}
 	
 	
@@ -153,14 +163,14 @@ public class ResourceManagerController extends MicroService {
 		logger.info("received " + payload);
 		try {
 			JsonNode json     = customMapper.readTree(payload);
-			ResourcePool pool = resourceManager.getResourcePool(
-					jobQueueManager.getResourcePoolSelectionPolicy()
-					.select(jobCategory));
-					
+			String poolName = jobQueueManager
+					.getResourcePoolSelectionPolicy()
+					.getPoolByJobCategory(jobCategory);
+			ResourcePool pool = resourceManager.getResourcePool(poolName);
 			Capacity demand = CapacityFactory.newCapacity(
 					JsonUtils.getMap(json, "demand"));
 			
-			Allocation alloc = pool.allocate(demand);
+//			Allocation alloc = pool.allocate(demand);
 			
 			JobTemplate template = jobQueueManager.getJobTemplate(jobCategory);
 			JobBuilder builder   = jobQueueManager.getJobBuilder();
@@ -170,11 +180,10 @@ public class ResourceManagerController extends MicroService {
 			optionValues.put("cluster", "10.46.31.26");
 			JobImpl job = builder.build(template, json, optionValues);
 
-			job.setSupply(alloc.getSupply(), alloc.getDemand());
+//			job.setSupply(alloc.getSupply(), alloc.getDemand());
 			JobQueue queue = jobQueueManager.getQueue(pool.getName());
 			
 			JobToken token = queue.addJob(job);
-			token.setRoot(Paths.get(ctx.getRealPath("/")));
 			logger.debug("returning job token " + token);
 			return CompletableFuture.completedFuture(token);
 		} catch (Exception ex) {

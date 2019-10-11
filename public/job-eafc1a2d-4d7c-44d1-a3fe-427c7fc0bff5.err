@@ -1,0 +1,36 @@
+2019-10-10 16:49:31 INFO     [GET] https://10.46.31.26:9440/PrismGateway/services/rest/v2.0/cluster
+DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won't be maintained after that date. A future version of pip will drop support for Python 2.7. More details about Python 2 support in pip, can be found at https://pip.pypa.io/en/latest/development/release-process/#python-2-support
+You are using pip version 18.0, however version 19.2.3 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/paramiko/kex_ecdh_nist.py:39: CryptographyDeprecationWarning: encode_point has been deprecated on EllipticCurvePublicNumbers and will be removed in a future version. Please use EllipticCurvePublicKey.public_bytes to obtain both compressed and uncompressed point encoding.
+  m.add_string(self.Q_C.public_numbers().encode_point())
+/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/paramiko/kex_ecdh_nist.py:90: CryptographyDeprecationWarning: Support for unsafe construction of public numbers from encoded data will be removed in a future version. Please use EllipticCurvePublicKey.from_encoded_point
+  self.curve, Q_S_bytes
+/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/paramiko/kex_ecdh_nist.py:101: CryptographyDeprecationWarning: encode_point has been deprecated on EllipticCurvePublicNumbers and will be removed in a future version. Please use EllipticCurvePublicKey.public_bytes to obtain both compressed and uncompressed point encoding.
+  hm.add_string(self.Q_C.public_numbers().encode_point())
+/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/paramiko/ecdsakey.py:134: CryptographyDeprecationWarning: Support for unsafe construction of public numbers from encoded data will be removed in a future version. Please use EllipticCurvePublicKey.from_encoded_point
+  self.ecdsa_curve.curve_class(), pointinfo
+/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/paramiko/ecdsakey.py:200: CryptographyDeprecationWarning: signer and verifier have been deprecated. Please use sign and verify instead.
+  signature, ec.ECDSA(self.ecdsa_curve.hash_object())
+/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/paramiko/rsakey.py:108: CryptographyDeprecationWarning: signer and verifier have been deprecated. Please use sign and verify instead.
+  algorithm=hashes.SHA1(),
+Traceback (most recent call last):
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/bottle.py", line 764, in _handle
+    return route.call(**args)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/bottle.py", line 1575, in wrapper
+    rv = callback(*a, **ka)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/nutest_webserver.py", line 63, in index
+    coverage_on=coverage_on)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/bottle.py", line 3117, in template
+    return TEMPLATES[tplid].render(kwargs)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/bottle.py", line 2907, in render
+    return self.tpl.render(**_defaults)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/jinja2/environment.py", line 969, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/jinja2/environment.py", line 742, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "<template>", line 39, in top-level template code
+  File "<template>", line 106, in block "content"
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/jinja2/environment.py", line 378, in getitem
+    return obj[argument]
+UndefinedError: 'dict object' has no attribute 'params'

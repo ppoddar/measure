@@ -2,8 +2,8 @@
 "category": "nutest",
 "name": "test job",
 "demand": {
-	"MEMORY": "30 MB",
-	"STORAGE": "1 GB",
+	"MEMORY": "300 MB",
+	"STORAGE": "1000 GB",
 	"COMPUTE": 1
 }
 }

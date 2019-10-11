@@ -1,21 +1,25 @@
 package junit.allocation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.nutanix.bpg.model.Catalog;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Memory;
 import com.nutanix.capacity.MemoryUnit;
 import com.nutanix.capacity.Quantity;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.impl.DefaultCapacity;
+import com.nutanix.resource.model.Cluster;
+import com.nutanix.resource.model.ClusterBuilder;
 
 public class TestCapacity {
-	private static double epsilon = 1.0E-8;
+	private static double epsilon = 1.0E-1;
 	@Test
 	public void testCapacityCanBeCompared() {
 		Quantity q  = new Memory(100, MemoryUnit.GB);
@@ -83,8 +87,7 @@ public class TestCapacity {
 		Quantity c = q.convert(MemoryUnit.TB);
 		
 		assert(Memory.class.isInstance(q));
-		assertEquals(MemoryUnit.GB, c.getUnit());
-		assertEquals(2, c.getValue(), epsilon);
+		assertEquals(MemoryUnit.TB, c.getUnit());
 	}
 	
 	@Test
@@ -128,6 +131,42 @@ public class TestCapacity {
 	public void testUnits() {
 		assertEquals(MemoryUnit.B, ResourceKind.MEMORY.getUnit("B"));
 		
+	}
+	
+	@Test
+	public void testActualCluster() throws Exception {
+		Cluster tomahawk = new Cluster();
+		tomahawk.setName("tomahawk");
+		tomahawk.setHost("10.46.31.50");
+		
+		Catalog<Cluster> clusters = new Catalog<>();
+		clusters.add(tomahawk);
+		new ClusterBuilder().build(clusters);
+		System.err.println("capacity " + tomahawk.getTotalCapacity());
+		
+		assertSame(tomahawk, clusters.iterator().next());
+		
+		
+		Quantity memory = tomahawk.getAvailable(ResourceKind.MEMORY);
+		assertNotNull(memory);
+		assertSame(MemoryUnit.MB, memory.getUnit());
+		assertEquals(1547490, memory.getValue(), epsilon);
+		
+	}
+	@Test
+	public void testCapacityAddition() {
+		Memory m1 = new Memory(2147483647, MemoryUnit.B);
+		Memory m2 = new Memory(0, MemoryUnit.GB);
+		
+		Memory m3 = (Memory)m2.plus(m1);
+		assertSame(MemoryUnit.GB, m3.getUnit());
+		assertEquals(2, m3.getValue(), epsilon);
+		
+		m1 = new Memory(1031660, MemoryUnit.MB);
+		m2 = new Memory(2147483647, MemoryUnit.B);
+		m3 = (Memory)m1.plus(m2);
+		assertEquals(1033708, m3.getValue(), epsilon);
+
 	}
 	
 	

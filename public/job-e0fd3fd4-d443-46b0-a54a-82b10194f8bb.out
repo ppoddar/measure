@@ -1,0 +1,265 @@
+Tests to be run: era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
+
+Config file: nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/config.json
+
+Clusters used: taurus03
+Virtual environment location: nutest
+
+Log directory : nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT
+
+/Users/pinaki.poddar/workspace/airavata/nutest
+Starting my-virtual-env for nutest framework
+Virtual environment started at nutest
+era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
+nutest run -c taurus03 -t era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke -N --config_file nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/config.json --log_dir=nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT
+2019-10-10 16:55:17 WARN  nutest_client.py:459  DO NOT USE -c/--clusters or the "clusters" attribute of a test. They are DEPRECATED.
+2019-10-10 16:55:17 INFO  nutest_client.py:461  Use -r/--resources and get_resource_by_name() or get_resources_by_type() instead
+2019-10-10 16:55:17 INFO  nutest_client.py:516  Logdir is nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT
+2019-10-10 16:55:17 INFO  nutest_client.py:519  PID:80378, nutest:/Users/pinaki.poddar/workspace/airavata/nutest/bin/nutest, tester:PPoddarSJC-TB
+2019-10-10 16:55:19 INFO  nutest_scheduler.py:515  Starting Webserver on port 14299
+2019-10-10 16:55:19 INFO  nutest_webserver.py:422  PID:80381, name:webserver
+2019-10-10 16:55:20 INFO  nutest_scheduler.py:548  Webserver is accessible at : http://127.0.0.1:14299
+2019-10-10 16:55:20 INFO  nutest_scheduler.py:74  Registering clusters from JSON into DB.
+2019-10-10 16:55:20 INFO  nutest_scheduler.py:159  Nutest Wheel version: master-dfb784e27981e87daf745a40ca809548437f746f
+2019-10-10 16:55:20 INFO  nutest_scheduler.py:305  Registering Tests
+2019-10-10 16:55:20 INFO  nutest_scheduler.py:377  Scheduling tests for execution
+2019-10-10 16:55:20 INFO  nutest_scheduler.py:384  Execution of class testcases.era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd started
+2019-10-10 16:55:20 INFO  process.py:111  Process testcases.era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd (pid=80385) started on client localhost
+2019-10-10 16:55:20 INFO  process.py:185  PID:80385, name:testcases.era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd
+2019-10-10 16:55:20 INFO  nos_cluster_validator.py:45  PID-80385 : Thread-1 : Validating resource spec {u'cluster_min_nodes': 1, u'must_run_on_hypervisors': [u'ahv', u'vsphere']} against taurus03.
+2019-10-10 16:55:25 INFO  nutest_class_runner.py:136  Test Params: {u'class_setup_timeout': 2400, u'pre_run': [{'name': 'framework.lib.nos_cluster_pre_post_runs.update_start_time', 'stage': 'CLASS_PRERUN'}, {u'name': u'workflows.workflow_era_setup.init_prism_service', u'stage': u'CLASS_PRERUN'}, {u'name': u'workflows.workflow_era_setup.deploy_era_server', u'stage': u'CLASS_PRERUN'}, {u'name': u'workflows.workflow_era_setup.deploy_era_cli', u'stage': u'CLASS_PRERUN'}, {u'name': u'workflows.workflow_era_setup.init_test_context', u'stage': u'CLASS_PRERUN'}, {u'name': u'workflows.workflow_era_setup.init_test_context', u'stage': u'TEST_PRERUN'}], 'test_pkg': 'testcases', u'test_timeout': 18000, 'test_args': {u'cluster_password': u'Nutanix.1', u'use_existing_build': False, u'cluster_username': u'admin', u'era_server': {u'username': u'era', u'SKIP_DB': u'false', u'upgrade': u'true', u'implementation_type': u'CLI', u'log_collection': u'true', u'TEMPLATE': u'TEMPLATE_ERA_SERVER_POSTGRES_BASE', u'password': u'Nutanix.1', u'build_type': u'skipui'}, u'network': u'dhcp'}, u'interface_type': u'ACLI', 'base_url': 'http://127.0.0.1:14299', u'include_default_error_patterns': True, 'runner': 'class', u'force_log_collection': False, u'log_analyser_timeout': 3600, u'resource_spec': [{u'cluster_min_nodes': 1, u'must_run_on_hypervisors': [u'ahv', u'vsphere']}], u'post_run': [{u'name': u'workflows.workflow_era_setup.class_teardown', u'stage': u'CLASS_POSTRUN'}, {'name': 'framework.lib.nos_cluster_pre_post_runs.update_end_time', 'stage': 'TEST_POSTRUN'}], u'interface_retries': 1, u'interface_retry_interval': 10, u'post_run_timeout': 24000, u'expected_fatals': [{u'pattern': u'QFATAL', u'target': u'*'}, {u'pattern': u'/h/exit', u'target': u'*'}], u'upload_to_panacea_central': False, u'enable_cluster_init': False, 'log_dir': 'nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT', 'clusters': ['taurus03'], u'check_cluster_status': False, u'teardown_timeout': 2400, 'config_file': 'nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/config.json', u'license_enforcement': False, u'setup_timeout': 12000, u'ncc_log_collection_timeout': 1800, u'ncc_url': u'DEFAULT_NCC_URL', u'no_log_collection': True, u'error_patterns': [], 'test_names': ['era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke'], 'coverage_format': 'html', u'class_teardown_timeout': 2400, u'pre_run_timeout': 24000, 'class_log_dir': 'nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/era/rbac/smoke/test_rbac_smoke/RbacSmokeEndToEnd', 'test_results_url': 'http://127.0.0.1:14299/api/v1/test_results', 'coverage_include': '/Users/pinaki.poddar/workspace/airavata/nutest/*', u'ncc_log_collection_plugins': [u'cvm_logs', u'cvm_config', u'sysstats', u'hypervisor_config', u'hypervisor_logs', u'cvm_kernel_logs'], u'ignore_cluster_can_destroy': u'true'}
+2019-10-10 16:55:25 STAGE nutest_class_runner.py:481  ------------------------------------------------------------
+2019-10-10 16:55:25 STAGE nutest_class_runner.py:481  CLASS PRERUN
+2019-10-10 16:55:25 STAGE nutest_class_runner.py:481  ------------------------------------------------------------
+2019-10-10 16:55:25 INFO  nutest_class_runner.py:487 (CPR) Executing framework.lib.nos_cluster_pre_post_runs.update_start_time
+2019-10-10 16:55:29 INFO  nos_cluster_pre_post_runs.py:438 (CPR) PID-80385 : Thread-2 : Resource taurus03 timestamp: 2019-10-10 16:55:29
+2019-10-10 16:55:29 INFO  nos_cluster_pre_post_runs.py:445 (CPR) PID-80385 : Thread-2 : Resource taurus03 is ahead of tester by: 0:00:00
+2019-10-10 16:55:30 INFO  nutest_class_runner.py:487 (CPR) Executing workflows.workflow_era_setup.init_prism_service
+2019-10-10 16:55:30 INFO  utilities.py:232 (CPR) {'SKIP_COLLECTORS': 'False', 'NUTEST_BASE_URL': 'http://127.0.0.1:14299', 'NUTEST_LOGDIR': 'nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/era/rbac/smoke/test_rbac_smoke/RbacSmokeEndToEnd', 'NUTEST_VENV_PATH': 'nutest', 'PYTHONDONTWRITEBYTECODE': '1', 'JAVA_ARCH': 'x86_64', 'LOGNAME': 'pinaki.poddar', 'USER': 'pinaki.poddar', 'HOME': '/Users/pinaki.poddar', 'PATH': '/Users/pinaki.poddar/workspace/airavata/nutest/nutest/bin:/usr/local/opt/sphinx-doc/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:/usr/local/munki', 'PS1': '(nutest) ', 'LD_LIBRARY_PATH': '/Users/pinaki.poddar/opt/oracle/instant_client:', 'TERM_PROGRAM': 'Apple_Terminal', 'LANG': 'en_US.UTF-8', 'NUTEST_LOGFILE': 'nutest_class.log', 'TERM': 'xterm-256color', 'Apple_PubSub_Socket_Render': '/private/tmp/com.apple.launchd.LAn48PbDya/Render', 'NUTEST_PATH': '/Users/pinaki.poddar/workspace/airavata/nutest', 'NUTEST_WEB_IP': '10.40.35.121', 'SHLVL': '4', 'XPC_FLAGS': '0x0', 'com.apple.java.jvmTask': 'CommandLine', '_': '/Users/pinaki.poddar/workspace/airavata/nutest/nutest/bin/nutest', 'JAVA_MAIN_CLASS_80345': 'org.springframework.boot.loader.JarLauncher', 'NUTEST_WEB_PORT': '14299', 'TERM_SESSION_ID': '8618553D-B40B-4659-9203-52347A47EFBE', 'XPC_SERVICE_NAME': '0', 'PYTHONPATH': '/Users/pinaki.poddar/workspace/airavata/nutest:', 'SSH_AUTH_SOCK': '/private/tmp/com.apple.launchd.vDx9YEYerG/Listeners', 'VIRTUAL_ENV': '/Users/pinaki.poddar/workspace/airavata/nutest/nutest', 'SHELL': '/bin/bash', 'TERM_PROGRAM_VERSION': '404.1', 'LC_ALL': 'en_US.UTF-8', 'TMPDIR': '/var/folders/rt/y1q0s7hx4zq3ddl8w1t01cpr0000n7/T/', 'IGNORE_CLUSTER_CAN_DESTROY': 'true', 'OLDPWD': '/Users/pinaki.poddar/workspace/airavata/nutest', '__CF_USER_TEXT_ENCODING': '0x2A7:0x0:0x0', 'PWD': '/Users/pinaki.poddar/workspace/airavata/nutest', 'ERA_BASE': 'nutest/my_nutest_virtual_env/era_base', 'INTERFACE_TYPE': u'ACLI'}
+2019-10-10 16:55:30 INFO  utilities.py:242 (CPR) RESOURCES DIR /Users/pinaki.poddar/workspace/airavata/nutest/resources/cdv/config_jsons/
+2019-10-10 16:55:30 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/cluster
+2019-10-10 16:55:30 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/cluster
+2019-10-10 16:55:31 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/protection_domains
+2019-10-10 16:55:36 INFO  nutest_class_runner.py:487 (CPR) Executing workflows.workflow_era_setup.deploy_era_server
+2019-10-10 16:55:36 STEP  workflow_era_setup.py:185 (CPR) ------------------------------------------------------------
+2019-10-10 16:55:36 STEP  workflow_era_setup.py:185 (CPR) 1. ERA Server deployment
+2019-10-10 16:55:36 STEP  workflow_era_setup.py:185 (CPR) ------------------------------------------------------------
+2019-10-10 16:55:36 INFO  utilities.py:429 (CPR) Skipping the testbed configuration update for ERA server.
+2019-10-10 16:55:36 INFO  installer.py:72 (CPR) url present [u'http://phx-builds.corp.nutanix.com/cdv-builds']
+PING phx-ep-filer-build-vip-prod-1.corp.nutanix.com (10.40.64.77): 56 data bytes
+64 bytes from 10.40.64.77: icmp_seq=0 ttl=59 time=21.890 ms
+64 bytes from 10.40.64.77: icmp_seq=1 ttl=59 time=21.155 ms
+64 bytes from 10.40.64.77: icmp_seq=2 ttl=59 time=21.949 ms
+
+--- phx-ep-filer-build-vip-prod-1.corp.nutanix.com ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 21.155/21.665/21.949/0.361 ms
+2019-10-10 16:55:48 INFO  utilities.py:429 (CPR) Skipping the testbed configuration update for ERA server.
+2019-10-10 16:55:48 INFO  era_server.py:176 (CPR) Finding VM Template: TEMPLATE_ERA_SERVER_POSTGRES_BASE 
+2019-10-10 16:55:48 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/
+2019-10-10 16:55:49 INFO  era_server.py:180 (CPR) Cloning 8f49da97-8816-4ff5-8948-8be6c52aedc7 as pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 16:55:49 INFO  utilities.py:1609 (CPR) Cluster is taurus03
+2019-10-10 16:55:49 INFO  utilities.py:1610 (CPR) Network is dhcp
+2019-10-10 16:55:49 INFO  utilities.py:1614 (CPR) Network config fetched for network dhcp
+2019-10-10 16:55:49 INFO  utilities.py:1615 (CPR) {u'subnet': u'255.255.255.0', u'static_vlan': u'default.vlan1181.static', u'static_pool': u'10.46.18.221#32', u'vlan': u'default.vlan1181.ipam', u'dns': u'10.40.64.15', u'gateway': u'10.46.18.1', u'prefix_length': u'24'}
+2019-10-10 16:55:49 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/
+2019-10-10 16:55:49 INFO  http.py:152 (CPR) [POST] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/8f49da97-8816-4ff5-8948-8be6c52aedc7/clone
+2019-10-10 16:55:49 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/2335b431-c4e3-4df8-8687-d3d02c4d9069
+2019-10-10 16:55:59 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/2335b431-c4e3-4df8-8687-d3d02c4d9069
+2019-10-10 16:56:00 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/
+2019-10-10 16:56:51 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/networks/
+2019-10-10 16:56:52 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/nics/?include_address_assignments=true
+2019-10-10 16:56:52 INFO  prism_service.py:1682 (CPR) Attaching nic 7e63acb2-1120-494d-b718-eab019812def
+2019-10-10 16:56:52 INFO  http.py:152 (CPR) [POST] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/nics
+2019-10-10 16:56:52 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/9ced7f35-0a40-4f25-b316-c5ff1c7da0e4
+2019-10-10 16:57:02 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/9ced7f35-0a40-4f25-b316-c5ff1c7da0e4
+2019-10-10 16:57:22 INFO  era_server.py:201 (CPR) Adding VM with uuid ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187 to host manager.
+2019-10-10 16:57:22 INFO  era_server.py:205 (CPR) {u'vm_features': {u'AGENT_VM': False, u'VGA_CONSOLE': True}, u'name': u'pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME', u'num_cores_per_vcpu': 1, u'gpus_assigned': False, u'num_vcpus': 4, u'memory_mb': 6144, u'power_state': u'off', u'ha_priority': 0, u'allow_live_migrate': True, u'timezone': u'Etc/GMT', u'vm_logical_timestamp': 1, u'uuid': u'ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187'}
+2019-10-10 16:57:22 INFO  era_server.py:206 (CPR) Powering on pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 16:57:22 INFO  http.py:152 (CPR) [POST] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/set_power_state/
+2019-10-10 16:57:22 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/1d8f30b8-85bb-4e28-9d95-7e207dc6b87d
+2019-10-10 16:57:33 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/1d8f30b8-85bb-4e28-9d95-7e207dc6b87d
+2019-10-10 16:57:33 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187?include_vm_nic_config=true
+PING 10.46.18.158 (10.46.18.158): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+Request timeout for icmp_seq 2
+Request timeout for icmp_seq 3
+Request timeout for icmp_seq 4
+
+--- 10.46.18.158 ping statistics ---
+6 packets transmitted, 0 packets received, 100.0% packet loss
+2019-10-10 16:57:49 INFO  prism_service.py:1367 (CPR) Waiting for IP address to be pingable
+2019-10-10 16:58:19 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187?include_vm_nic_config=true
+PING 10.46.18.158 (10.46.18.158): 56 data bytes
+64 bytes from 10.46.18.158: icmp_seq=0 ttl=59 time=21.703 ms
+64 bytes from 10.46.18.158: icmp_seq=1 ttl=59 time=21.456 ms
+64 bytes from 10.46.18.158: icmp_seq=2 ttl=59 time=23.273 ms
+64 bytes from 10.46.18.158: icmp_seq=3 ttl=59 time=21.170 ms
+64 bytes from 10.46.18.158: icmp_seq=4 ttl=59 time=20.815 ms
+64 bytes from 10.46.18.158: icmp_seq=5 ttl=59 time=22.793 ms
+
+--- 10.46.18.158 ping statistics ---
+6 packets transmitted, 6 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 20.815/21.868/23.273/0.878 ms
+2019-10-10 16:59:24 INFO  era_server.py:220 (CPR) Getting the IPV4 Address for pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 16:59:24 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/nics/?include_address_assignments=true
+2019-10-10 16:59:24 INFO  prism_service.py:870 (CPR) {u'network_uuid': u'7e63acb2-1120-494d-b718-eab019812def', u'is_connected': True, u'mac_address': u'50:6b:8d:08:7b:87', u'requested_ip_address': u'10.46.18.158', u'model': u'', u'ip_address': u'10.46.18.158'}
+2019-10-10 16:59:24 INFO  era_server.py:222 (CPR) [u'10.46.18.158']
+2019-10-10 16:59:24 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/nics/?include_address_assignments=true
+2019-10-10 16:59:25 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/networks/
+2019-10-10 16:59:25 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/nics/?include_address_assignments=true
+2019-10-10 16:59:25 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/networks/
+2019-10-10 16:59:25 INFO  era_server.py:250 (CPR) [{u'dhcp': {u'subnet': u'255.255.255.0', u'static_vlan': u'default.vlan1181.static', u'static_pool': u'10.46.18.221#32', u'vlan': u'default.vlan1181.ipam', u'dns': u'10.40.64.15', u'gateway': u'10.46.18.1', u'prefix_length': u'24'}}]
+2019-10-10 16:59:25 INFO  http.py:110 (CPR) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187/nics/?include_address_assignments=true
+2019-10-10 16:59:25 INFO  prism_service.py:870 (CPR) {u'network_uuid': u'7e63acb2-1120-494d-b718-eab019812def', u'is_connected': True, u'mac_address': u'50:6b:8d:08:7b:87', u'requested_ip_address': u'10.46.18.158', u'model': u'', u'ip_address': u'10.46.18.158'}
+2019-10-10 16:59:25 INFO  era_server.py:276 (CPR) IP Address of the host is 10.46.18.158
+2019-10-10 16:59:25 INFO  era_server.py:278 (CPR) VLAN ID of the host is default.vlan1181.ipam for the IP address 10.46.18.158
+2019-10-10 16:59:25 INFO  era_server.py:287 (CPR) Network config for the host {u'dhcp': {u'subnet': u'255.255.255.0', u'static_vlan': u'default.vlan1181.static', u'static_pool': u'10.46.18.221#32', u'vlan': u'default.vlan1181.ipam', u'dns': u'10.40.64.15', 'ip_address': u'10.46.18.158', u'gateway': u'10.46.18.1', u'prefix_length': u'24'}}
+2019-10-10 16:59:25 INFO  workflow_era_setup.py:752 (CPR) Waiting for ssh connectivity to era server
+2019-10-10 16:59:25 INFO  utilities.py:119 (CPR) Current Time: 1570751965.77, Timeout Time: 1570752265.77
+
+2019-10-10 16:59:25 INFO  utilities.py:120 (CPR) Number of arguments to condition is : 0
+2019-10-10 16:59:25 INFO  utilities.py:122 (CPR) Calling condition method.
+2019-10-10 16:59:25 INFO  linux_host.py:2329 (CPR) Running ls with user era/Nutanix.1@10.46.18.158
+2019-10-10 16:59:26 INFO  linux_host.py:2333 (CPR) Command completed with status: 0
+2019-10-10 16:59:26 INFO  linux_host.py:2336 (CPR) alertmanager-0.15.0-rc.0.linux-amd64  era_base	era_base.loc  era_server_config
+2019-10-10 16:59:26 INFO  workflow_era_setup.py:758 (CPR) Waiting for tomcat availability.
+2019-10-10 16:59:26 INFO  utilities.py:119 (CPR) Current Time: 1570751966.8, Timeout Time: 1570752266.8
+
+2019-10-10 16:59:26 INFO  utilities.py:120 (CPR) Number of arguments to condition is : 0
+2019-10-10 16:59:26 INFO  utilities.py:122 (CPR) Calling condition method.
+2019-10-10 16:59:26 INFO  linux_host.py:2329 (CPR) Running netstat -lnp | grep 443 with user era/Nutanix.1@10.46.18.158
+2019-10-10 16:59:26 INFO  linux_host.py:2333 (CPR) Command completed with status: 0
+2019-10-10 16:59:26 INFO  linux_host.py:2336 (CPR) (Not all processes could be identified, non-owned process info
+2019-10-10 16:59:26 INFO  linux_host.py:2336 (CPR)  will not be shown, you would have to be root to see it all.)
+2019-10-10 16:59:26 INFO  linux_host.py:2336 (CPR) tcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN      2465/java           
+2019-10-10 16:59:26 INFO  linux_host.py:2336 (CPR) tcp        0      0 0.0.0.0:8443            0.0.0.0:*               LISTEN      2465/java           
+2019-10-10 16:59:26 INFO  linux_host.py:2329 (CPR) Running ps -ef | awk '/[t]omcat/{print $2}' with user era/Nutanix.1@10.46.18.158
+2019-10-10 16:59:27 INFO  linux_host.py:2333 (CPR) Command completed with status: 0
+2019-10-10 16:59:27 INFO  linux_host.py:2336 (CPR) 2465
+2019-10-10 16:59:27 INFO  workflow_era_setup.py:766 (CPR) Accepting the EULA from backend.
+2019-10-10 16:59:27 INFO  utilities.py:119 (CPR) Current Time: 1570751967.18, Timeout Time: 1570752147.18
+
+2019-10-10 16:59:27 INFO  utilities.py:120 (CPR) Number of arguments to condition is : 0
+2019-10-10 16:59:27 INFO  utilities.py:122 (CPR) Calling condition method.
+2019-10-10 16:59:27 INFO  era_service_api.py:1146 (CPR) Attempting to bypass password reset and EULA acceptance.
+2019-10-10 16:59:27 INFO  http.py:152 (CPR) [POST] https://10.46.18.158:443/era/v0.8/auth/update
+2019-10-10 16:59:27 INFO  era_service_api.py:1150 (CPR) EULA Accept response 200
+2019-10-10 16:59:27 INFO  workflow_era_setup.py:768 (CPR) Password reset and EULA acceptance has been bypassed
+2019-10-10 16:59:27 INFO  workflow_era_setup.py:205 (CPR) Checking if upgrade bundle exists in build repository
+2019-10-10 16:59:27 INFO  workflow_era_setup.py:219 (CPR) Performing era server upgrade using LCM (local build)
+2019-10-10 16:59:27 WARN  installer.py:251 (CPR) Test Context Lookup Failed for Era Server
+2019-10-10 16:59:27 INFO  installer.py:254 (CPR) Enabling force upgrade on era server!!!
+2019-10-10 16:59:28 STEP  installer.py:257 (CPR) ------------------------------------------------------------
+2019-10-10 16:59:28 STEP  installer.py:257 (CPR) 2. Upgrade ERA server
+2019-10-10 16:59:28 STEP  installer.py:257 (CPR) ------------------------------------------------------------
+2019-10-10 16:59:28 INFO  installer.py:261 (CPR) Building ERA components
+2019-10-10 16:59:28 INFO  installer.py:622 (CPR) Checking if it is configured to reuse the build.
+2019-10-10 16:59:28 INFO  installer.py:634 (CPR) 'use_existing_build' is not configured.
+2019-10-10 16:59:28 STEP  installer.py:637 (CPR) ------------------------------------------------------------
+2019-10-10 16:59:28 STEP  installer.py:637 (CPR) 3. Building components
+2019-10-10 16:59:28 STEP  installer.py:637 (CPR) ------------------------------------------------------------
+2019-10-10 17:00:28 INFO  installer.py:645 (CPR) Building components successful
+2019-10-10 17:00:28 INFO  installer.py:707 (CPR) Running: cd /Users/pinaki.poddar/workspace/airavata && git log -1 | head -1 | cut -f2 -d ' '
+2019-10-10 17:00:28 INFO  installer.py:709 (CPR) Exit status: 0
+2019-10-10 17:00:28 INFO  installer.py:710 (CPR) 40ee6da9bb2ad5267a681d318be022107f29717b
+2019-10-10 17:00:28 INFO  installer.py:108 (CPR) Getting the latest commit 40ee6da9bb2ad5267a681d318be022107f29717b
+2019-10-10 17:00:28 INFO  installer.py:120 (CPR) No upgrade bundle found.
+2019-10-10 17:00:28 WARN  nutest_error.py:52 (CPR) The exception message is
+Failed to get the era upgrade bundle after build
+2019-10-10 17:00:28 ERROR workflow_era_setup.py:222 (CPR) Upgrade Failed!!! Getting upgrade and /var/log/messages
+2019-10-10 17:00:28 INFO  era_server.py:965 (CPR) Running sudo journalctl -u era_monitor.service > /home/era/era_monitor.service.log
+2019-10-10 17:00:28 INFO  linux_host.py:2329 (CPR) Running sudo journalctl -u era_monitor.service > /home/era/era_monitor.service.log with user era/Nutanix.1@10.46.18.158
+2019-10-10 17:00:28 INFO  linux_host.py:2333 (CPR) Command completed with status: 0
+2019-10-10 17:00:28 INFO  linux_host.py:2329 (CPR) Running sudo zip -q -r /tmp/era_upgrade.zip /var/log/message* /home/era/era_monitor.service.log /home/era/era_base/logs /home/era/era_base/deploy/apache-tomcat-7.0.72/logs /home/era/era_server_config/era_server_config.json /home/era/era_server_config/era_server_resiliency.json with user era/Nutanix.1@10.46.18.158
+2019-10-10 17:00:32 INFO  linux_host.py:2333 (CPR) Command completed with status: 0
+2019-10-10 17:00:32 INFO  linux_host.py:356 (CPR) Copying /tmp/era_upgrade.zip to nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/era/rbac/smoke/test_rbac_smoke/RbacSmokeEndToEnd/era_upgrade.zip
+2019-10-10 17:00:34 ERROR nutest_class_runner.py:208 (CPR) Traceback (most recent call last):
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/nutest_class_runner.py", line 182, in __execute_and_handle_exceptions
+    method_to_call()
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/nutest_class_runner.py", line 489, in __execute_class_pre_run
+    self.__execute_function(pre_run, self._test_obj, 'PRE')
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/nutest_class_runner.py", line 463, in __execute_function
+    TimedExecutor.execute(timeout, function_obj, test_obj)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/timeout_listener.py", line 126, in execute
+    output = functor(*args, **kwargs)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/workflows/workflow_era_setup.py", line 240, in deploy_era_server
+    raise ex
+NuTestError: Failed to get the era upgrade bundle after build
+
+2019-10-10 17:00:34 INFO  exception_decoder.py:61 (CPR) Active state of the code during exception can be found at code_active_state.log
+2019-10-10 17:00:34 STAGE nutest_class_runner.py:509  ------------------------------------------------------------
+2019-10-10 17:00:34 STAGE nutest_class_runner.py:509  CLASS POST RUN
+2019-10-10 17:00:34 STAGE nutest_class_runner.py:509  ------------------------------------------------------------
+2019-10-10 17:00:34 INFO  nutest_class_runner.py:515 (CPO) Executing workflows.workflow_era_setup.class_teardown
+2019-10-10 17:00:34 INFO  era_server.py:1071 (CPO) nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/era/rbac/smoke/test_rbac_smoke/RbacSmokeEndToEnd
+2019-10-10 17:00:34 INFO  era_server.py:1082 (CPO) No files found for password check in []
+2019-10-10 17:00:34 INFO  era_server.py:965 (CPO) Running sudo journalctl -u era_monitor.service > /home/era/era_monitor.service.log
+2019-10-10 17:00:34 INFO  linux_host.py:2329 (CPO) Running sudo journalctl -u era_monitor.service > /home/era/era_monitor.service.log with user era/Nutanix.1@10.46.18.158
+2019-10-10 17:00:34 INFO  linux_host.py:2333 (CPO) Command completed with status: 0
+2019-10-10 17:00:34 INFO  linux_host.py:2329 (CPO) Running sudo zip -r /tmp/era_system_logs.zip /var/log/message* /home/era/era_monitor.service.log with user era/Nutanix.1@10.46.18.158
+2019-10-10 17:00:37 INFO  linux_host.py:2333 (CPO) Command completed with status: 0
+2019-10-10 17:00:37 INFO  linux_host.py:2336 (CPO)   adding: var/log/messages (deflated 96%)
+2019-10-10 17:00:37 INFO  linux_host.py:2336 (CPO)   adding: var/log/messages-20190714 (deflated 96%)
+2019-10-10 17:00:37 INFO  linux_host.py:2336 (CPO)   adding: var/log/messages-20190912 (deflated 96%)
+2019-10-10 17:00:37 INFO  linux_host.py:2336 (CPO)   adding: home/era/era_monitor.service.log (deflated 96%)
+2019-10-10 17:00:38 INFO  linux_host.py:356 (CPO) Copying /tmp/era_system_logs.zip to nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/era/rbac/smoke/test_rbac_smoke/RbacSmokeEndToEnd/era_system_logs.zip
+2019-10-10 17:00:40 STEP  workflow_era_setup.py:493 (CPO) ------------------------------------------------------------
+2019-10-10 17:00:40 STEP  workflow_era_setup.py:493 (CPO) 4. Delete all software profiles.
+2019-10-10 17:00:40 STEP  workflow_era_setup.py:493 (CPO) ------------------------------------------------------------
+2019-10-10 17:00:40 INFO  workflow_era_setup.py:553 (CPO) Calling teardown on Era Server...
+2019-10-10 17:00:40 INFO  era_server.py:348 (CPO) Collecting ERA server diagnostic bundle.
+2019-10-10 17:00:40 WARN  era_server.py:353 (CPO) Failed to collect diagnostic bundle!!! 'RbacSmokeEndToEnd' object has no attribute 'era_cli_service'
+2019-10-10 17:00:40 WARN  era_server.py:366 (CPO) Failed to remove network resources 'RbacSmokeEndToEnd' object has no attribute 'era_cli_service'
+2019-10-10 17:00:40 INFO  era_server.py:512 (CPO) Executing cat /home/era/era_server_config/era_server_resiliency.json on ERAServer
+2019-10-10 17:00:40 WARN  nutest_error.py:52 (CPO) The exception message is
+Command: cat /home/era/era_server_config/era_server_resiliency.json. Result {'status': 1, 'stderr': '', 'stdout': 'cat: /home/era/era_server_config/era_server_resiliency.json: No such file or directory\r\n'}
+2019-10-10 17:00:40 WARN  era_server.py:449 (CPO) File /home/era/era_server_config/era_server_resiliency.json not found: Command: cat /home/era/era_server_config/era_server_resiliency.json. Result {'status': 1, 'stderr': '', 'stdout': 'cat: /home/era/era_server_config/era_server_resiliency.json: No such file or directory\r\n'}
+2019-10-10 17:00:40 INFO  era_server.py:387 (CPO) Deleting Cloned ERA Server VM
+2019-10-10 17:00:40 INFO  vm.py:97 (CPO) Closing connection to volume group
+2019-10-10 17:00:40 ERROR vm.py:74 (CPO) close_volume_group is not implemented yet
+2019-10-10 17:00:40 INFO  vm.py:100 (CPO) Deleting the volume groups associated with pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 17:00:40 INFO  vm.py:81 (CPO) Getting list of volume groups attached to VM pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 17:00:40 INFO  http.py:110 (CPO) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/volume_groups/
+2019-10-10 17:00:41 INFO  vm.py:84 (CPO) []
+2019-10-10 17:00:41 INFO  vm.py:102 (CPO) Deleting the vm pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 17:00:41 INFO  http.py:110 (CPO) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187?include_vm_disk_config=true&include_vm_nic_config=true
+2019-10-10 17:00:42 INFO  prism_service.py:1800 (CPO) Deleting VM Name pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 17:00:42 INFO  http.py:78 (CPO) [DELETE] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/vms/ec1a7ccc-b0d1-4a2c-a8fa-de48af75c187
+2019-10-10 17:00:42 INFO  http.py:110 (CPO) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/d8fb428d-1ed9-4684-ba11-5c2d63498ef8
+2019-10-10 17:00:52 INFO  http.py:110 (CPO) [GET] https://10.46.31.18:9440/PrismGateway/services/rest/v2.0/tasks/d8fb428d-1ed9-4684-ba11-5c2d63498ef8
+2019-10-10 17:00:52 INFO  vm.py:104 (CPO) Successfully deleted: pinaki.poddar_ERA_SERVER_20191010.165530.598_DELETE_ME
+2019-10-10 17:00:52 INFO  era_server.py:389 (CPO) Deleted ERA Server successfully.
+2019-10-10 17:00:52 INFO  workflow_era_setup.py:555 (CPO) ERA Server teardown completed.
+2019-10-10 17:00:52 WARN  nutest_class_runner.py:522 (CPO) Class Post run workflows.workflow_era_setup.class_teardown failed to execute with error: Traceback (most recent call last):
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/nutest_class_runner.py", line 518, in __execute_class_post_run
+    self.__execute_function(post_run, self._test_obj, 'POST')
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/nutest_class_runner.py", line 463, in __execute_function
+    TimedExecutor.execute(timeout, function_obj, test_obj)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/nutest/lib/python2.7/site-packages/framework/test_driver/timeout_listener.py", line 126, in execute
+    output = functor(*args, **kwargs)
+  File "/Users/pinaki.poddar/workspace/airavata/nutest/workflows/workflow_era_setup.py", line 494, in class_teardown
+    profile_api = Profile(test_obj.log_directory, test_obj.era_service_api)
+AttributeError: 'RbacSmokeEndToEnd' object has no attribute 'era_service_api'
+
+2019-10-10 17:00:52 INFO  exception_decoder.py:61 (CPO) Active state of the code during exception can be found at code_active_state.log
+2019-10-10 17:00:52 INFO  nutest_class_runner.py:532 (CPO) CLASS POSTRUN completed in 18s
+2019-10-10 17:00:52 INFO  process.py:146  Process testcases.era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd exited with status 0
+2019-10-10 17:00:52 INFO  nutest_scheduler.py:224  Cleaning Up
+2019-10-10 17:00:52 STAGE nutest_scheduler.py:240  ------------------------------------------------------------
+2019-10-10 17:00:52 STAGE nutest_scheduler.py:240  TEST RESULTS
+2019-10-10 17:00:52 STAGE nutest_scheduler.py:240  ------------------------------------------------------------
+2019-10-10 17:00:52 INFO  nutest_scheduler.py:241  LOGDIR: nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT
+2019-10-10 17:00:52 INFO  nutest_scheduler.py:242  TEST_NAME                                     STATUS     ERROR_STAGE
+2019-10-10 17:00:52 INFO  nutest_scheduler.py:243  ---------                                     ------     -----------
+2019-10-10 17:00:52 INFO  nutest_scheduler.py:250  RbacSmokeEndToEnd.test_rbac_smoke             FAILED     CLASS_PRERUN
+serving on 0.0.0.0:14299 view at http://127.0.0.1:14299
+2019-10-10 17:00:52 WARN  nutest_webserver.py:483  signal 15 received by webserver with pid=80381.
+
+Test : FAILED [1]
+Deactivating NuTest Virtual environment.
+taurus03
+/Users/pinaki.poddar/workspace/airavata/nutest/eratest.sh -t 'era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke' -f nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT/config.json -c taurus03 -p nutest -l nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT
+NuTest exited with status [31m[1m256[0m
+ LOG_DIR = nutest/my_nutest_virtual_env/logs/20191010.165503.873021-PDT

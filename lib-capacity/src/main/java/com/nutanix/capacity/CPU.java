@@ -1,5 +1,6 @@
 package com.nutanix.capacity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nutanix.capacity.impl.AbstractQuantity;
 
 public class CPU extends AbstractQuantity {
@@ -12,6 +13,7 @@ public class CPU extends AbstractQuantity {
 		return new CPU((int)amount);
 	}
 
+	@JsonIgnore
 	@Override
 	public Unit getPreferredUnit() {
 		return null;

@@ -87,8 +87,9 @@ submitJob = function($form) {
 		//incrementJobCount()
 		var msg = response['category'] + ' job '
 		+ '[' + response['name'] + '] has been submitted'
+		+ ' to [' + response['queue'] + '] job queue '
 		console.log(msg)
-		//showMessageDialog(msg)
+		showMessageDialog(msg)
 	}).fail(function (err) {
 		console.log('error from ' + url)
 		var msg = JSON.parse(err.responseText)['cause']['message']
@@ -121,9 +122,57 @@ class Job {
 		this.startTime = job.startTime
 		this.expectedDuration  = job.expectedDuration
 		this.status    = job.status
-		this.output = job.outputURI
+		this.output    = job.outputURI
 		this.errorOutput = job.errorOutputURI
 	}
+	
+	/**
+	 * create a page with job details
+	 */
+	createPage() {
+		var $page = $('<div>')
+		$page.append(
+			this.createTitle(), 
+			this.createStatus(),
+			this.createStartTime()) 
+		
+		this.createOutput($page, 'output', this.output)
+		this.createOutput($page, 'error output', this.errorOutput)
+		
+		return $page
+	}
+	createTitle() {
+		var $title = $('<h1>')
+		$title.text(this.name)
+		$title.addClass('w3-margin w3-padding w3-teal')
+		
+		var $id = this.createDiv('job-id: ', this.id)
+		var $category = this.createDiv('category: ', this.category)
+
+		var $div = $('<div>')
+		$div.append($title, $id, $category)
+		return $div
+	}
+	
+	createDiv(label, text) {
+		var $section = $('<div>')
+		$section.addClass('w3-margin w3-padding')
+		var $label = $('<span>')
+		$label.text(label)
+		$label.addClass('w3-padding')
+		$label.css('font-weight', 'bold')
+		var $item = $('<span>')
+		$item.text(text)
+		$item.addClass('w3-text-blue')
+		$section.append($label, $item)
+		
+		return $section
+	}
+	
+	createStatus() {
+		return this.createDiv('Status:', this.status)
+	}
+
 	
 	getRowIdentifer() {
 		return 'job-' + this.id
@@ -148,16 +197,18 @@ class Job {
 	}
 	
 	/**
-	 * create a list item that when clicked shows a row
-	 * in job table
+	 * create a list item that when clicked shows 
+	 * job details on right side viewing area
 	 */
 	createItem() {
 		var $li = $('<li>')
 		$li.text(this.name)
 		var _this = this
 		$li.on('click', function() {
-			var $table = $('#job-table')
-			$table.append(_this.createRow())
+			var $page = _this.createPage()
+			var $view = $('#job-view')
+			$view.empty()
+			$view.append($page)
 		})
 		return $li
 	}
@@ -186,12 +237,71 @@ class Job {
 		})
 	}
 
-	getTime() {
-		var diff = new Date().getTime() - this.startTime;
-		return 'started ' + new Date(this.startTime)
-		  + ' (' + diff + ' ago)'
+	createStartTime() {
+		var now = new Date().getTime()
+		var diff =  (now - this.startTime)/1000;
+		var $ago = $('<span>')
+		$ago.text(' (' + diff + ' seconds ago)')
+		
+		var $label = $('<span>')
+		$label.css('font-weight', 'bold')
+		$label.text('Started at: ')
+		
+		var $time = $('<span>')
+		$time.text(new Date(this.startTime))
+		
+		var $div = $('<div>')
+		$div.append($label, $time, $ago)
+		
+		return $div
 	}
 	
+	/**
+	 * create two elements of accordianl control. 
+	 */
+	createOutput($page, text, uri) {
+		var $control = $('<p>')
+		$control.addClass('w3-panel w3-teal w3-text-white')
+		$control.text(text)
+		$control.addClass('w3-text-blue')
+		
+		var _this = this
+		var $view = $('<div>')
+		$view.addClass('w3-text-small')
+		$view.load(uri, function(data) {
+			$view.empty()
+			_this.populate($view,data)
+		})
+		$view.addClass('w3-hide')
+		$control.on('click', function(e) {
+			if ($view.hasClass('w3-hide')) {
+				$view.removeClass('w3-hide')
+			} else {
+				$view.addClass('w3-hide')
+			}
+		})
+		
+		$page.append($control, $view)
+	}
+	
+	populate($view, data) {
+		var lines = data.split(/\r?\n/)
+		console.log('got ' + lines.length + ' lines of data')
+		for (var i = 0; i < lines.length; i++) {
+			var $line = $('<div>')
+			$line.addClass('w3-small')
+			var $lineNo = $('<span>')
+			$lineNo.text(i.toString() + ': ')
+			$lineNo.addClass('w3-text-gray')
+			var $lineText = $('<span>')
+			$lineText.text(lines[i])
+			if (lines[i].toLowerCase().includes('error')) {
+				$lineText.addClass('w3-text-red')
+			}
+			$line.append($lineNo, $lineText)
+			$view.append($line)
+		}
+	}
 	
 	getAction() {
 		var $action = $('<span>')
@@ -225,12 +335,15 @@ class Job {
  */
 class JobQueue {
 	/**
-	 * create a queue with given name
+	 * create a queue with given name.
+	 * 
+	 * also creates HTML elements for a queue
 	 */
 	constructor(name) {
 		console.log('creating job queue [' + name + ']')
 		this.name = name
 		this.jobs = {}
+		
 		this.$li = $('<li>')
 		var $label = $('<span>')
 		$label.text(this.name)

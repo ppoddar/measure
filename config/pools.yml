@@ -4,7 +4,11 @@
 pools: 
   default: 
      - tomahawk 
-#     - tauras
+  test: 
+     - tauras
+     
+     
+     
 #     - mongoose
 #  jenkins: 
 #     - tauras01

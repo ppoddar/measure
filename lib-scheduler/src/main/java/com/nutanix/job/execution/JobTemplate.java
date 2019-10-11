@@ -132,13 +132,13 @@ public class JobTemplate implements Named {
 		String result = value;
 		List<String> variableNames = VariableParser.parse(value);
 		if (variableNames.isEmpty()) {
-			logger.debug("option [" + key + "] with value [" + value + "] is not using any variable");
+			//logger.debug("option [" + key + "] with value [" + value + "] is not using any variable");
 			return result;
 		}
-		logger.debug("option [" + key + "] with value [" + value + "] " 
-				+ " is using " + variableNames.size()
-				+ " variables: " + variableNames
-				+ " they would be replaced by " + vars);
+//		logger.debug("option [" + key + "] with value [" + value + "] " 
+//				+ " is using " + variableNames.size()
+//				+ " variables: " + variableNames
+//				+ " they would be replaced by " + vars);
 		for (String var : variableNames) {
 			if (vars.containsKey(var)) {
 				String regex = "\\$\\{" + var + "\\}";

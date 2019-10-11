@@ -18,14 +18,22 @@ public class JobCleaner implements Runnable {
 
 	@Override
 	public void run() {
-		Iterator<JobToken> tokens = queue.selectJobByStatus(
-				Job.Status.CANCELLED, 
-				Job.Status.COMPLETED,
-				Job.Status.EXPIRED).iterator();
-		while (tokens.hasNext()) {
-			JobToken token = tokens.next();
-			logger.warn("removing " + token + " from " + queue);
-			tokens.remove();
-		}
+		while (Thread.currentThread().isInterrupted()) {
+			Iterator<JobToken> tokens = queue.iterator();
+			while (tokens.hasNext()) {
+				JobToken token = tokens.next();
+				Job.Status status = token.getStatus();
+				switch (status) {
+				case CANCELLED:
+				case COMPLETED:
+				case EXPIRED:
+					logger.debug("removing " + token);
+					tokens.remove();
+					break;
+				default:
+			}
+		}}}
+		
+		
 	}
-}
+

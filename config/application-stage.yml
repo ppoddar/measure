@@ -4,7 +4,7 @@
 # each module is configured separtately.
 #  
 # -----------------------------------------
-# main context path of this appliction
+# main context path of Spring Boot appliction
 server: 
   servlet: 
       contextPath: /
@@ -20,12 +20,12 @@ logging:
      org.springframework:     error
      org.springframework.web: error
      
-# for each named module, the node is converetd as a properties
-# and used to initailize a micro-service
+# each named module is initailized a micro-service
+# from an YML file
 modules: 
+  resource: resource-stage.yml
+  jobQueue: queues-stage.yml  
   database: database.yml 
-  resource: resource.yml
-  tasks:    tasks.yml    
     
     
 

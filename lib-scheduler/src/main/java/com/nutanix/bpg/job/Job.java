@@ -36,9 +36,11 @@ import com.nutanix.resource.Resource;
 public interface Job {
 	
 	public static enum Status {
-		NOT_SCHEDULED, SCHEDULED, 
+		QUEUED,
+		SCHEDULED, 
 		RUNNING, 
-		COMPLETED, CANCELLED, FAILED, 
+		COMPLETED, 
+		CANCELLED, FAILED, 
 		EXPIRED}
 	
 	String getId();

@@ -1,5 +1,6 @@
 package com.nutanix.capacity.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nutanix.capacity.Quantity;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Unit;
@@ -35,6 +36,7 @@ public abstract class AbstractQuantity implements Quantity {
 		}
 	}
 
+	@JsonIgnore
 	public ResourceKind getKind() {
 		return kind;
 	}
@@ -52,7 +54,8 @@ public abstract class AbstractQuantity implements Quantity {
 		assertSameKind(this, other);
 		Quantity added = other.convert(this.getUnit());
 		double a = this.value + added.getValue();
-		return this.clone(a, this.unit);
+		Quantity result = this.clone(a, this.unit);
+		return result;
 	}
 
 	public Quantity minus(Quantity other) {
@@ -79,6 +82,7 @@ public abstract class AbstractQuantity implements Quantity {
 		return f * other.getValue() / this.value;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isIntegral() {
 		return isIntegral;

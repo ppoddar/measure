@@ -8,8 +8,10 @@ template-root:
 job-output: 
     ../public/job-output
 # each job category is assigned to a pool 
-# i.e. job of a particulr category can run 
+# i.e. job of a particular category can run 
 # in multiple cluster
 # job category is specifed in each job template
-nutest: default 
+
+job2pool: 
+    nutest: default 
     

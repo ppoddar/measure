@@ -1,0 +1,13 @@
+# pools are enumerated by name
+# for each pool, clusters are assigned by name 
+# a cluster can be in multiple pool 
+pools: 
+  default: 
+     - tomahawk 
+     - tauras
+     - mongoose
+  jenkins: 
+     - tauras01
+     - tomahawk4
+     
+  

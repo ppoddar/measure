@@ -1,18 +1,17 @@
 package com.nutanix.resource;
 
-import java.util.Collection;
+import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.nutanix.bpg.utils.Identifable;
-import com.nutanix.capacity.Utilization;
-import com.nutanix.resource.model.VirtualMachine;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Quantity;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Unit;
+import com.nutanix.capacity.Utilization;
+import com.nutanix.resource.model.Cluster;
 
 /**
  * A resource represents capacity -- 
@@ -33,10 +32,9 @@ import com.nutanix.capacity.Unit;
 	include=As.PROPERTY,
 	property="class")
 @JsonSubTypes({
-	@JsonSubTypes.Type(VirtualMachine.class)
+	@JsonSubTypes.Type(Cluster.class)
 })
 public interface Resource extends Identifable {
-		
 	/**
 	 * get capacity of all kinds.
 	 * each quantity in returned capacity is expressed in
@@ -44,61 +42,14 @@ public interface Resource extends Identifable {
 	 * 
 	 * @return a collection of capacities
 	 */
+	Quantity getAvailable(ResourceKind kind);
+	Quantity getTotal(ResourceKind kind);
+	Utilization getUtilization(ResourceKind kind);
 	Capacity getAvailableCapacity();
 	Capacity getTotalCapacity();
-	
-	/**
-	 * get capacity of given kind.
-	 * @return capacity of given kind, if exists
-	 * @throws IllegalArgumentException if capcity
-	 * of given kind does not exist
-	 */
-	
-	/**
-	 * affirms if any capacity of given kind exists
-	 * 
-	 * @param kind a kind e.g. memory, cpu, storage etc.
-	 * not case-sensitive
-	 * @return
-	 */
-	
-	/**
-	 * get kinds of capacities provided by this receiver
-	 * 
-	 * @return a set of {@link Resource.Kind kinds}
-	 * {@link Resource.Kind#MEMORY memory}.
-	 */
-	
-	/**
-	 * the unit in which given kind of resource capacity
-	 * is expressed.
-	 * @param kind
-	 * @return an unit.
-	 */
-	Unit getUnit(ResourceKind kind);
-	
-	/**
-	 * add capacity to this resource.
-	 * @param q a quantity.
-	 * @return same receiver
-	 */
-	Resource addQuanity(Quantity q);
-	
-	/**
-	 * reduce capacity from this resource.
-	 * @param q
-	 * @return same receiver
-	 */
+	Map<ResourceKind, Utilization> getUtilization();
+
 	boolean acquire(Capacity q);
 	boolean release(Capacity q);
-
-	/**
-	 * gets utilization of this receiver.
-	 * 
-	 * @return utilization
-	 */
-	Utilization getUtilization();
-	
-	<R extends Resource> R copy();
 	
 }

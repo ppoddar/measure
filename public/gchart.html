@@ -1,0 +1,38 @@
+<html>
+<head>
+<title></title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="./css/bpg.css">
+
+<script src='./scripts/gchart.js'></script>
+
+</head>
+<body>
+<div class='w3-panel w3-border w3-round-large'>
+	<div id='gchart'></div>
+</div>
+
+<script type="text/javascript">
+
+	google.charts.load('current', {'packages':['corechart', 'bar']});
+	google.charts.setOnLoadCallback(drawPieChart);
+
+    function drawPieChart() {
+		var attr = 'MEMORY'
+	    var total = {}
+	    var available = {}
+	    total[attr]     = {'value': 100}
+	    available[attr] = {'value': 90}
+		var gchart = new Google()
+	
+		var $div = gchart.drawPieChart(attr, available, total);
+		$('#gchart').append($div)
+    }
+	
+</script>
+</body>

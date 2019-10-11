@@ -40,6 +40,9 @@ public class JsonUtils {
 				+ " available properties " + propertyNames(json));
 	}
 	
+	
+
+	
 	public static Map<String, String> getMap(JsonNode json, String p) {
 		return getMap(json, p, null);
 	}
@@ -68,9 +71,9 @@ public class JsonUtils {
 		if (json.has(p)) {
 			JsonNode map = json.get(p);
 			Iterator<String> fields = map.fieldNames();
-			logger.debug("getMap() got json node " +  map.getNodeType() 
-			+ " for property [" + p + "] with fields " 
-			+ propertyNames(map));
+//			logger.debug("getMap() got json node " +  map.getNodeType() 
+//			+ " for property [" + p + "] with fields " 
+//			+ propertyNames(map));
 			Map<String, String> result = new HashMap<>();
 			while (fields.hasNext()) {
 				String field = fields.next();
@@ -86,6 +89,7 @@ public class JsonUtils {
 							+ " is not textual");
 				}
 			}
+			logger.debug("JSON map [" + p + "] =" + result);
 			return result;
 			
 			//return new ObjectMapper().convertValue(map, Map.class);
@@ -121,6 +125,25 @@ public class JsonUtils {
 		throw new RuntimeException("missing property [" + p + "]"
 				+ " available properties " + propertyNames(json));
 	}
+	
+	public static int getInt(JsonNode json, String p) {
+		if (json.has(p)) {
+			return json.get(p).asInt();
+		}
+		throw new RuntimeException("missing property [" + p + "]"
+				+ " available properties " + propertyNames(json));
+	}
+	
+	public static long getLong(JsonNode json, String p) {
+		if (json.has(p)) {
+			return json.get(p).asLong();
+		}
+		throw new RuntimeException("missing property [" + p + "]"
+				+ " available properties " + propertyNames(json));
+	}
+
+
+
 	
 	
 	
