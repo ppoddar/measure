@@ -24,17 +24,17 @@ This project is built as multi-module `maven` project.
 
 ###  Build
 
-    The build the entitre project
+The build the entitre project
 
     $ mvn clean install -DskipTests=true
     
 
 ### Run
-   Once the project is built, run Spring Boot Application
+Once the project is built, run Spring Boot Application
 
    $ ./setup/run-spring.sh
 
-  This will start a web application at http://localhost:8080
+This will start a web application at http://localhost:8080
   
   
   ### View
