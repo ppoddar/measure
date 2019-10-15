@@ -4,26 +4,23 @@
 # assumes that artifcats have been deployed
 # --------------------------------------------
 # directory where this script will run
-DIR=${1:-/root/www/raf}
-cd $DIR 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+INSTALL_DIR=$SCRIPT_DIR/..
 
+cd $INSTALL_DIR
 # main jar assumed to have been deployed
-MAIN_JAR=./spring/target/spring-0.0.1-SNAPSHOT.jar
-PORT=${2:-8080}
-DATABASE_NAME=bpg
+MAIN_JAR=$INSTALL_DIR/spring/target/spring-boot.jar
+PORT=10000
 
-echo installing measurement app from $DIR at $PORT
+. $INSTALL_DIR/setup/stop-process.sh $PORT
 
-echo setup databse schema $DATABASE_NAME
-sh setup/setup-database.sh $DATABASE_NAME
-echo starting main service at $PORT
+CONFIG=$INSTALL_DIR/config/stage/application.yml
+echo starting web service at $PORT with $CONFIG...
 
-./setup/stop-process.sh $PORT
-echo starting web service at $PORT ...
 nohup \
-java -jar $MAIN_JAR \
+java  \
+  -Dconfig=$CONFIG    \
   -Dserver.port=$PORT \
-  -Dspring.config.location=$DIR/setup/application.yml \
-  -Dlogging.config=$DIR/setup/logback.xml \
-  &
+  -Dspring.config.location=$CONFIG \
+  -jar $MAIN_JAR >>spring-output.log 2>&1    &
 

@@ -31,7 +31,7 @@ public interface ResourcePool
 	void setName(String name);
 	void addResource(Resource resource);
 	List<Resource> getResources();
-	Allocation allocate(Capacity demand);
+	//Allocation allocate(Capacity demand);
 	
 	int getSize();
 	Capacity getTotalCapacity();
@@ -39,7 +39,7 @@ public interface ResourcePool
 	Map<ResourceKind, Utilization> getUtilization();
 
 	
-	AllocationPolicy getAllocationPolicy();
-	void setAllocationPolicy(AllocationPolicy policy);
+//	AllocationPolicy getAllocationPolicy();
+//	void setAllocationPolicy(AllocationPolicy policy);
 	
 }

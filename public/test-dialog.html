@@ -1,0 +1,22 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src='./scripts/common.js'></script>
+<script src='./scripts/dialog/dialog.js'></script>
+<script src='./scripts/dialog/jobSubmit.js'></script>
+<script src='./scripts/dialog/jobSelectCategory.js'></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<script type="text/javascript">
+	var style = {'color':{
+		'dialog':'w3-teal',
+		'submit':'w3-green',
+		'cancel':'w3-red'
+	}}
+	var dialog = new JobSelectCategoryDialog(style, 'test-category')
+	dialog.open()
+</script>
+</body>
+</html>

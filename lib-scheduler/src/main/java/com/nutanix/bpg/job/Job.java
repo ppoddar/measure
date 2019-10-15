@@ -1,11 +1,11 @@
 package com.nutanix.bpg.job;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nutanix.capacity.Capacity;
-import com.nutanix.job.execution.JobTemplate;
 import com.nutanix.resource.Resource;
 
 /**
@@ -48,6 +48,7 @@ public interface Job {
 	String getCategory();
 	long getStartTime();
 	long getExpectedCompletionTimeInMillis();
+	JobDescription getSpecification();
 	JobTemplate getTemplate();
 	/**
 	 * gets the demand (required resource capacity) 
@@ -75,9 +76,6 @@ public interface Job {
 	 */
 	String getSubmitter();
 
-	void setName(String name);
-	void setDesciptor(String desc);
-	void setCategory(String cat);
 	/**
 	 * gets an estimate of time to complete this job
 	 * execution.
@@ -101,9 +99,12 @@ public interface Job {
 	 * @return null if remote process executes in
 	 * user's working directory.  
 	 */
-	String getWorkingDirectory();
+	Path getWorkingDirectory();
 	List<String> getCommand();
+	void setCommand(List<String> cmds);
+	
 	Map<String, String> getEnvironment();
+	void setEnvironment(Map<String, String> env);
 	/**
 	 * arguments for script execution
 	 * @return

@@ -1,0 +1,44 @@
+# ----------------------------------------------------------
+# job template for nutest
+#
+# A template describes aspect of executing an OS command.
+# considering nutest as an example, for concreteness.
+# a nutest is invoked by OS as 
+#      $ python eratest.py [--option value]...
+# with ./nutest as working directory 
+# 
+# ----------------------------------------------------------
+
+name: nutest
+command: python eratest.py
+    
+directory: "~/workspace/airavata/nutest"
+option-flag: --
+ 
+ # script options are specifed as a map of key value pairs
+ # keys: property names of 'options' object 
+ # value: passed to command execution after variable replacement
+options: 
+    -   
+        key: tests
+        # value: era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
+        value: era.precheckin.test_smoke.SmokeTest.test_smoke___postgres_private_keys 
+    - 
+      key: test_args 
+      value: network=dhcp
+      
+    - 
+      key: build_type 
+      value: all
+     
+    - 
+      key: config_file 
+        # value: testcases/era/rbac/smoke/config.json
+      value: testcases/era/precheckin/config.json
+      
+    -
+      key: virtual_env
+      value: nutest
+    -
+      key: clusters    
+      value: ${cluster} # variable is enclosed in ${...}

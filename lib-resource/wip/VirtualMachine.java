@@ -18,7 +18,7 @@ import com.nutanix.capacity.MemoryUnit;
 import com.nutanix.capacity.ResourceKind;
 import com.nutanix.capacity.Storage;
 
-public class VirtualMachine extends AbstarctResource {
+public class VirtualMachine  {
 	private String ipAddress;
 	private static Logger logger = LoggerFactory.getLogger(VirtualMachine.class);
 	@JsonCreator

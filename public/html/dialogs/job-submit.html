@@ -1,37 +1,34 @@
 <!-- this form is dynamically loaded                         -->
 <!-- this form has javascript that  will execute before load -->
-<!-- only when the docuemnt is loaded without an anchor      -->
+<!-- only when the document is loaded without an anchor      -->
 <!-- refer: 'script execution' section in https://api.jquery.com/load/ -->
-<div class='w3-contanier w3-card'>
-	<header class='w3-teal w3-container'>
-		<h1>Submit a Job</h1>
-	</header>
-	<div class='w3-container'>
-<form>
+<form class='w3-contanier w3-card'>
+	<div class='w3-teal w3-container'>
+		<header>
+			<h1>Submit a Job</h1>
+			<h3>specify options</h3>
+		</header>
+	</div>
 	<!-- ========== basic section always visible =============== -->
-	<div class='w3-row w3-padding'>
-		<div class='w3-col m3'>
-			<label class="w3-text-teal"><b>Job category</b></label>
+	<!-- shown in a table -->
+	<div class='w3-container'>
+		<div class='w3-row w3-padding'>
+			<label class="w3-col m3"><b>category</b></label>
+			<label class="w3-text-teal w3-col m7" id='job-category'></label>
 		</div>
-		<div class='w3-col m7'>
-			<select id='job-category'></select>
-		</div>
-	</div>
-	<div class='w3-row w3-container'>
-		<div class='w3-col m3'>
-			<label class="w3-text-teal"><b>Job name</b></label>
-		</div>
-		<div class='w3-col m7'>
-			<input id="job-name" class="w3-input w3-border" type="text" 
-			    value='my first job' required>
-			<p class='w3-small'>would be automatically prefiexed
-			with submitter's name</p>
+		<div class='w3-row w3-padding'>
+			<label class="w3-tooltip w3-col m3"><b>name</b><super>*</super>
+				<span class='w3-text w3-small'>
+				would be automatically prefiexed
+			with submitter's name</span>
+			</label>
+			<input id="job-name" class="w3-input w3-border w3-col m7" 
+			    type="text" value='my_first_job' required>
 		</div>
 	</div>
+	
 	<div class='w3-row w3-padding'>
-		<div class='w3-col m3'>
-			<label class="w3-text-teal"><b>Submitter</b><super>*</super></label>
-		</div>
+		<label class="w3-col m3"><b>Submitter</b><super>*</super></label>
 		<div class='w3-col m7'>
 			<input id="job-submitter" class="w3-input w3-border" type="text" 
 			    value='engineer@era.com'
@@ -48,10 +45,16 @@
 	
 	<div id='tab-area' style='width:100%;height:200px;overflow:scroll'>
 	
-	
-	
 	<!--  =============== script section ======================= -->
 	<div id='script' class='tab-content'>
+	<p>following are options of running <pre>nutest</pre></p>
+	<div class='w3-row'>
+		<input type='check' checked>delete VMs after test run completes
+	</div>
+	<div class='w3-row'>
+		<input type='check' checked>use an existing ERA server
+	</div>
+	
 	<div class='w3-row w3-padding'>
 		<div class='w3-col m3'>
 			<label class="w3-text-teal"><b>Script</b><super>*</super></label>

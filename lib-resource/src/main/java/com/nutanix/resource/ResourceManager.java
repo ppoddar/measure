@@ -35,8 +35,8 @@ public interface ResourceManager {
 	 * @param options 
 	 * @return an allocation 
 	 */
-	Allocation allocate(ResourcePool pool, 
-			Capacity demand);
+//	Allocation allocate(ResourcePool pool, 
+//			Capacity demand);
 // TODO:			Options options);
 	
 	/**

@@ -71,6 +71,21 @@ public class Cluster implements Resource,Named {
 		id   = JsonUtils.getString(json, "uuid");
 		name = JsonUtils.getString(json, "name");
 		host = JsonUtils.getString(json, "cluster_external_ipaddress");
+		total = new DefaultCapacity();
+		
+		JsonNode usage = JsonUtils.getObject(json, "usage_stats");
+		long capacity_bytes = JsonUtils.getLong(usage, "storage.capacity_bytes");
+		long usage_bytes = JsonUtils.getLong(usage, "storage.usage_bytes");
+		
+		total = new DefaultCapacity();
+		total.setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.TB);
+		total.addQuantity(new Storage(capacity_bytes/2, MemoryUnit.B));
+		available = new DefaultCapacity();
+		available.setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.TB);
+		available.addQuantity(new Storage((capacity_bytes-usage_bytes)/2, MemoryUnit.B));
+		
+		logger.debug("total: " + total);
+		logger.debug("available: " + available);
 	}
 	
 	void initCapacity() {
@@ -218,7 +233,7 @@ public class Cluster implements Resource,Named {
 		return true;
 	}
 	
-	public void addQuantity(Capacity cap, Quantity q) {
+	private void addQuantity(Capacity cap, Quantity q) {
 		cap.addQuantity(q);
 	}
 	
@@ -245,17 +260,27 @@ public class Cluster implements Resource,Named {
 		available.addQuantity(q);
 	}
 	
-	public void addHost(Host host) {
-		logger.debug("add " + host);
-		hosts.add(host);
-		int coreCount = host.getCPUCores();
-		Quantity q = new CPU(coreCount);
+//	public void addHost(Host host) {
+//		logger.debug("add " + host);
+//		hosts.add(host);
+//		int coreCount = host.getCPUCores();
+//		Quantity q = new CPU(coreCount);
+//		total.addQuantity(q);
+//		available.addQuantity(q);
+//		
+//		Quantity m = new Memory(host.getMemory(), MemoryUnit.B);
+//		total.addQuantity(m);
+//		available.addQuantity(m);
+//	}
+	
+	/**
+	 * adds given quantity to toal and available capacity
+	 * of this cluster.
+	 * @param q
+	 */
+	public void addCapacity(Quantity q) {
 		total.addQuantity(q);
 		available.addQuantity(q);
-		
-		Quantity m = new Memory(host.getMemory(), MemoryUnit.B);
-		total.addQuantity(m);
-		available.addQuantity(m);
 	}
 
 }

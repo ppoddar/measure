@@ -16,11 +16,14 @@ echo Spring application configuration at $PROJECT_HOME/config/application.yml
 #DEBUG_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:$PORT
 
 DEBUG_OPTIONS=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$PORT
+CONFIG_FILE=config/$PROFILE/application.yml
 java -Xdebug $DEBUG_OPTIONS \
-  -Dconfig=config/application-$PROFILE.yml \
+  -Dconfig=$CONFIG_FILE    \
   -Dserver.port=$PORT \
+  -Dspring.config.location=$CONFIG_FILE    \
   -jar $MAIN_JAR
 
+#  -Dspring.config.location=$CONFIG_FILE    \
 #  -Dspring.config.location=$PROJECT_HOME/config/application.yml
 #  -Dlogging.level.org=ERROR  \
 #  -Dlogging.level.com.nutanix=INFO 

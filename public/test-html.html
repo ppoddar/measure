@@ -1,0 +1,26 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src='./scripts/common.js'></script>
+<script src='./scripts/dialog.js'></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div id='select-job-category'></div>
+
+<script type="text/javascript">
+	$('#select-job-category').load('html/dialogs/select-job-category.html')
+
+	// create a dialog
+	var $dialog = new Dialog('#select-job-category')
+	var callalert = function () {
+		var cat = $("input:radio[name='job-category']:checked").val()
+		alert('submit ' + cat)
+	}
+	// show dialog with given submit
+	$dialog.show(callalert)
+	
+	
+</script>
+</body>
+</html>

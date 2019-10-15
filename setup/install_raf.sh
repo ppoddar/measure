@@ -11,13 +11,13 @@ cd $DIR
 MAIN_JAR=./spring/target/spring-boot.jar
 PORT=${2:-8090}
 
-echo installing RAF app from $DIR at $PORT
+echo installing JOB FARM from $DIR
 echo starting main service at $PORT
 ./setup/stop-process.sh $PORT
 echo starting web service at $PORT ...
 nohup \
 java \
-  -Dconfig=config/application-dev.yml \
+  -Dconfig=config/stage/applicatio.yml \
   -Dserver.port=$PORT \
   -jar $MAIN_JAR      > server.log \
   &

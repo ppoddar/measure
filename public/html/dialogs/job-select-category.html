@@ -1,0 +1,38 @@
+<!-- a form that woould be wrappend in a modal dialog -->
+<form id='job-select-category-dialog' class='w3-card'>
+	<div class='w3-container w3-teal'>
+		<header>
+			<h1>Submit Job</h1>
+			<h3>select job Category</h3>
+		</header>
+	</div>
+	
+	<div class='w3-container w3-margin'>
+		<p>select a pre-defined Job category.
+		System.administrator would be able to add
+		new job categories
+		</p>
+	
+		<input class="w3-radio" type="radio" name="job-category" value="nutest" checked>
+	    <label>Smoke Test</label><br>
+		<input class="w3-radio" type="radio" name="job-category" value="nutest">
+		<label>Check-in Test</label><br>
+		<input class="w3-radio" type="radio" name="job-category" value="measure">
+		<label>Database Measurement</label><br>
+		<input class="w3-radio" type="radio" name="job-category" value="benchmark">
+		<label>Performance Benchmark</label><br>
+	</div>
+	<!-- a centered submit and cancel button -->
+	<!-- submit function is dynamically added -->
+	<!-- cancel closes the parent dialog -->
+	<div class='w3-container w3-margin'>
+		<div class='w3-bar w3-center w3-margin'>
+			<input class='w3-button w3-green' 
+				type='submit' value='select'>
+			<input class='w3-button w3-red'
+				type='button' value='Cancel'
+			    onclick="$(this).closest('.w3-modal').hide();return false">
+		</div>
+	</div>
+</form>
+</html>

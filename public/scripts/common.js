@@ -23,7 +23,7 @@ function jq(id) {
 function find($parent, css) {
 	var $el = $parent.find(css).first()
 	if ($el.length == 0)
-		throw 'no child element with css [' + css + ']'
+		throw 'no child element with selector [' + css + ']'
 		+ ' found in parent ' + $parent.attr('id')
 	return $el
 }

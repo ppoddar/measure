@@ -1,0 +1,46 @@
+<html>
+<!-- builds entire GUI dynamically -->
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script src='./scripts/gui.js'></script>
+<script src='./scripts/common.js'></script>
+<script src='./scripts/dynamic-form.js'></script>
+<script src='./scripts/cluster.js'></script>
+<script src='./scripts/pool.js'></script>
+<script src='./scripts/tasks.js'></script>
+<script src='./scripts/tab.js'></script>
+<script src='./scripts/vm.js'></script>
+<script src='./scripts/capacity.js'></script>
+<script src='./scripts/job.js'></script>
+<script src='./scripts/gchart.js'></script>
+<script src='./scripts/dialog/dialog.js'></script>
+<script src='./scripts/dialog/jobSelectCategory.js'></script>
+<script src='./scripts/dialog/jobSubmit.js'></script>
+<script src='./scripts/dialog/message.js'></script>
+<script src='./scripts/dialog/error.js'></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript">
+$().ready(function() {
+	$.ajax({
+		url: '/ui-config.yml'
+	}).done(function(data) {
+		// build it
+		var config = JSON.parse(data)
+		createBar(config)
+	})
+})
+	
+google.charts.load('current', {'packages':['corechart', 'bar']});
+
+</script>
+
+</head>
+<body>
+<div id='tab-bar'></div>
+<div id="perspective"></div>
+</body>
+</html>

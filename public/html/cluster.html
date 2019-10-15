@@ -1,20 +1,29 @@
-<!-- cluster resources -->
-
+<!--            cluster perspective          -->
+<!-- list of clusters on left column         -->
+<!-- cluster data charts on right column     -->
+<!--           IMPORTANT                     -->
+<!-- this view is loaded dynamically         -->
+<!-- hence, the page *must not* be loaded with     -->
+<!-- an anchor so that scripts can executed  -->
 <div class='w3-container w3-row'>
 	<div class='w3-col m3 l3'>
-		<div class='w3-bar w3-teal'>
+		<div id='bar' class='w3-bar'>
 			<div class='w3-bar-item'>Resource Pool</div>
-			<i class='w3-bar-item material-icons w3-right'>search</i>
+			<div class='w3-bar-item'><i class='w3-bar-item material-icons w3-right'>search</i></div>
 		</div>
 		<ul id='pool-list' class='w3-margin'>
 			<!-- pools would be added in this list -->
 		</ul>
 	</div>
-
-	<div id='cluster-view' class='w3-col m7 l7 w3-margin'></div>
-</div>
+	<div id='cluster-view' class='w3-col m7 l7 w3-margin'>
+			<!-- cluster chart be added in this area -->
+	</div>
 
 
 <script>
-ResourcePool.fetchAllPools($('#pool-list'))
+    console.log('fetching all clusters')
+	ResourcePool.fetchAllPools($('#pool-list'))
 </script>
+</div>
+
+

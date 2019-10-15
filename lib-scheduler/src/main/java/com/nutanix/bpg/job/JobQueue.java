@@ -8,6 +8,8 @@ import com.nutanix.resource.ResourcePool;
  *
  */
 public interface JobQueue extends Named, Iterable<JobToken> {
+	
+	 JobQueueManager getManager();
 	/**
 	 * the pool associated to this queue.
 	 * @return
@@ -18,7 +20,7 @@ public interface JobQueue extends Named, Iterable<JobToken> {
 	 * between a {@link JobQueue} and {@link ResourcePool}.
 	 * 
 	 * @param pool a resource pool
-	 * @return the same reciever
+	 * @return the same receiver
 	 */
 	JobQueue setPool(ResourcePool pool);
 	

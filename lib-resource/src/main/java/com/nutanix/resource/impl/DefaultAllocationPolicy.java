@@ -5,11 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nutanix.resource.Allocation;
+import com.nutanix.resource.AllocationConstraints;
 import com.nutanix.resource.AllocationPolicy;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourcePool;
 import com.nutanix.capacity.Capacity;
 import com.nutanix.capacity.Quantity;
+import com.nutanix.capacity.ResourceKind;
 /**
  * default implementation of {@link AllocationPolicy 
  * allocation policy} selects a resource from the pool,
@@ -31,13 +33,16 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 	 * @throws RuntimeException is no resource fits
 	 */
 	@Override
-	public Allocation reserveAllocation(ResourcePool provider, Capacity demand) {
+	public Allocation reserveAllocation(ResourcePool pool, 
+			Capacity demand,
+			AllocationConstraints constraints) {
 		Allocation alloc = null;
-		logger.debug("allocating " + demand + " with provider " + provider.getName() + " with capacity " + provider.getTotalCapacity());
+		logger.debug("allocating " + demand + " with " + pool + " with capacity " + pool.getTotalCapacity());
 		for (Quantity c : demand) {
+			if (c.getKind() == ResourceKind.COMPUTE) continue;
 			double bestFitness = 0;
 			Resource bestFit = null;
-			for (Resource rsrc : provider) { 
+			for (Resource rsrc : pool) { 
 				double fitness = fitness(rsrc, c);
 				//logger.debug("fitness=" + fitness + " resource " + rsrc.getId() + " available capacity " + rsrc.getAvailableCapacity());
 				if (fitness < 0) continue;
@@ -50,7 +55,7 @@ public class DefaultAllocationPolicy implements AllocationPolicy {
 			if (bestFit == null) {
 				throw new RuntimeException("can not allocate " + c
 						+ " Available capacity " 
-						+ provider.getAvailableCapacity());
+						+ pool.getAvailableCapacity());
 			}
 			alloc = new DefaultAllocation(demand, bestFit);
 		}

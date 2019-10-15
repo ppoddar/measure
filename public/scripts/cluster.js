@@ -1,7 +1,6 @@
 /**
- * cluster represents a set of VM
- * utilization is utilization of all VMs
  */
+
 class Cluster {
 	constructor(data) {
 		console.log('cluster data')
@@ -14,10 +13,7 @@ class Cluster {
 	}
 	
 	/**
-	 * show utilization of this cluster and 
-	 * capacity distribution over each VMs.
-	 * 
-	 * populates given page template
+	 * show utilization of this cluster
 	 * 
 	 * @return a jQuery <div>  element. 
 	 */
@@ -57,7 +53,7 @@ class Cluster {
 		
 		/**
 		 * cluster item on click displays 'cluster-view'
-		 * on t=right side viewing area
+		 * on to right side viewing area
 		 */
 		$cluster.on('click', function(e) {
 			e.stopPropagation()

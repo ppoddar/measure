@@ -1,14 +1,25 @@
  name:  nutest
  command: eratest.py
+ demand: 
+   MEMORY: 100 MB
+   STORAGE: 300 GB
+   COMPUTE: 2
+ 
  requires: 
     - cluster
     
  option-flag: --
  
  options: 
-    tests: era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
-    config_file: testcases/era/rbac/smoke/config.json
-    clusters: ${cluster}
+    - 
+      key: tests
+      value:  era.rbac.smoke.test_rbac_smoke.RbacSmokeEndToEnd.test_rbac_smoke
+    - 
+      key: config_file
+      value:  testcases/era/rbac/smoke/config.json
+    - 
+      key: clusters
+      value: ${cluster}
     
         
         # {10.46.31.26}

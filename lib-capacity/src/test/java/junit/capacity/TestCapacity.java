@@ -80,12 +80,12 @@ public class TestCapacity {
 		assertEquals(1024,  
 			MemoryUnit.MB.getConversionFactor(MemoryUnit.GB), epsilon);
 		
-		Memory q = new Memory(1024*2, MemoryUnit.MB);
+		Memory q   = new Memory(1024*8, MemoryUnit.GB);
 		Quantity c = q.convert(MemoryUnit.TB);
 		
 		assert(Memory.class.isInstance(q));
 		assertEquals(MemoryUnit.TB, c.getUnit());
-		assertEquals(2, c.getValue(), epsilon);
+		assertEquals(8, c.getValue(), epsilon);
 	}
 	
 	@Test

@@ -134,26 +134,6 @@ public class TestCapacity {
 	}
 	
 	@Test
-	public void testActualCluster() throws Exception {
-		Cluster tomahawk = new Cluster();
-		tomahawk.setName("tomahawk");
-		tomahawk.setHost("10.46.31.50");
-		
-		Catalog<Cluster> clusters = new Catalog<>();
-		clusters.add(tomahawk);
-		new ClusterBuilder().build(clusters);
-		System.err.println("capacity " + tomahawk.getTotalCapacity());
-		
-		assertSame(tomahawk, clusters.iterator().next());
-		
-		
-		Quantity memory = tomahawk.getAvailable(ResourceKind.MEMORY);
-		assertNotNull(memory);
-		assertSame(MemoryUnit.MB, memory.getUnit());
-		assertEquals(1547490, memory.getValue(), epsilon);
-		
-	}
-	@Test
 	public void testCapacityAddition() {
 		Memory m1 = new Memory(2147483647, MemoryUnit.B);
 		Memory m2 = new Memory(0, MemoryUnit.GB);

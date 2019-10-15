@@ -1,6 +1,6 @@
 package com.nutanix.bpg.job;
 
-import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nutanix.bpg.job.Job.Status;
-import com.nutanix.bpg.scheduler.JobImpl;
+import com.nutanix.bpg.job.impl.JobImpl;
+import com.nutanix.bpg.job.impl.JobQueueImpl;
 
 /**
  * a {@link JobToken} is a token for a {@link Job}.
@@ -43,7 +44,7 @@ public class JobToken {
 	private Path root;
 	private Path output;
 	private Path errorOutput;
-	private Job.Status status;
+	private Status status;
 	
 	private static Logger logger = LoggerFactory.getLogger(JobToken.class);
 	/**
@@ -51,12 +52,20 @@ public class JobToken {
 	 * 
 	 * @param job carries information about the job
 	 */
-	public JobToken(JobImpl job) {
+	public JobToken(JobImpl job, JobQueueImpl queue) {
 		if (job == null) {
 			throw new IllegalArgumentException("can not create a token for null job");
 		}
 		this.job       = job;
+		this.queue     = queue.getName();
 		this.startTime = System.currentTimeMillis();
+		try {
+			this.root = queue.getOutputRoot();
+			this.output    = queue.createPath("job-"+getId(), false);
+			this.errorOutput = queue.createPath("job-"+getId(), true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -140,43 +149,37 @@ public class JobToken {
 		}
 	}
 	
+	public void setStatus(Job.Status s) {
+		//valiadteTransition(getStaus(), s);
+		this.status = s;
+	}
 	/**
 	 * returns latest status of the job.
 	 * if promise is non-null, it's status is that of the promise.
 	 * @return
 	 */
 	public Status getStatus() {
-		if (status == Job.Status.FAILED) {
-			return status;
+		if (error != null) {
+			return Job.Status.FAILED;
 		}
-		long now = System.currentTimeMillis();
-		if (getExpectedEndTime() > 0 
-		 && getExpectedEndTime() > now) {
-			status =  Job.Status.EXPIRED;
-			return status;
-		}
-		if (promise == null) {
-			return status;
-		} if (promise.isCancelled()) {
-			status = Job.Status.CANCELLED;
-		} else if (promise.isCompletedExceptionally()) {
-			status = Job.Status.FAILED;
-		} else if (promise.isDone()) {
-			status = Job.Status.COMPLETED;
+		if (promise != null) {
+			if (promise.isCancelled()) {
+				return  Job.Status.CANCELLED;
+			} else if (promise.isCompletedExceptionally()) {
+				return Job.Status.FAILED;
+			} else if (promise.isDone()) {
+				return Job.Status.COMPLETED;
+			} else {
+				return Job.Status.RUNNING;
+			}
 		} else {
-			status = Job.Status.RUNNING;
+			if (getJob().getSupplier() != null) {
+				return Job.Status.SCHEDULED;
+			} else if (status != null) {
+				return status;
+			}
 		}
-		return status;
-	}
-	
-	public void setStatus(Job.Status status) {
-		this.status = status;
-	}
-	
-	public boolean hasErrorOutput() {
-		return errorOutput != null
-			&& errorOutput.toFile().length() > 0;
-		
+		return Job.Status.QUEUED;
 	}
 	
 	@JsonIgnore
@@ -202,25 +205,23 @@ public class JobToken {
 	}
 	
 	/**
-	 * gets URI of job output.
+	 * gets URI of job output w.r.t public root.
 	 * @return
 	 */
 	public String getOutputURI() {
-		if (output == null) {
-			throw new IllegalStateException("token output not set for " + this);
-		}
-		if (root == null) {
-			throw new IllegalStateException("root output dir not set for " + this);
-		}
 		return root.relativize(output).toString();
 	}
-	
+	/**
+	 * get path to local file of standard output of job execution,
+	 * @return
+	 */
 	@JsonIgnore
-	public File getOutputFile() {
-		if (output == null) {
-			throw new IllegalStateException("token output not set");
-		}
-		return output.toFile();
+	public Path getOutput() {
+		return output;
+	}
+	@JsonIgnore
+	public Path getErrorOutput() {
+		return errorOutput;
 	}
 	
 	public String getErrorMessage() {
@@ -241,66 +242,15 @@ public class JobToken {
 	 * @return
 	 */
 	public String getErrorOutputURI() {
-		if (errorOutput == null) {
-			throw new IllegalStateException("token error output not set for " + this);
-		}
-		if (root == null) {
-			throw new IllegalStateException("root output dir not set for " + this);
-		}
 		return root.relativize(errorOutput).toString();
 	}
-	@JsonIgnore
-	public File getErrorOutputFile() {
-		if (errorOutput == null) {
-			throw new IllegalStateException("token error output not set");
-		}
-		return errorOutput.toFile();
-	}
-
-	public void setOutput(Path path) {
-		if (path == null) {
-			throw new IllegalArgumentException("can not set null output path");
-		}
-		logger.debug("set output for " + this + " " + path.toUri());
-		output = path;
-	}
-	
-	public void setErrorOutput(Path err) {
-		if (err == null) {
-			throw new IllegalArgumentException("can not set null error output path");
-		}
-		errorOutput = err;
-	}
-
 	public void setError(Exception ex) {
 		this.error = ex;
-		status = Job.Status.FAILED;
 	}
 	
 	
-	/**
-	 * sets the path against which all output|error
-	 * URI is resolved
-	 * 
-	 * @param r an output path w.r.t which all output|error
-	 * URI
-	 */
-	public void setRoot(Path r) {
-		if (r == null) {
-			throw new IllegalArgumentException("can not set null output root path");
-		}
-		if (!r.toFile().exists()) {
-			throw new IllegalArgumentException("can not set non-existent output root " + r.toUri());
-		}
-		if (!r.toFile().isDirectory()) {
-			throw new IllegalArgumentException("can not set non-directory output root " + r.toUri());
-		}
-		
-		this.root = r;
-	}
 
 	public String toString() {
-		return "job token [" + getName() + "] (" + getStatus() + ")";
+		return "job token [" + getName() + "] (status=" + getStatus() + ")";
 	}
-
 }

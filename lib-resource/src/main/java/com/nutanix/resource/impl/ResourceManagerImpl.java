@@ -110,12 +110,12 @@ public class ResourceManagerImpl
 		return names;
 	}
 
-	@Override
-	public Allocation allocate(ResourcePool pool, Capacity demand) {
-		logger.debug("allocating " + demand);
-		Allocation alloc = pool.allocate(new DefaultCapacity(demand));
-		return alloc;
-	}
+//	@Override
+//	public Allocation allocate(ResourcePool pool, Capacity demand) {
+//		logger.debug("allocating " + demand);
+//		Allocation alloc = pool.allocate(new DefaultCapacity(demand));
+//		return alloc;
+//	}
 
 
 	public ObjectMapper getObjectMapper() {
@@ -143,7 +143,7 @@ public class ResourceManagerImpl
 			while (poolNames.hasNext()) {
 				String poolName = poolNames.next();
 				ResourcePool pool = new DefaultResourcePool();
-				pool.setAllocationPolicy(allocationPolicy);
+				//pool.setAllocationPolicy(allocationPolicy);
 				pool.setName(poolName);
 				pools.add(pool);
 				for (JsonNode clusterName : poolsNode.get(poolName)) {

@@ -12,6 +12,12 @@ import java.util.List;
  *
  */
 public class VariableParser {
+	/**
+	 * parses variables enclosed as ${var}
+	 *  
+	 * @param s a string
+	 * @return list of var names
+	 */
 	public static List<String> parse(String s) {
 		StringBuffer var = new StringBuffer();
 		List<String> vars = new ArrayList<String>();

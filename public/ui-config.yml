@@ -1,0 +1,15 @@
+{
+ "theme": "black",
+ "perspectives": [ 
+   {"name": "home",    "page": "html/demo.html"},
+   {"name": "cluster", "page": "html/cluster.html"},
+   {"name": "jobs",    "page": "html/job.html"}
+  ],
+  "style": {
+    "color": {
+        "bar": "w3-teal",
+        "bar2": "w3-green"
+    }
+  }
+     
+ }

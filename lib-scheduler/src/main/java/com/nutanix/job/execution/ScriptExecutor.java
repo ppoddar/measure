@@ -28,7 +28,7 @@ public class ScriptExecutor implements Callable<Exception> {
 	private List<String> commands;
 	private File output;
 	private File err;
-	private String directory;
+	private File directory;
 	private String osCommand;
 	private Map<String, String> env;
 	
@@ -57,7 +57,7 @@ public class ScriptExecutor implements Callable<Exception> {
 	}
 	
 	
-	public ScriptExecutor withDirectory(String f) {
+	public ScriptExecutor withDirectory(File f) {
 		directory = f;
 		return this;
 	}
@@ -78,7 +78,6 @@ public class ScriptExecutor implements Callable<Exception> {
 	}
 	
 	
-	// echo 'set -- -l; cd www' | cat - remote.script | ssh -T root@10.15.254.161	/**
 
 	
 	
@@ -98,27 +97,30 @@ public class ScriptExecutor implements Callable<Exception> {
 		osCommand = "";
 		List<String> fullCmds = new ArrayList<>();
 		fullCmds.addAll(this.commands);
-
+		String printCommand = StringUtils.join(' ', fullCmds);
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.command(fullCmds);
 		if (env != null && !env.isEmpty()) {
 			pb.environment().putAll(env);
 		}
-		if (err != null) {
-			pb.redirectError(err);
-		} else {
-			pb.redirectError(Redirect.PIPE);
-		}
 		if (output != null) {
+			printCommand += "\r\n\t  1> " + err;
 			pb.redirectOutput(output);
 		} else {
 			pb.redirectOutput(Redirect.PIPE);
 		}
-		if (!StringUtils.isEmpty(directory)) {
-			pb.directory(new File(directory));
+		if (err != null) {
+			printCommand += "\r\n\t 2> " + err;
+			pb.redirectError(err);
+		} else {
+			pb.redirectError(Redirect.PIPE);
+		}
+		
+		if (directory != null) {
+			pb.directory(directory);
 		}
 		osCommand = StringUtils.join(' ', commands);
-		logger.debug("executing " + osCommand);
+		logger.debug(printCommand);
 		Process p = pb.start();
 		p.waitFor();
 		
@@ -128,9 +130,11 @@ public class ScriptExecutor implements Callable<Exception> {
 	public String getOSCommand() {
 		return osCommand;
 	}
-
-	
 }
+
+
+
+// echo 'set -- -l; cd www' | cat - remote.script | ssh -T root@10.15.254.161	/**
 
 //if (scriptArgs != null && scriptArgs.length > 0) {
 //commands.add("echo");

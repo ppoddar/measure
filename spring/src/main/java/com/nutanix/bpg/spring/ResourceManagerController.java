@@ -1,13 +1,11 @@
 package com.nutanix.bpg.spring;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -27,22 +25,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nutanix.bpg.job.JobBuilder;
+import com.nutanix.bpg.job.JobDescription;
 import com.nutanix.bpg.job.JobQueue;
+import com.nutanix.bpg.job.JobQueueManager;
+import com.nutanix.bpg.job.JobTemplate;
 import com.nutanix.bpg.job.JobToken;
-import com.nutanix.bpg.job.ResourcePoolSelectionPolicy;
+import com.nutanix.bpg.job.impl.JobImpl;
+import com.nutanix.bpg.job.impl.JobQueueImpl;
+import com.nutanix.bpg.job.impl.JobQueueManagerImpl;
 import com.nutanix.bpg.repo.Repository;
 import com.nutanix.bpg.repo.RepositoryImpl;
-import com.nutanix.bpg.scheduler.JobImpl;
-import com.nutanix.bpg.scheduler.JobQueueImpl;
-import com.nutanix.bpg.scheduler.JobQueueManager;
-import com.nutanix.bpg.scheduler.JobQueueManagerImpl;
-import com.nutanix.bpg.utils.JsonUtils;
 import com.nutanix.capacity.Capacity;
-import com.nutanix.capacity.CapacityFactory;
 import com.nutanix.config.Configuration;
-import com.nutanix.job.execution.JobBuilder;
-import com.nutanix.job.execution.JobTemplate;
-import com.nutanix.resource.Allocation;
 import com.nutanix.resource.Resource;
 import com.nutanix.resource.ResourceManager;
 import com.nutanix.resource.ResourcePool;
@@ -75,8 +70,8 @@ public class ResourceManagerController extends MicroService {
 			String queueName = pool.getName();
 			JobQueue queue = jobQueueManager.newQueue(queueName)
 				.setPool(pool);
-			((JobQueueImpl)queue).setOutputRoot(
-					Paths.get(ctx.getRealPath("/")));
+			Path outputRoot = Paths.get(ctx.getRealPath("/"));
+			((JobQueueImpl)queue).setOutputRoot(outputRoot);
 		}
 	}
 	
@@ -126,26 +121,6 @@ public class ResourceManagerController extends MicroService {
 	}
 	
 	
-//	@PostMapping(value="/pool/{name}/allocate",
-//		consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Allocation allocate(
-			@PathVariable("name")  String name,
-			@RequestBody Capacity demand) {
-		try {
-			logger.info("received allcation request for [" + name + "] pool");
-			ResourcePool pool = getResourcePoolByName(name);
-			logger.info("found allcation pool " + pool);
-			if (pool == null) {
-				throw new IllegalArgumentException("pool named [" + name + "] does not exist. "
-						+ " available pool names are " + resourceManager.getPoolNames());
-			}
-			logger.info("allocating demand  " + demand);
-			return pool.allocate(demand);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		}
-	}
 	
 	/**
 	 * Submits a Job.
@@ -155,36 +130,23 @@ public class ResourceManagerController extends MicroService {
 	 * @return
 	 */
 	@Async
-	@PostMapping(value="/job/{category}/",
+	@PostMapping(value="/job/",
 			consumes=MediaType.TEXT_PLAIN_VALUE)
-	public Future<JobToken> submitJob(
-			@PathVariable("category") String jobCategory,
-			@RequestBody String payload) {
+	public CompletableFuture<JobToken> submitJob(@RequestBody String payload) {
 		logger.info("received " + payload);
 		try {
-			JsonNode json     = customMapper.readTree(payload);
+			JsonNode json     = new ObjectMapper().readTree(payload);
+			JobDescription jobSpec = new JobDescription(json);
 			String poolName = jobQueueManager
 					.getResourcePoolSelectionPolicy()
-					.getPoolByJobCategory(jobCategory);
-			ResourcePool pool = resourceManager.getResourcePool(poolName);
-			Capacity demand = CapacityFactory.newCapacity(
-					JsonUtils.getMap(json, "demand"));
+					.getPoolByJobCategory(jobSpec.getCategory());
 			
-//			Allocation alloc = pool.allocate(demand);
-			
-			JobTemplate template = jobQueueManager.getJobTemplate(jobCategory);
+			JobQueue queue = jobQueueManager.getQueue(poolName);
+			JobTemplate template = jobQueueManager
+					.getJobTemplate(jobSpec.getCategory());
 			JobBuilder builder   = jobQueueManager.getJobBuilder();
-			Map<String, String> optionValues =
-					new HashMap<>();
-			//optionValues.put("cluster", ((VirtualMachine)alloc.getSupply()).getIPAddress());
-			optionValues.put("cluster", "10.46.31.26");
-			JobImpl job = builder.build(template, json, optionValues);
-
-//			job.setSupply(alloc.getSupply(), alloc.getDemand());
-			JobQueue queue = jobQueueManager.getQueue(pool.getName());
-			
+			JobImpl job = builder.build(template, jobSpec);
 			JobToken token = queue.addJob(job);
-			logger.debug("returning job token " + token);
 			return CompletableFuture.completedFuture(token);
 		} catch (Exception ex) {
 			ex.printStackTrace();

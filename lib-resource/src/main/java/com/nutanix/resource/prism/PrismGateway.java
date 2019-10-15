@@ -72,8 +72,9 @@ public class PrismGateway {
 	
 	public PrismGateway(Cluster cluster) {
 		this.cluster = cluster;
-		
 	}
+	
+	
 	
 	URL buildURLForPath(String path, String[] params) {
 		URLBuilder builder = new URLBuilder()
@@ -91,15 +92,17 @@ public class PrismGateway {
 		}
 	}
 	
-	public void verifyConnection() {
+	public boolean isReachable() {
 		try {
 			getResponse(buildURLForPath("/", null));
+			return true;
 		} catch (UnknownHostException ex) {
 			throw new RuntimeException("host [" + cluster.getHost() + "]"
 					+ " is not recognized. Check if you can "
 					+ " conncet to cluster", ex);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			ex.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -123,7 +126,7 @@ public class PrismGateway {
 				.encodeToString((cluster.getUser()+":"+cluster.getPassword())
 				.getBytes(StandardCharsets.UTF_8)); 
 		con.setRequestProperty("Authorization", "Basic "+encoded);
-		
+		con.setConnectTimeout(1000);
 		logger.info("Prism request:" + url);
 		try {
 			InputStream in = con.getInputStream();

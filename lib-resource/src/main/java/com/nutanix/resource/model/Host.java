@@ -3,6 +3,9 @@ package com.nutanix.resource.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.nutanix.bpg.utils.JsonUtils;
 import com.nutanix.bpg.utils.Named;
+import com.nutanix.capacity.Memory;
+import com.nutanix.capacity.MemoryUnit;
+import com.nutanix.capacity.Quantity;
 /**
  * Physical host provides memory and cpu capacity 
  * to a cluster.
@@ -50,8 +53,8 @@ public class Host implements Named {
 		return vm_count;
 	}
 	
-	public long getMemory() {
-		return memory_capacity;
+	public Quantity getMemory() {
+		return new Memory(memory_capacity, MemoryUnit.B);
 	}
 	
 	public String toString() {

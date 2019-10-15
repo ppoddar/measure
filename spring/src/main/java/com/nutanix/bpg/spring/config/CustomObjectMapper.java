@@ -10,12 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.nutanix.bpg.model.Catalog;
 import com.nutanix.bpg.model.Metrics;
 import com.nutanix.bpg.model.MetricsDimension;
 import com.nutanix.bpg.spring.serde.CatalogDeserializer;
-import com.nutanix.bpg.spring.serde.CatalogSerializer;
 import com.nutanix.bpg.spring.serde.IndexibleMapDeserializer;
 import com.nutanix.bpg.spring.serde.IndexibleMapSerializer;
 import com.nutanix.bpg.utils.IndexibleMap;
@@ -34,7 +32,6 @@ public class CustomObjectMapper {
 		CollectionLikeType type2 = mapper.getTypeFactory().constructCollectionLikeType(IndexibleMap.class,
 				MetricsDimension.class);
 
-		module.addSerializer(new CatalogSerializer(type));
 		module.addSerializer(new IndexibleMapSerializer(type2));
 		module.addSerializer(new CapacitySerializer());
 

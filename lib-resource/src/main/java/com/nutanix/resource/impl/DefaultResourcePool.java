@@ -22,17 +22,18 @@ public class DefaultResourcePool implements ResourcePool {
 	private String name;
 	private List<Resource> resources;
 	private AllocationPolicy policy; 
-	private Capacity total;
-	private Capacity available;
 	
 	
 	protected DefaultResourcePool() {
 		resources = new ArrayList<Resource>();
 		policy = new DefaultAllocationPolicy();
-		total = new DefaultCapacity();
-		available = new DefaultCapacity();
-		total.setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.GB);
-		available.setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.GB);
+	}
+	
+	Capacity newCapacity() {
+		Capacity cap = new DefaultCapacity();
+		cap.setPreferredUnit(ResourceKind.MEMORY, MemoryUnit.GB);
+		cap.setPreferredUnit(ResourceKind.STORAGE, MemoryUnit.TB);
+		return cap;
 	}
 	
 	public String getName() {
@@ -46,30 +47,28 @@ public class DefaultResourcePool implements ResourcePool {
 	@Override
 	public void addResource(Resource r) {
 		resources.add(r);
-		total.addCapacity(r.getTotalCapacity());
-		available.addCapacity(r.getAvailableCapacity());
 	}
 
-	@Override
-	public Allocation allocate(Capacity demand) {
-		Allocation alloc = getAllocationPolicy()
-					.reserveAllocation(this, demand);
-		alloc.getSupply().acquire(demand);
-		return alloc;
-	}
+//	@Override
+//	public Allocation allocate(Capacity demand) {
+//		Allocation alloc = getAllocationPolicy()
+//					.reserveAllocation(this, demand);
+//		alloc.getSupply().acquire(demand);
+//		return alloc;
+//	}
 
 	
 
-	@JsonIgnore
-	@Override
-	public AllocationPolicy getAllocationPolicy() {
-		return policy;
-	}
-
-	@Override
-	public void setAllocationPolicy(AllocationPolicy policy) {
-		this.policy = policy;
-	}
+//	@JsonIgnore
+//	@Override
+//	public AllocationPolicy getAllocationPolicy() {
+//		return policy;
+//	}
+//
+//	@Override
+//	public void setAllocationPolicy(AllocationPolicy policy) {
+//		this.policy = policy;
+//	}
 
 	/**
 	 * a pool iterates over all resources 
@@ -136,11 +135,19 @@ public class DefaultResourcePool implements ResourcePool {
 
 	@Override
 	public Capacity getTotalCapacity() {
+		Capacity total = newCapacity();
+		for (Resource r : this) {
+			total.addCapacity(r.getTotalCapacity());
+		}
 		return total;
 	}
 	
 	@Override
 	public Capacity getAvailableCapacity() {
+		Capacity available = newCapacity();
+		for (Resource r : this) {
+			available.addCapacity(r.getAvailableCapacity());
+		}
 		return available;
 	}
 	

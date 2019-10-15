@@ -14,16 +14,16 @@ public class DefaultAllocation implements Allocation {
 	private long startTime = -1;
 	private Duration duration;
 	private final Capacity demand;
-	private final Resource supply;
+	private final Resource supplier;
 	private static final Logger logger = LoggerFactory.getLogger(DefaultAllocation.class);
 	
-	public DefaultAllocation(Capacity demand, Resource supply) {
+	public DefaultAllocation(Capacity demand, Resource supplier) {
 		if (demand == null) 
 			throw new IllegalArgumentException("can not allocate for null demand");
-		if (supply == null) 
-			throw new IllegalArgumentException("can not allocate for null supply");
+		if (supplier == null) 
+			throw new IllegalArgumentException("can not allocate to null supplier");
 		this.demand = demand;
-		this.supply = supply;
+		this.supplier = supplier;
 		logger.debug("creating allocation " + this);
 	}
 	
@@ -62,8 +62,8 @@ public class DefaultAllocation implements Allocation {
 	}
 
 	@Override
-	public Resource getSupply() {
-		return supply;
+	public Resource getSupplier() {
+		return supplier;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class DefaultAllocation implements Allocation {
 	}
 	
 	public String toString() {
-		return "demand " + getDemand() + " allocated to "  + getSupply();
+		return "demand " + getDemand() + " allocated to "  + getSupplier();
 	}
 	
 	@Override

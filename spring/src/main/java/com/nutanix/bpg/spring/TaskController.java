@@ -1,10 +1,7 @@
 package com.nutanix.bpg.spring;
 
-import java.net.URI;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -21,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nutanix.bpg.job.JobQueue;
+import com.nutanix.bpg.job.JobQueueManager;
 import com.nutanix.bpg.job.JobToken;
-import com.nutanix.bpg.scheduler.JobQueueManager;
-import com.nutanix.bpg.scheduler.JobQueueManagerImpl;
+import com.nutanix.bpg.job.impl.JobQueueManagerImpl;
 
 /*
  * REST controller for Job Queue.
@@ -52,7 +49,6 @@ public class TaskController extends MicroService {
 		logger.debug("getting result for task " + id);
 		JobToken task = taskQueues.getQueue(queue).getJob(id);
 		if (task != null) {
-			task.setRoot(Paths.get(ctx.getRealPath("/")));
 			String result = task.getOutputURI();
 			logger.debug("sending task result " + result);
 			return new ResponseEntity<Object>(result, HttpStatus.OK);

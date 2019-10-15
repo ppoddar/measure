@@ -15,20 +15,16 @@ public class TestResourceManager {
 	static ResourceManagerController controller;
 	@BeforeClass
 	public static void initService() throws Exception {
-		
 		System.setProperty("config", "../config/application-dev.yml");
 		controller = new ResourceManagerController();
 		controller.setObjectMapper(new ObjectMapper());
 		controller.initService();
 	}
 	
-	
-	
 	@Test
 	public void testOfflineSubmitJob() throws Exception {
 		String payload = readFileContent("jobrequest.json");
-		String jobCategory = "nutest";
-		controller.submitJob(jobCategory, payload);
+		controller.submitJob(payload);
 	}
 	
 	String readFileContent(String rsrc) throws Exception {
@@ -44,5 +40,4 @@ public class TestResourceManager {
 		in.close();
 		return str.toString();
 	}
-
 }

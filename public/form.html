@@ -1,0 +1,57 @@
+<html>
+<!-- dyanmic form --> 
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src='./scripts/common.js'></script>
+<script src='./scripts/dynamic-form.js'></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript">
+$().ready(function() {
+	$.ajax({
+		url: '/ui-config.yml'
+	}).done(function(data) {
+		var config = JSON.parse(data)
+		console.log('theme:' + config.theme)
+	})
+})
+</script>
+
+</head>
+<body>
+   <div id = 'my-form'></div>
+
+<script type="text/javascript">
+	var o1 = {key: 'readonly input ', 
+			 kind: 'text',
+			 readonly: true, 
+			 value: 'this is readonly input'}
+	var o2 = {key: 'editable input', 
+			 kind: 'text',
+			 readonly: false, 
+			 value: 'this is editable input'}
+	
+	var o3 = {key: 'single choice', 
+		    kind: 'choice',
+		    group: 'single-choice',
+			choices: [
+		   {label: 'choice 1'},
+		   {label: 'choice 2'}
+		]}
+	var o4 = {key: 'multiple choice', 
+		    kind: 'select',
+		    group: 'multiple-choice',
+			choices: [
+		   {label: 'choice 1'},
+		   {label: 'choice 2'}
+		]}
+	
+	var options = [o1, o2, o3, o4]
+	
+	var $form = createForm(options)
+	$('#my-form').append($form)
+	
+	$.ajax()
+</script>
+</body>
+
+</html>

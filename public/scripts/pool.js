@@ -74,12 +74,12 @@ class ResourcePool {
 	 * 
 	 * @return a jQuery <div>  element. 
 	 */
-	showUtilization(pageId) {
-		var $page = jq(pageId)
-		var $control   = find($page,'#header')
+	showUtilization() {
+		var $page = $('<div>')
+		var $control   = $('<h1>')
 		$control.text(this.name)
 		
-		var $description = find($page, '#description')
+		var $description = $('<div>')
 		$description.html(' <b>' + this.name + '</b> pool has'
 				+ ' <b>' + this.clusters.length + '</b> clusters.<p>'
 				+ ' Showing <b>capacity utilization</b>'

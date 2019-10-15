@@ -2,7 +2,6 @@ package com.nutanix.resource.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -14,47 +13,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectWriter.GeneratorSettings;
 import com.nutanix.bpg.model.Catalog;
-import com.nutanix.resource.prism.PrismGateway;
+import com.nutanix.bpg.utils.JsonUtils;
+import com.nutanix.capacity.MemoryUnit;
+import com.nutanix.capacity.Storage;
 
 /**
- * Gathers resource capacity for each virtual
- * machine in a cluster by HTTP response via
- * Prism gateway.
- *  
- * @author pinaki.poddar
+ *  Builds cluster. each cluster in separte
+ *  thread
  *
  */
 public class ClusterBuilder {
 	private static Logger logger = LoggerFactory.getLogger(ClusterBuilder.class);
-	
-	
 	/**
-	 * populates given cluster with resource capacity
+	 * populates given clusters with resource capacity
 	 * information.
 	 * <p>
 	 * The capacity information is obtained by calling
-	 * Prism gateway for available virtual machines,
-	 * parsing the response for memory, cpu and disk 
+	 * Prism gateway for cluster,
+	 * parsing the response for 
 	 * capacity.
 	 *  
 	 * @param cluster
 	 * @throws Exception
 	 */
 	public void build(Catalog<Cluster> clusters) {
-		
 		ExecutorService threadPool = Executors.newCachedThreadPool();
 		List<Future<Cluster>> futures = new ArrayList<Future<Cluster>>();
 		for (Cluster cluster : clusters) {
-			SingleClusterBuilder builder = 
-					new SingleClusterBuilder(cluster);
+			SingleClusterBuilder builder = new SingleClusterBuilder(cluster);
 			Future<Cluster> f = threadPool.submit(builder);
 			futures.add(f);
 		}
 		
 		for (Future<Cluster> f : futures) {
 			try {
-				clusters.add(f.get());
+				Cluster cluster = f.get();
+				clusters.add(cluster);
+				logger.info("built " + cluster + " capacity " + cluster.getTotalCapacity());
 			} catch (Exception ex) {
 				logger.debug("error building cluster", ex);
 			}
@@ -62,28 +59,7 @@ public class ClusterBuilder {
 		
 	}
 	
-	private static class SingleClusterBuilder implements Callable<Cluster> {
-		private Cluster cluster;
-		
-		SingleClusterBuilder(Cluster c) {
-			cluster = c;
-		}
-		@Override
-		public Cluster call() throws Exception {
-			PrismGateway gateway = new PrismGateway(cluster);
-			JsonNode response = gateway.getResponse("cluster/");
-			cluster.populate(response);
-			Catalog<Host> hosts = new HostBuilder().build(gateway);
-			Catalog<Disk> disks = new DiskBuilder().build(gateway);
-			for (Disk disk : disks) {
-				cluster.addDisk(disk);
-			}
-			for (Host host : hosts) {
-				cluster.addHost(host);
-			}
-			return cluster;
-		}
-	}
-
+	
+	
 
 }

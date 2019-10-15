@@ -10,20 +10,19 @@ import com.nutanix.capacity.Capacity;
  */
 public interface AllocationPolicy {
 	/**
-	 * Create an allocation in terms of an assignment
-	 * of a resource to a demand of capacity.
+	 * Create an allocation in terms of resource 
+	 * supply being allocated to demand.
 	 * <br>
-	 * This assignment is tentative in a sense that
-	 * available capacity of the resource is not
-	 * reduced. 
+	 * An allocation reduces {@link Resource#getAvailableCapacity()
+	 * available capacity} of the resource.
 	 * 
 	 * @param pool a container of resources
 	 * @param demand a set of capabilities
-	 * @return
+	 * @return null if no pool has sufficient resource
 	 */
-	Allocation reserveAllocation(
-			ResourcePool pool,  
-			Capacity demand);
+	Allocation reserveAllocation(ResourcePool pool,  
+			Capacity demand,
+			AllocationConstraints constaints);
 	
 	
 }

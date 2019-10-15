@@ -30,7 +30,7 @@ public interface Allocation
 	 * gets the resource to which demand is allocated
 	 * @return a resource. never null.
 	 */
-	Resource getSupply();
+	Resource getSupplier();
 	/**
 	 * gets the demand that has been allocated
 	 * @return a set of capacities. never null.

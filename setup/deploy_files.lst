@@ -1,5 +1,5 @@
 setup/
 public/
-catalog/
-config/
+catalog
+config
 spring/target/spring-boot.jar
